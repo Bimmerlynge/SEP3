@@ -20,14 +20,14 @@ namespace Client.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            songs = Model.GetAllSongs();
+            songs = await Model.GetAllSongs();
         }
 
 
-        private void playSong(ChangeEventArgs e)
+        private async Task playSong(ChangeEventArgs e)
         {
             Song song = songs.First(t => t.Id == int.Parse((string)e.Value));
-            Model.playSong(song);
+            await Model.playSong(song);
             currentSong = song.Title + song.Id + ".mp3";
         }
 

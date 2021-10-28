@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Client.Data;
 
 namespace Client.model
 {
     public interface IAudioTestModel
     {
-        void playSong(Song song);
-        IList<Song> GetAllSongs();
+        Task playSong(Song song);
+        Task<IList<Song>> GetAllSongs();
     }
 }

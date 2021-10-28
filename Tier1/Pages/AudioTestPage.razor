@@ -1,6 +1,5 @@
 ﻿@page "/AudioTestPage"
 @using Client.Data
-@using Client.model
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment env 
 
  
@@ -8,13 +7,29 @@
 
 <h3>Media</h3>
 
-<select @onchange="playSong">
-    <option>Select Below</option>
-    @foreach (Song song in songs)
-    {
-        <option value="@song.Id">@song.Title</option>
-    }
-</select>
+
+@if (songs == null)
+{
+    <p>
+      <em>Loading...</em>  
+    </p>
+} else if (!songs.Any())
+{
+    <p>
+        <em>No ToDo items exist. Please add some.</em>
+    </p>
+}
+else
+{
+
+    <select @onchange="playSong">
+        <option>Select Below</option>
+        @foreach (Song song in songs)
+        {
+            <option value="@song.Id">@song.Title</option>
+        }
+    </select>
+}
 
 <audio src="audio/@currentSong" controls></audio>
 
