@@ -6,8 +6,8 @@ namespace AppServer.Model
 {
     public interface IPlayService
     {
-        public byte[] Play(string urlOfSong);
+        public Task<byte[]> PlayAsync(string urlOfSong);
 
-        IList<Song> GetAllSongs();
+        Task<string> GetAllSongsAsJsonAsync();
     }
 }

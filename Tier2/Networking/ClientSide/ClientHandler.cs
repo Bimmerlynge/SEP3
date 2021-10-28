@@ -1,13 +1,12 @@
 using System;
-using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
-using System.Threading;
+using System.Threading.Tasks;
 using AppServer.Data;
 using AppServer.Model;
 
-namespace AppServer.Networking
+namespace AppServer.Networking.ClientSide
 {
     public class ClientHandler : IClientHandler
     {
@@ -20,67 +19,55 @@ namespace AppServer.Networking
         }
         
 
-        public  void ListenToClient()
+        public async void ListenToClientAsync()
         {
-           
+            Console.WriteLine("LISTEN");
+                TransferObj fromClient = readFromClientAsync(client.GetStream()).Result;
             
-                TransferObj fromClient = readFromClient(client.GetStream());
-            
-
                 switch (fromClient.Action)
                 {
-                    
-                    case "GETSONGS":
-                        
-                        getAllSongs();
+                    case "GETSONGS": 
+                        await GetAllSongsAsync();
+                        Console.WriteLine("SEND SONGS");
                         break;
                     case "PLAYSONG":
                         Song song = JsonSerializer.Deserialize<Song>(fromClient.Arg);
-                        HandlePlaySong(song, client.GetStream());
+                       await HandlePlaySongAsync(song, client.GetStream());
                         break;
-                    
-                    
                 }
-
                 client.Dispose();
-
         }
         
-        private TransferObj readFromClient(NetworkStream stream)
+        private async Task<TransferObj> readFromClientAsync(NetworkStream stream)
         {
-            TransferObj transferObj;
             byte[] dataFromServer = new byte[5000];
-            int bytesRead = stream.Read(dataFromServer, 0, dataFromServer.Length);
-            string s = Encoding.ASCII.GetString(dataFromServer, 0, bytesRead);
-            Console.WriteLine(s);
-            transferObj = JsonSerializer.Deserialize<TransferObj>(s);
+            int bytesRead = await stream.ReadAsync(dataFromServer, 0, dataFromServer.Length);
+            string readFromClient = Encoding.ASCII.GetString(dataFromServer, 0, bytesRead);
+            Console.WriteLine(readFromClient);
+            TransferObj transferObj = JsonSerializer.Deserialize<TransferObj>(readFromClient);
             
-
             return transferObj;
         }
 
 
-  
-        public void getAllSongs()
+        public async Task GetAllSongsAsync()
         {
-            IList<Song> allSongs = model.GetAllSongs();
-            string songListAsString = JsonSerializer.Serialize(allSongs);
-
-            TransferObj sentObj = new TransferObj() {Arg = songListAsString};
-            string transObj = JsonSerializer.Serialize(sentObj);
-            byte[] bytes = Encoding.ASCII.GetBytes(transObj);
+            
+            string transAsJson = await model.GetAllSongsAsJsonAsync();
+            byte[] bytes = Encoding.ASCII.GetBytes(transAsJson);
+            
             Console.WriteLine("GetallSongs sending: {0} bytes", bytes.Length);
+            
             NetworkStream stream = client.GetStream();
-            stream.Write(bytes,0,bytes.Length);
+            await stream.WriteAsync(bytes,0,bytes.Length);
             
         }
-        
-        
-        private void HandlePlaySong(Song song, NetworkStream stream)
+
+        private async Task HandlePlaySongAsync(Song song, NetworkStream stream)
         { 
-            byte[] songBytes = model.Play(song.Url);
+            byte[] songBytes = await model.PlayAsync(song.Url);
             Console.WriteLine("Length of {0}: {1}",song.Title, songBytes.Length);
-            stream.Write(songBytes, 0, songBytes.Length);
+            await stream.WriteAsync(songBytes, 0, songBytes.Length);
         }
 
     }

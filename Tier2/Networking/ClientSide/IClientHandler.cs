@@ -5,7 +5,7 @@ namespace AppServer.Networking
 {
     public interface IClientHandler
     {
-        void ListenToClient();
+        void ListenToClientAsync();
 
 
     }
