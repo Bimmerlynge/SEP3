@@ -1,0 +1,57 @@
+﻿@page "/AudioPlayer"
+@inject IJSRuntime _js;
+<h3>AudioPlayer</h3>
+
+<button class="btn btn-primary" @onclick="PlayAudio1">Champion</button>
+<button class="btn btn-primary" @onclick="PlayAudio2">Under the Bridge</button>
+<button class="btn btn-primary" @onclick="PlayAudio3">Ring of Fire</button>
+<button class="btn btn-primary" style="background-color: tomato" @onclick="StopAudio">Stop Music</button>
+
+<p>Currently playing: @SongName</p>
+
+<audio controls="controls" id="player">
+    <source id="playerSource" src="" />
+</audio>
+
+@code {
+    string SongName { get; set; }
+    
+    async Task PlayAudio1()
+    {
+        SongName = "02 Champion (feat_ Jon).mp3";
+        await _js.InvokeVoidAsync("PlayAudio", "/audio/" + SongName);
+        PrintSong();
+    }
+
+    async Task PlayAudio2()
+    {
+        SongName = "11 Under the Bridge.mp3";
+        await _js.InvokeVoidAsync("PlayAudio", "/audio/" + SongName);
+        PrintSong();
+    }
+    
+    async Task PlayAudio3()
+    {
+        SongName = "06 Ring of Fire.mp3";
+        await _js.InvokeVoidAsync("PlayAudio", "/audio/" + SongName);
+        PrintSong();
+    }
+
+    // async Task PlayAudioFile3()
+    // {
+    //     SongName = "Test123";
+    //     Console.WriteLine(SongName);
+    //     await _js.InvokeVoidAsync("PlayAudioFile", "/audio/02 Champion (feat_ Jon).mp3");
+    // }
+
+    async Task StopAudio()
+    {
+        await _js.InvokeVoidAsync("StopAudio", "/audio/" + SongName);
+        SongName = "";
+    }
+    
+    private void PrintSong()
+    {
+        Console.WriteLine("Currently playing: " + SongName);
+    }
+}
