@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Client.model;
 using Client.Networking;
+using Blazored.Modal;
 
 namespace Client
 {
@@ -28,6 +29,8 @@ namespace Client
            services.AddScoped<IClient,Networking.Client>();
             
             services.AddScoped<IAudioTestModel,AudioTestModel>(); 
+            services.AddBlazoredModal();
+
 
         }
 
