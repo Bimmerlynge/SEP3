@@ -9,8 +9,6 @@ namespace Client.Networking
 {
     public class Client : IClient
     {
-        
-        
         public async Task<string> GetAllSongs(string transforObjekt)
         {
             using TcpClient client = GetTcpClient();
