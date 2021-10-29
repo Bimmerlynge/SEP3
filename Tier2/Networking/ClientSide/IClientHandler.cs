@@ -1,7 +1,4 @@
-using System.Collections.Generic;
-using System.Net.Sockets;
-
-namespace AppServer.Networking
+namespace AppServer.Networking.ClientSide
 {
     public interface IClientHandler
     {
