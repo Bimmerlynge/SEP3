@@ -2,4 +2,4 @@
 obj/
 out/
 bin/
-.MINKODE.*
+MINKODE.java
