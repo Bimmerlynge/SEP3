@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 
 import com.google.gson.reflect.TypeToken;
 import org.springframework.web.client.RestTemplate;
-import shared.ISong;
 import shared.Song;
 
 import java.lang.reflect.Type;
@@ -23,11 +22,11 @@ public class SongClient
   private void run()
   {
     System.out.println(getMessage());
-    ISong song1 = getSong();
+    Song song1 = getSong();
     System.out.println(song1.getTitle());
-    ArrayList<ISong> songList = getAllSongs();
+    ArrayList<Song> songList = getAllSongs();
 
-    for (ISong song: songList) {
+    for (Song song: songList) {
       System.out.println(song.getTitle());
     }
   }
@@ -38,19 +37,17 @@ public class SongClient
     return gson.fromJson(json, String.class);
   }
 
-  private ArrayList<ISong> getAllSongs()
+  private ArrayList<Song> getAllSongs()
   {
     Gson gson = new Gson();
     Type type = new TypeToken<ArrayList<Song>> (){}.getType();
     String json = rest.getForObject(ROOT + "song", String.class);
-    ArrayList<ISong> songs = gson.fromJson(json, type);
-    return songs;
+    return gson.fromJson(json, type);
   }
 
-  private ISong getSong(){
+  private Song getSong(){
     Gson gson = new Gson();
     String json = rest.getForObject(ROOT + "song/8", String.class);
-    ISong song = gson.fromJson(json, Song.class);
-    return song;
+    return gson.fromJson(json, Song.class);
   }
 }

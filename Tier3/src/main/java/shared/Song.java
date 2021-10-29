@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import java.sql.Date;
 
-public class Song implements ISong {
+public class Song {
 
     private int id;
     private String url;
