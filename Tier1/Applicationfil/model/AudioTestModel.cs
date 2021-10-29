@@ -33,18 +33,18 @@ namespace Client.model
             string transString = JsonSerializer.Serialize(transferObj);
             
             string inFromServer = await client.GetAllSongs(transString);
-            Console.WriteLine("infroms sarea: " + inFromServer);
+            // Console.WriteLine("infroms sarea: " + inFromServer);
             
             TransferObj tObj = JsonSerializer.Deserialize<TransferObj>(inFromServer,new JsonSerializerOptions() {PropertyNameCaseInsensitive = true});
-            Console.WriteLine("Trans from server: "+ tObj.Action + "   " + tObj.Arg);
+            // Console.WriteLine("Trans from server: "+ tObj.Action + "   " + tObj.Arg);
             IList<Song> allSongs = JsonSerializer.Deserialize<IList<Song>>(tObj.Arg, new JsonSerializerOptions() {PropertyNameCaseInsensitive = true});
 
-            int i = 0;
-            foreach (Song allSong in allSongs)
-            {
-                Console.WriteLine(i++);
-                Console.WriteLine(allSong.Title);
-            }
+            // int i = 0;
+            // foreach (Song allSong in allSongs)
+            // {
+            //     Console.WriteLine(i++);
+            //     Console.WriteLine(allSong.Title);
+            // }
             return allSongs;
         }
     }
