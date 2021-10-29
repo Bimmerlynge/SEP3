@@ -83,12 +83,13 @@ EXECUTE PROCEDURE songDurationTotal();
 
 INSERT INTO Album (title)
 VALUES ('Test');
-INSERT INTO Song (url, title, duration)
-VALUES ('Somewhere', 'TestSong', 5);
-INSERT INTO Song (url, title, duration)
-VALUES ('Somewhere', 'TestSong2', 7);
-INSERT INTO Song (url, title, duration)
-VALUES ('Somewhere', 'TestSong2', 9);
+INSERT INTO Song(url, title, duration) VALUES
+    ('..\..\..\Util\Audio\06 Ring of Fire.mp3', 'Ring_Of_Fire', 24);
+INSERT INTO Song(url, title, duration) VALUES
+    ('..\..\..\Util\Audio\02 Champion (feat_ Jon).mp3', 'Champion', 55);
+INSERT INTO Song(url, title, duration) VALUES
+    ('..\..\..\Util\Audio\11 Under the Bridge.mp3', 'Under_The_Bridge', 24);
+
 INSERT INTO AlbumSpec (albumId, songId)
 VALUES (1, 1);
 SELECT duration
@@ -111,4 +112,4 @@ SELECT duration
 FROM Album;
 
 SELECT *
-FROM AlbumSpec;
+FROM Song;

@@ -1,10 +1,9 @@
 package server.DAO;
-
-import shared.ISong;
+import shared.Song;
 
 import java.util.ArrayList;
 
 public interface ISongDAO {
 
-    ArrayList<ISong> getAllSongs();
+    ArrayList<Song> getAllSongs();
 }

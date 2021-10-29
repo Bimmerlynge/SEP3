@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import server.DAO.ISongDAO;
 import server.DAO.SongDAO;
-import shared.ISong;
+import shared.Song;
 
 import java.util.ArrayList;
 
@@ -16,9 +16,9 @@ public class StartServer
     SpringApplication.run(StartServer.class, args);
     ISongDAO songDAO = new SongDAO();
 
-    ArrayList<ISong> songs = songDAO.getAllSongs();
+    ArrayList<Song> songs = songDAO.getAllSongs();
 
-    for (ISong song : songs) {
+    for (Song song : songs) {
       System.out.println(song.toString());
     }
   }
