@@ -10,15 +10,15 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="Util\Audio\02 Champion (feat_ Jon).mp3">
+      <Content Include="Util\Audio\Champion.mp3">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
-      <Content Include="Util\Audio\06 Ring of Fire.mp3">
+      <Content Include="Util\Audio\Ring_Of_Fire.mp3">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>
-      <Content Include="Util\Audio\11 Under the Bridge.mp3">
+      <Content Include="Util\Audio\Under_The_Bridge.mp3">
         <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       </Content>

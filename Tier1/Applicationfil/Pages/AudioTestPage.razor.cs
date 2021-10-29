@@ -48,10 +48,5 @@ namespace Client.Pages
             }
          
         }
-
-
-
-        
     }
-    
-}
+    }
