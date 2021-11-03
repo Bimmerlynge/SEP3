@@ -37,7 +37,7 @@ namespace ClientTest
         [Test]
         public void TestIfSelectedSongIsCorrect()
         {
-            Assert.Pass();
+            //Kan nok ikke lade sig gøre?
         }
     }
 }

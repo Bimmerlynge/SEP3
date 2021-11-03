@@ -18,10 +18,7 @@ namespace Client.Pages
 
         private string currentSong;
         private IList<Song> songs;
-
         
-
-
         protected override async Task OnInitializedAsync()
         {
             songs = await Model.GetAllSongs();

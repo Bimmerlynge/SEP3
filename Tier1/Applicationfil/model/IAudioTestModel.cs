@@ -8,5 +8,10 @@ namespace Client.model
     {
         Task playSong(Song song);
         Task<IList<Song>> GetAllSongs();
+        
+        Task PauseSongAsync();
+        Task PlayFromAsync(int sec);
+        Task SetVolumeAsync(int percentage);
+        
     }
 }
