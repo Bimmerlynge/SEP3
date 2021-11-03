@@ -14,14 +14,12 @@ namespace Client.Pages
     public partial class AudioTestPage : ComponentBase
     {
         [Inject] public IAudioTestModel Model { get; set; }
+        [Inject] public IPlayerModel Player { get; set; }
         [Inject] public IModalService ModalService { get; set; }
 
         private string currentSong;
         private IList<Song> songs;
-
         
-
-
         protected override async Task OnInitializedAsync()
         {
             songs = await Model.GetAllSongs();
@@ -38,7 +36,7 @@ namespace Client.Pages
                     return;
                 }                
                 Song song = songs.First(t => t.Id == int.Parse((string)e.Value));
-                await Model.playSong(song);
+                await Player.PlaySongAsync(song);
                 currentSong = song.Title + song.Id + ".mp3";
             }
             catch (Exception exception)
@@ -47,6 +45,12 @@ namespace Client.Pages
                 ModalService.Show<Popup>("Error");
             }
          
+        }
+
+        public async Task TogglePlay()
+        {
+            Player.SetVolumeAsync(0);
+            Player.PlayPauseToggleAsync();
         }
     }
     }

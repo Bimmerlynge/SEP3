@@ -28,7 +28,8 @@ namespace Client
 
            services.AddScoped<IClient,Networking.Client>();
             
-            services.AddScoped<IAudioTestModel,AudioTestModel>(); 
+            services.AddScoped<IAudioTestModel,AudioTestModel>();
+            services.AddScoped<IPlayerModel, PlayerModel>();
             services.AddBlazoredModal();
 
 

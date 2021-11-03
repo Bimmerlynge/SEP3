@@ -1,20 +1,22 @@
-using System;
+
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using Client.Data;
 using Client.model;
 using Client.Networking;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 using NUnit.Framework;
-using Client = Client.Networking.Client;
+
+
+using _Client = Client.Networking.Client;
+
 
 namespace ClientTest
 {
     public class Tests
     {
-        private static global::Client.Networking.Client _client = new();
-        private IAudioTestModel Model = new AudioTestModel(_client);
+
+        private static IClient client = new _Client();
+        //private static global::Client.Networking.Client _client = new();
+        private IAudioTestModel Model = new AudioTestModel(client);
 
         private string currentSong;
         private IList<Song> songs;
@@ -37,7 +39,7 @@ namespace ClientTest
         [Test]
         public void TestIfSelectedSongIsCorrect()
         {
-            Assert.Pass();
+            //Kan nok ikke lade sig gøre?
         }
     }
 }
