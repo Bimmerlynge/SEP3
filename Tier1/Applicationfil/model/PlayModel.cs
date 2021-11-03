@@ -49,7 +49,6 @@ namespace Client.model
 
         public async Task PlayPauseToggleAsync()
         {
-            
             Console.WriteLine("Current playstate: " + waveOut.PlaybackState);
             if (waveOut.PlaybackState == PlaybackState.Playing)
                 waveOut.Pause();

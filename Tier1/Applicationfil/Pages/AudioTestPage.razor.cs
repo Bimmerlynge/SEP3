@@ -39,7 +39,7 @@ namespace Client.Pages
                 }                
                 Song song = songs.First(t => t.Id == int.Parse((string)e.Value));
                 await Player.PlaySongAsync(song);
-                currentSong = song.Title + song.Id + ".mp3";
+                audioPlayer = song.Title + song.Id + ".mp3";
             }
             catch (Exception exception)
             {
@@ -49,17 +49,10 @@ namespace Client.Pages
          
         }
 
-        public async Task TogglePlay()
+        private async Task TogglePlay()
         {
-            Player.SetVolumeAsync(0);
-            Player.PlayPauseToggleAsync();
+            await Player.PlayPauseToggleAsync();
         }
-        private async Task togglePlay()
-        {
-            await Model.playSong(currentSong);
-            isPlaying = !isPlaying;
-        }
-
         private async Task previousSong()
         {
             await Model.PlayPreviousSong();
