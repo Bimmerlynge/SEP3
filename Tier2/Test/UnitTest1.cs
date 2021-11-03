@@ -9,11 +9,13 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
+using AppServer.Model;
+
 namespace AppServerTest
 {
     public class Tests
     {
-
+        private IPlayService _playService = new PlayService();
         [SetUp]
         public void Setup()
         {

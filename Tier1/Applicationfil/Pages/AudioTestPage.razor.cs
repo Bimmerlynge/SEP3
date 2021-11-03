@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Blazored.Modal;
 using Blazored.Modal.Services;
@@ -15,6 +14,7 @@ namespace Client.Pages
     public partial class AudioTestPage : ComponentBase
     {
         [Inject] public IAudioTestModel Model { get; set; }
+        [Inject] public IPlayerModel Player { get; set; }
         [Inject] public IModalService ModalService { get; set; }
         
         private IList<Song> songs;
@@ -28,9 +28,8 @@ namespace Client.Pages
         }
 
 
-        private async Task selectSong(ChangeEventArgs e)
+        private async Task playSong(ChangeEventArgs e)
         {
-            
             try
             {           
                 //Quick fix, skal aligevel udskiftes, gør intet når man vælger "Select Below"
@@ -38,10 +37,9 @@ namespace Client.Pages
                 {
                     return;
                 }                
-                currentSong = songs.First(t => t.Id == int.Parse((string)e.Value));
-                await Model.playSong(currentSong);
-                audioPlayer = currentSong.Title + currentSong.Id + ".mp3";
-                isPlaying = true;
+                Song song = songs.First(t => t.Id == int.Parse((string)e.Value));
+                await Player.PlaySongAsync(song);
+                currentSong = song.Title + song.Id + ".mp3";
             }
             catch (Exception exception)
             {
@@ -49,6 +47,12 @@ namespace Client.Pages
                 ModalService.Show<Popup>("Error");
             }
          
+        }
+
+        public async Task TogglePlay()
+        {
+            Player.SetVolumeAsync(0);
+            Player.PlayPauseToggleAsync();
         }
         private async Task togglePlay()
         {

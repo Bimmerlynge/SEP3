@@ -32,6 +32,10 @@ else
         <button @onclick="previousSong"><span class="oi-arrow-circle-left" aria-hidden="true"></span></button>
         <button @onclick="nextSong"><span class="oi-arrow-circle-right" aria-hidden="true"></span></button>
     </div>
+    
+    <button @onclick="@(() => TogglePlay())">
+        <i class="oi oi-trash" style="color:red"/>
+        </button>
 }
 
 

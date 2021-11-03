@@ -14,7 +14,7 @@ public class SongController
 {
   ISongDAO songDAO = new SongDAO();
 
-  @GetMapping("/song")
+  @GetMapping("/songs")
   public synchronized String getAllSongs() {
     ArrayList<Song> songs = songDAO.getAllSongs();
     return new Gson().toJson(songs);
@@ -30,5 +30,11 @@ public class SongController
   public synchronized String getSong(@PathVariable int songId) {
     Song song = new Song(songId, "Somewhere", "111sygsang", 5, new Date(2));
     return new Gson().toJson(song);
+  }
+
+  @GetMapping("/song")
+  public synchronized String getAllSongsWithArtists() {
+    ArrayList<Song> songs = songDAO.getAllSongsWithArtists();
+    return new Gson().toJson(songs);
   }
 }

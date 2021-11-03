@@ -16,7 +16,7 @@ public class StartServer
     SpringApplication.run(StartServer.class, args);
     ISongDAO songDAO = new SongDAO();
 
-    ArrayList<Song> songs = songDAO.getAllSongs();
+    ArrayList<Song> songs = songDAO.getAllSongsWithArtists();
 
     for (Song song : songs) {
       System.out.println(song.toString());

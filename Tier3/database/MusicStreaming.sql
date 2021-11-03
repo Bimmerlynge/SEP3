@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS Album
 CREATE TABLE IF NOT EXISTS Artist
 (
     artistId SERIAL PRIMARY KEY,
-    name     VARCHAR(100)
+    artistName     VARCHAR(100)
     );
 
 CREATE TABLE IF NOT EXISTS ArtistSongRelation
@@ -54,6 +54,11 @@ CREATE TABLE IF NOT EXISTS AlbumRelease
     FOREIGN KEY (albumId) REFERENCES Album (albumId),
     FOREIGN KEY (artistId) REFERENCES Artist (artistId)
     );
+
+CREATE VIEW SongWithArtist AS
+    SELECT S.*, A.* FROM Song AS S JOIN ArtistSongRelation ASR ON S.songId = ASR.songId
+JOIN Artist A ON A.artistId = ASR.artistId
+ORDER BY songId ASC;
 
 CREATE OR REPLACE FUNCTION songDurationTotal()
     RETURNS TRIGGER
@@ -110,6 +115,17 @@ INSERT INTO AlbumSpec (albumId, songId)
 VALUES (1, 3);
 SELECT duration
 FROM Album;
+INSERT INTO Artist (artistName)
+VALUES ('Clemens');
+INSERT INTO Artist (artistName)
+VALUES ('Jon');
+INSERT INTO Artist (artistName)
+VALUES ('Johnny Cash');
+INSERT INTO Artist (artistName)
+VALUES ('Red Hot Chili Peppers');
+INSERT INTO ArtistSongRelation (artistId, songId) VALUES (3, 1);
+INSERT INTO ArtistSongRelation (artistId, songId) VALUES (1, 2);
+INSERT INTO ArtistSongRelation (artistId, songId) VALUES (2, 2);
+INSERT INTO ArtistSongRelation (artistId, songId) VALUES (4, 3);
 
-SELECT *
-FROM Song;
+SELECT * FROM SongWithArtist;
