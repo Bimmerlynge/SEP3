@@ -18,7 +18,6 @@
 }
 else
 {
-
     <select @onchange="playSong">
         <option>Select Below</option>
         @foreach (Song song in songs)
@@ -26,8 +25,12 @@ else
             <option value="@song.Id">@song.Title</option>
         }
     </select>
+    
+    <button @onclick="@(() => TogglePlay())">
+        <i class="oi oi-trash" style="color:red"/>
+        </button>
 }
-<audio src="audio/@currentSong" autoplay controls="controls"></audio>
+<audio src="audio/@currentSong" controls="controls"></audio>
 
 
 

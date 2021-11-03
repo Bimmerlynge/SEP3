@@ -19,16 +19,16 @@ namespace Client.model
 
         public async Task playSong(Song song)
         {
-            string serverFile = "wwwroot\\audio\\" + song.Title + song.Id + ".mp3";
-            if (!File.Exists(serverFile))
-            {
-                string songAsJson = JsonSerializer.Serialize(song);
-                TransferObj transferObj = new TransferObj() {Action = "PLAYSONG", Arg = songAsJson};
-                string transf = JsonSerializer.Serialize(transferObj);
-
-
-                await client.PlaySong(transf, serverFile);
-            }
+            // string serverFile = "wwwroot\\audio\\" + song.Title + song.Id + ".mp3";
+            // if (!File.Exists(serverFile))
+            // {
+            //     string songAsJson = JsonSerializer.Serialize(song);
+            //     TransferObj transferObj = new TransferObj() {Action = "PLAYSONG", Arg = songAsJson};
+            //     string transf = JsonSerializer.Serialize(transferObj);
+            //
+            //
+            //     await client.PlaySong(transf, serverFile);
+            // }
         }
 
         public async Task<IList<Song>> GetAllSongs()

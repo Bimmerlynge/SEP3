@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
@@ -50,7 +51,7 @@ namespace Client.Networking
             client.Dispose();
         }
 
-        protected TcpClient GetTcpClient()
+        private TcpClient GetTcpClient()
         {
             return new TcpClient("localhost", 1098);
         }
