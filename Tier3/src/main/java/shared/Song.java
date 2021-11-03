@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class Song {
 
@@ -12,6 +13,7 @@ public class Song {
     private String title;
     private int duration;
     private Date releaseDate;
+    private ArrayList<Artist> artists;
 
 
     public Song(int id, String url, String title, int duration, Date releaseDate) {
@@ -20,6 +22,7 @@ public class Song {
         this.title = title;
         this.duration = duration;
         this.releaseDate = releaseDate;
+        artists = new ArrayList<>();
     }
 
     public String toString(){
@@ -66,5 +69,19 @@ public class Song {
 
     public void setReleaseDate(Date releaseDate) {
         this.releaseDate = releaseDate;
+    }
+
+    public void addArtist(Artist artist) {
+        artists.add(artist);
+    }
+
+    public void setArtists(ArrayList<Artist> artists)
+    {
+        this.artists = artists;
+    }
+
+    public ArrayList<Artist> getArtists()
+    {
+        return artists;
     }
 }

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import com.google.gson.reflect.TypeToken;
 import org.springframework.web.client.RestTemplate;
+import shared.Artist;
 import shared.Song;
 
 import java.lang.reflect.Type;
@@ -24,10 +25,15 @@ public class SongClient
     System.out.println(getMessage());
     Song song1 = getSong();
     System.out.println(song1.getTitle());
-    ArrayList<Song> songList = getAllSongs();
+    ArrayList<Song> songList = getAllSongsWithArtists();
+    ArrayList<Artist> artistList;
 
     for (Song song: songList) {
+      artistList = song.getArtists();
       System.out.println(song.getTitle());
+      for (Artist artist: artistList) {
+        System.out.println(artist.getArtistName());
+      }
     }
   }
 
@@ -41,7 +47,7 @@ public class SongClient
   {
     Gson gson = new Gson();
     Type type = new TypeToken<ArrayList<Song>> (){}.getType();
-    String json = rest.getForObject(ROOT + "song", String.class);
+    String json = rest.getForObject(ROOT + "songs", String.class);
     return gson.fromJson(json, type);
   }
 
@@ -49,5 +55,12 @@ public class SongClient
     Gson gson = new Gson();
     String json = rest.getForObject(ROOT + "song/8", String.class);
     return gson.fromJson(json, Song.class);
+  }
+
+  private ArrayList<Song> getAllSongsWithArtists() {
+    Gson gson = new Gson();
+    Type type = new TypeToken<ArrayList<Song>> (){}.getType();
+    String json = rest.getForObject(ROOT + "song", String.class);
+    return gson.fromJson(json, type);
   }
 }
