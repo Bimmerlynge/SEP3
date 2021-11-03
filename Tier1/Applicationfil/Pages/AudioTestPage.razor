@@ -19,15 +19,23 @@
 else
 {
 
-    <select @onchange="playSong">
+    <select @onchange="selectSong">
         <option>Select Below</option>
         @foreach (Song song in songs)
         {
             <option value="@song.Id">@song.Title</option>
         }
     </select>
+    
+    <div class="audioPlayer">
+        <button @onclick="togglePlay">Play/Pause</button>
+        <button @onclick="previousSong"><span class="oi-arrow-circle-left" aria-hidden="true"></span></button>
+        <button @onclick="nextSong"><span class="oi-arrow-circle-right" aria-hidden="true"></span></button>
+    </div>
 }
-<audio src="audio/@currentSong" autoplay controls="controls"></audio>
+
+
+<audio src="audio/@audioPlayer" autoplay controls="controls"></audio>
 
 
 

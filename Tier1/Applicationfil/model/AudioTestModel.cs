@@ -1,16 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Client.Data;
 using Client.Networking;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Client.model
 {
     public class AudioTestModel : IAudioTestModel
     {
         private IClient client;
+        private IList<Song> previouslySongs = new List<Song>();
+
 
         public AudioTestModel(IClient client)
         {
@@ -29,6 +34,12 @@ namespace Client.model
 
                 await client.PlaySong(transf, serverFile);
             }
+
+            if (previouslySongs.Count == 0 || previouslySongs[^1].Id != song.Id)
+            {
+                previouslySongs.Add(song);
+            }
+            
         }
 
         public async Task<IList<Song>> GetAllSongs()
@@ -67,6 +78,18 @@ namespace Client.model
         public async Task SetVolumeAsync(int percentage)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task PlayPreviousSong()
+        {
+            if (previouslySongs.Any())
+            {
+                Console.WriteLine(previouslySongs.Count);
+                await playSong(previouslySongs[^1]);
+                previouslySongs.RemoveAt(previouslySongs.Count - 1);
+            }
+            
+            
         }
     }
 }

@@ -12,6 +12,7 @@ namespace Client.model
         Task PauseSongAsync();
         Task PlayFromAsync(int sec);
         Task SetVolumeAsync(int percentage);
-        
+        Task PlayPreviousSong();
+
     }
 }

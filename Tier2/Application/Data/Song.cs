@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace AppServer.Data
 {
@@ -11,7 +12,8 @@ namespace AppServer.Data
         public string Title { get; set; }
         
         public int Duration { get; set; }
-        
+
+        public IList<Artist> Artists { get; set; }
         //public DateTime ReleaseDate { get; set; }
         
         
