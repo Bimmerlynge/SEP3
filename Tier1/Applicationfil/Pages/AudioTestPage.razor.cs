@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Blazored.Modal;
 using Blazored.Modal.Services;
 using Client.Data;
 using Client.model;
@@ -20,11 +19,9 @@ namespace Client.Pages
         private IList<Song> songs;
         private Song currentSong;
         private bool isPlaying;
-        private string audioPlayer;
         protected override async Task OnInitializedAsync()
         {
             songs = await Model.GetAllSongs();
-            Console.WriteLine(songs[1].Artists.Count);
         }
 
 
@@ -39,7 +36,6 @@ namespace Client.Pages
                 }                
                 Song song = songs.First(t => t.Id == int.Parse((string)e.Value));
                 await Player.PlaySongAsync(song);
-                audioPlayer = song.Title + song.Id + ".mp3";
             }
             catch (Exception exception)
             {
@@ -51,7 +47,7 @@ namespace Client.Pages
 
         private async Task TogglePlay()
         {
-            await Player.PlayPauseToggleAsync();
+            isPlaying = await Player.PlayPauseToggleAsync();
         }
         private async Task previousSong()
         {
