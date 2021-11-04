@@ -16,8 +16,10 @@ namespace Client.model
 
         bool IsPlaying { get; }
         Action UpdatePlayState { get; set; } 
+        Action ProgressBarUpdate { get; set; }
         IList<Song> CurrentPlaylist { get; set; }
         string UpdateDisplay();
         void StopPlaying();
+        Task<int> UpdateProgressBar();
     }
 }

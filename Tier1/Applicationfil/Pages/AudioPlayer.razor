@@ -1,4 +1,5 @@
 ﻿@page "/AudioPlayer"
+@inject IJSRuntime JS
 <h3>AudioPlayer</h3>
 
 <div class="audioPlayer">
@@ -12,6 +13,8 @@
     </button>
     <button @onclick="nextSong"><span class="oi oi-arrow-circle-right" aria-hidden="true"></span></button>
     <label>@display</label>
+    
+    <progress id="progressBar" @onclick="progressBarClicked" @ref="progress" value="@progressValue" max="100" style="width: 100%">@(progressValue + " %")></progress>
 </div>
 
 @code {

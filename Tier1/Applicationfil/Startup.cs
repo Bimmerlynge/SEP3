@@ -8,6 +8,7 @@ using Client.Networking;
 using Blazored.Modal;
 using Client.Util;
 using Microsoft.AspNetCore.Components.Server.Circuits;
+using Microsoft.JSInterop;
 
 namespace Client
 {
@@ -24,7 +25,7 @@ namespace Client
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            
+            //services.AddScoped<IJSRuntime, JSRuntime>();
             services.AddRazorPages();
             services.AddServerSideBlazor();
 
@@ -34,7 +35,7 @@ namespace Client
             services.AddScoped<IPlayerModel, PlayerModel>();
             services.AddScoped<CircuitHandler, CircuitHandlerService>();
             services.AddBlazoredModal();
-
+            
 
         }
 
