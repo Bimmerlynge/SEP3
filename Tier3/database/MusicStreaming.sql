@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS ArtistSongRelation
     FOREIGN KEY (songId) REFERENCES Song (songId)
     );
 
-CREATE TABLE IF NOT EXISTS AlbumSpec
+CREATE TABLE IF NOT EXISTS AlbumSongRelation
 (
     albumId SMALLINT,
     songId  SMALLINT,
@@ -45,6 +45,14 @@ CREATE TABLE IF NOT EXISTS AlbumSpec
     FOREIGN KEY (albumId) REFERENCES Album (albumId),
     FOREIGN KEY (songId) REFERENCES Song (songId)
     );
+CREATE TABLE IF NOT EXISTS AlbumArtistRelation
+(
+    albumId SMALLINT,
+    artistId SMALLINT,
+    PRIMARY KEY (albumId, artistId),
+    FOREIGN KEY (albumId) REFERENCES Album(albumId),
+    FOREIGN KEY (artistId) REFERENCES Artist(artistId)
+);
 
 CREATE TABLE IF NOT EXISTS AlbumRelease
 (
@@ -60,6 +68,12 @@ CREATE VIEW SongWithArtist AS
 JOIN Artist A ON A.artistId = ASR.artistId
 ORDER BY songId ASC;
 
+
+CREATE VIEW AlbumsWithArtist AS
+    SELECT Al.*, Ar.* FROM Artist Ar Join AlbumArtistRelation AAR ON Ar.artistId = AAR.artistId
+JOIN Album Al ON Al.albumId = AAR.albumId
+ORDER BY albumId ASC;
+
 CREATE OR REPLACE FUNCTION songDurationTotal()
     RETURNS TRIGGER
     LANGUAGE plpgsql
@@ -68,9 +82,9 @@ $$
 BEGIN
 WITH durationTotal AS (
     SELECT SUM(S.duration) AS durTot
-    FROM AlbumSpec
-             JOIN Song S ON S.songId = AlbumSpec.songId
-    WHERE AlbumSpec.albumId = NEW.albumId)
+    FROM AlbumSongRelation
+             JOIN Song S ON S.songId = AlbumSongRelation.songId
+    WHERE AlbumSongRelation.albumId = NEW.albumId)
 UPDATE Album
 SET duration = durationTotal.durTot
     FROM durationTotal
@@ -81,13 +95,13 @@ $$;
 
 CREATE TRIGGER updateSongDuration
     AFTER INSERT OR UPDATE OR DELETE
-                    ON AlbumSpec
+                    ON AlbumSongRelation
                         FOR EACH ROW
                         EXECUTE PROCEDURE songDurationTotal();
 
 
 INSERT INTO Album (title)
-VALUES ('Test');
+VALUES ('RedHotAlbum'), ('NogetMedJohnnyAlbummet');
 INSERT INTO Song(url, title, duration) VALUES
     ('..\..\..\Util\Audio\Ring_Of_Fire.mp3', 'Ring_Of_Fire', 24);
 INSERT INTO Song(url, title, duration) VALUES
@@ -95,24 +109,24 @@ INSERT INTO Song(url, title, duration) VALUES
 INSERT INTO Song(url, title, duration) VALUES
     ('..\..\..\Util\Audio\Under_The_Bridge.mp3', 'Under_The_Bridge', 24);
 
-INSERT INTO AlbumSpec (albumId, songId)
+INSERT INTO AlbumSongRelation (albumId, songId)
 VALUES (1, 1);
 SELECT duration
 FROM Album;
-INSERT INTO AlbumSpec (albumId, songId)
+INSERT INTO AlbumSongRelation (albumId, songId)
 VALUES (1, 2);
 SELECT duration
 FROM Album;
 DELETE
-FROM AlbumSpec
+FROM AlbumSongRelation
 WHERE songId = 1;
 DELETE
-FROM AlbumSpec
+FROM AlbumSongRelation
 WHERE songId = 2;
 SELECT duration
 FROM Album;
-INSERT INTO AlbumSpec (albumId, songId)
-VALUES (1, 3);
+INSERT INTO AlbumSongRelation (albumId, songId)
+VALUES (1, 3), (2,1);
 SELECT duration
 FROM Album;
 INSERT INTO Artist (artistName)
@@ -127,5 +141,8 @@ INSERT INTO ArtistSongRelation (artistId, songId) VALUES (3, 1);
 INSERT INTO ArtistSongRelation (artistId, songId) VALUES (1, 2);
 INSERT INTO ArtistSongRelation (artistId, songId) VALUES (2, 2);
 INSERT INTO ArtistSongRelation (artistId, songId) VALUES (4, 3);
+INSERT INTO AlbumArtistRelation (albumId, artistId) VALUES (1,4);
+INSERT INTO AlbumArtistRelation (albumId, artistId) VALUES (2,3);
 
 SELECT * FROM SongWithArtist;
+SELECT * FROM AlbumsWithArtist;
