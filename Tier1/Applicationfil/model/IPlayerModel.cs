@@ -9,7 +9,7 @@ namespace Client.model
     {
         Task PlaySongAsync(Song song);
         Task PlayPauseToggleAsync();
-        Task PlayFromAsync(int sec);
+        Task PlayFromAsync(float progress);
         Task SetVolumeAsync(int percentage);
         Task PlayPreviousSong();
         Task PlayNextSongAsync();

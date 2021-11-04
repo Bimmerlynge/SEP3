@@ -95,10 +95,9 @@ namespace Client.model
             UpdatePlayState.Invoke();
         }
 
-        public async Task PlayFromAsync(int sec)
+        public async Task PlayFromAsync(float progress)
         {
-            Console.WriteLine(fileReader.CurrentTime);
-
+            int sec = (int)(currentSong.Duration * (progress/100));
             waveOut.Stop();
             fileReader.CurrentTime = TimeSpan.FromSeconds(sec);
             waveOut.Play();

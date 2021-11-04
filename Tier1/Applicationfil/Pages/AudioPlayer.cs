@@ -58,9 +58,9 @@ namespace Client.Pages
             float returnHack = 1;
             returnHack = await JS.InvokeAsync<float>("GetProgress", returnHack);
             Console.WriteLine(returnHack + " returHack efter barclick");
-            //Console.WriteLine(await JS.InvokeAsync<int>(progress, "var value_clicked = e.offsetX * this.max / this.offsetWidth;"));
+            await Player.PlayFromAsync(returnHack);
         }
 
-       
+
     }
 }
