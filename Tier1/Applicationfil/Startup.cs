@@ -6,6 +6,8 @@ using Microsoft.Extensions.Hosting;
 using Client.model;
 using Client.Networking;
 using Blazored.Modal;
+using Client.Util;
+using Microsoft.AspNetCore.Components.Server.Circuits;
 
 namespace Client
 {
@@ -30,6 +32,7 @@ namespace Client
             
             services.AddScoped<IAudioTestModel,AudioTestModel>();
             services.AddScoped<IPlayerModel, PlayerModel>();
+            services.AddScoped<CircuitHandler, CircuitHandlerService>();
             services.AddBlazoredModal();
 
 

@@ -8,6 +8,7 @@ using Client.model;
 using Microsoft.AspNetCore.Components;
 
 
+
 namespace Client.Pages
 {
     public partial class AudioTestPage : ComponentBase
@@ -16,14 +17,16 @@ namespace Client.Pages
         [Inject] public IPlayerModel Player { get; set; }
         [Inject] public IModalService ModalService { get; set; }
         
+        
         private IList<Song> songs;
         private Song currentSong;
         private bool isPlaying;
         protected override async Task OnInitializedAsync()
         {
+            Console.WriteLine("Hallo");
             songs = await Model.GetAllSongs();
         }
-
+        
 
         private async Task playSong(ChangeEventArgs e)
         {

@@ -18,7 +18,7 @@ namespace Client.model
         {
             this.client = client;
             waveOut = new WaveOutEvent();
-            //waveOut.Volume = 0.5f;
+            waveOut.Volume = 0.1f;
 
         }
 
@@ -79,6 +79,16 @@ namespace Client.model
             waveOut.Volume = toSet;
             Console.WriteLine(waveOut.Volume);
             
+        }
+
+        public void StopPlaying()
+        {
+            if (waveOut != null && fileReader != null)
+            {
+                waveOut.Stop();
+                waveOut.Dispose();
+                fileReader.Dispose();
+            }
         }
     }
 }

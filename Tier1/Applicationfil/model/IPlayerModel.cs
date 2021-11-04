@@ -9,5 +9,6 @@ namespace Client.model
         Task<bool> PlayPauseToggleAsync();
         Task PlayFromAsync(int sec);
         Task SetVolumeAsync(int percentage);
+        void StopPlaying();
     }
 }

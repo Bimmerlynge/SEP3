@@ -1,6 +1,10 @@
 ﻿@page "/AudioTestPage"
 @using Client.Data
+@using Client.model
+@using Client.Util
+@using Microsoft.AspNetCore.Components.Server.Circuits
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment env 
+
 
 <h3>Media</h3>
 
@@ -35,7 +39,14 @@ else
     
     <button @onclick="@(() => TogglePlay())">
         <i class="oi oi-trash" style="color:red"/>
-        </button>
+    </button>
+    
+    <br/>
+    <br/>
+    <br/>
+    
+    
+    
 }
 
 
