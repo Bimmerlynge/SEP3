@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Client.Data;
@@ -13,6 +15,16 @@ namespace Client.model
         private IClient client;
         private Mp3FileReader fileReader;
         private IWavePlayer waveOut;
+        private IList<Song> previouslySongs = new List<Song>();
+        private Song currentSong;
+
+        public bool IsPlaying
+        {
+            get { return waveOut.PlaybackState == PlaybackState.Playing; }
+        }
+
+        public Action UpdatePlayState { get; set; }
+        public IList<Song> CurrentPlaylist { get; set; }
 
         public PlayerModel(IClient client)
         {
@@ -25,7 +37,10 @@ namespace Client.model
         public async Task PlaySongAsync(Song song)
         {
             if (fileReader != null)
+            {
                 fileReader.Dispose();
+            }
+
             waveOut.Dispose();
             string serverFile = "wwwroot\\audio\\" + song.Title + song.Id + ".mp3";
             
@@ -34,6 +49,13 @@ namespace Client.model
             
             waveOut.Init(fileReader);
             waveOut.Play();
+            currentSong = song;
+            UpdatePlayState.Invoke();
+
+            if (previouslySongs.Count == 0 || previouslySongs[^1].Id != song.Id)
+            {
+                previouslySongs.Add(song);
+            }
         }
 
         private async Task FileExists(Song song, string serverFile)
@@ -47,37 +69,74 @@ namespace Client.model
             }
         }
 
-        public async Task<bool> PlayPauseToggleAsync()
+        public async Task PlayPauseToggleAsync()
         {
             Console.WriteLine("Current playstate: " + waveOut.PlaybackState);
             if (waveOut.PlaybackState == PlaybackState.Playing)
             {
-
                 waveOut.Pause();
-                return false;
             }
             else
             {
-            
                 waveOut.Play();
-                return true;
             }
+
+            UpdatePlayState.Invoke();
         }
 
         public async Task PlayFromAsync(int sec)
         {
             Console.WriteLine(fileReader.CurrentTime);
-            
+
             waveOut.Stop();
             fileReader.CurrentTime = TimeSpan.FromSeconds(sec);
             waveOut.Play();
+            UpdatePlayState.Invoke();
         }
 
         public async Task SetVolumeAsync(int percentage)
         {
-            float toSet = (float)percentage / 100;
+            float toSet = (float) percentage / 100;
             waveOut.Volume = toSet;
             Console.WriteLine(waveOut.Volume);
+        }
+
+        public async Task PlayPreviousSong()
+        {
+            if (previouslySongs.Count >= 2)
+            {
+                previouslySongs.RemoveAt(previouslySongs.Count - 1);
+                Console.WriteLine(previouslySongs.Count);
+                await PlaySongAsync(previouslySongs[^1]);
+            }
+        }
+
+        public async Task PlayNextSongAsync()
+        {
+            int index = CurrentPlaylist.IndexOf(currentSong);
+            if (index == CurrentPlaylist.Count - 1)
+            {
+                index = 0;
+            }
+            else
+            {
+                index++;
+            }
+
+            Console.WriteLine(index);
+            await PlaySongAsync(CurrentPlaylist[index]);
+        }
+
+        public string UpdateDisplay()
+        {
+            if (currentSong.Artists.Count < 2)
+            {
+                return currentSong.Title + " " + currentSong.Artists[0].ArtistName;
+            }
+            else
+            {
+                return currentSong.Title + " Various Artists";
+            }
             
         }
 

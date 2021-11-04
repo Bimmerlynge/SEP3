@@ -8,7 +8,6 @@ using Client.model;
 using Microsoft.AspNetCore.Components;
 
 
-
 namespace Client.Pages
 {
     public partial class AudioTestPage : ComponentBase
@@ -16,18 +15,15 @@ namespace Client.Pages
         [Inject] public IAudioTestModel Model { get; set; }
         [Inject] public IPlayerModel Player { get; set; }
         [Inject] public IModalService ModalService { get; set; }
-        
-        
         private IList<Song> songs;
         private Song currentSong;
-        private bool isPlaying;
+        
         protected override async Task OnInitializedAsync()
         {
-            Console.WriteLine("Hallo");
             songs = await Model.GetAllSongs();
-        }
-        
+            Player.CurrentPlaylist = songs;
 
+        }
         private async Task playSong(ChangeEventArgs e)
         {
             try
@@ -37,29 +33,15 @@ namespace Client.Pages
                 {
                     return;
                 }                
-                Song song = songs.First(t => t.Id == int.Parse((string)e.Value));
-                await Player.PlaySongAsync(song);
+                currentSong = songs.First(t => t.Id == int.Parse((string)e.Value));
+                await Player.PlaySongAsync(currentSong);
             }
             catch (Exception exception)
             {
                 Console.WriteLine(exception.Message);
                 ModalService.Show<Popup>("Error");
             }
-         
         }
-
-        private async Task TogglePlay()
-        {
-            isPlaying = await Player.PlayPauseToggleAsync();
-        }
-        private async Task previousSong()
-        {
-            await Model.PlayPreviousSong();
-        }
-
-        private Task nextSong()
-        {
-            throw new NotImplementedException();
-        }
+        
     }
     }
