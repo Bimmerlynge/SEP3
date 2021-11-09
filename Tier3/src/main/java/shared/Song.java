@@ -14,6 +14,8 @@ public class Song {
     private int duration;
     private Date releaseDate;
     private ArrayList<Artist> artists;
+    private ArrayList<Album> albums;
+
 
 
     public Song(int id, String url, String title, int duration, Date releaseDate) {
@@ -23,6 +25,21 @@ public class Song {
         this.duration = duration;
         this.releaseDate = releaseDate;
         artists = new ArrayList<>();
+        albums = new ArrayList<>();
+    }
+
+    public void addAlbum(Album album){
+        albums.add(album);
+    }
+
+    public ArrayList<Album> getAlbums()
+    {
+        return albums;
+    }
+
+    public void setAlbums(ArrayList<Album> albums)
+    {
+        this.albums = albums;
     }
 
     public String toString(){

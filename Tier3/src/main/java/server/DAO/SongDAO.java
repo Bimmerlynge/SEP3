@@ -1,5 +1,6 @@
 package server.DAO;
 
+import shared.Album;
 import shared.Artist;
 import shared.Song;
 
@@ -16,16 +17,30 @@ public class SongDAO extends BaseDAO implements ISongDAO
     try (Connection connection = getConnection())
     {
       PreparedStatement preparedStatement = connection
-          .prepareStatement("SELECT * FROM Song");
+          .prepareStatement("SELECT * FROM AllSongs");
       ResultSet resultSet = preparedStatement.executeQuery();
 
       ArrayList<Song> listOfSongs = new ArrayList<>();
+      int songId = 0;
+
       while (resultSet.next())
       {
-        Song song = new Song(resultSet.getInt("songId"),
-            resultSet.getString("url"), resultSet.getString("title"),
-            resultSet.getInt("duration"), resultSet.getDate("releaseDate"));
-        listOfSongs.add(song);
+        if (songId != resultSet.getInt("songid"))
+        {
+          Song song = new Song(resultSet.getInt("songid"),
+              resultSet.getString("url"), resultSet.getString("songtitle"),
+              resultSet.getInt("songduration"), resultSet.getDate("songreleasedate"));
+          listOfSongs.add(song);
+          songId = song.getId();
+        }
+
+        Artist artist = new Artist(resultSet.getInt("artistid"),
+            resultSet.getString("artistname"));
+        listOfSongs.get(listOfSongs.size() - 1).addArtist(artist);
+        Album album = new Album(resultSet.getInt("albumId"), resultSet.getString("albumtitle"),
+            resultSet.getInt("albumduration"),
+            resultSet.getDate("albumreleasedate"));
+        listOfSongs.get(listOfSongs.size()-1).addAlbum(album);
       }
       return listOfSongs;
 
@@ -55,8 +70,8 @@ public class SongDAO extends BaseDAO implements ISongDAO
         if (songId != resultSet.getInt("songId"))
         {
           Song song = new Song(resultSet.getInt("songId"),
-              resultSet.getString("url"), resultSet.getString("title"),
-              resultSet.getInt("duration"), resultSet.getDate("releaseDate"));
+              resultSet.getString("url"), resultSet.getString("songTitle"),
+              resultSet.getInt("songDuration"), resultSet.getDate("songReleaseDate"));
           listOfSongs.add(song);
           songId = song.getId();
         }

@@ -9,17 +9,17 @@ CREATE TABLE IF NOT EXISTS Song
 (
     songId      SERIAL PRIMARY KEY,
     url         VARCHAR  NOT NULL,
-    title       VARCHAR  NOT NULL,
-    duration    SMALLINT NOT NULL,
-    releaseDate _date
+    songTitle       VARCHAR  NOT NULL,
+    songDuration    SMALLINT NOT NULL,
+    songReleaseDate _date
 );
 
 CREATE TABLE IF NOT EXISTS Album
 (
     albumId     SERIAL PRIMARY KEY,
-    title       VARCHAR(100) NOT NULL,
-    duration    SMALLINT, -- Lav trigger for at finde summen af alle sange på albummet
-    releaseDate _date
+    albumTitle       VARCHAR(100) NOT NULL,
+    albumDuration    SMALLINT, -- Lav trigger for at finde summen af alle sange på albummet
+    albumReleaseDate _date
     );
 
 CREATE TABLE IF NOT EXISTS Artist
@@ -74,6 +74,14 @@ CREATE VIEW AlbumsWithArtist AS
 JOIN Album Al ON Al.albumId = AAR.albumId
 ORDER BY albumId ASC;
 
+CREATE VIEW AllSongs AS
+    SELECT A2.*, Ar.*, S.* From Song AS S JOIN ArtistSongRelation ASR ON S.songId = ASR.songId JOIN Artist Ar ON ASR.artistId = Ar.artistId
+    JOIN AlbumSongRelation A ON S.songId = A.songId JOIN Album A2 ON A.albumId = A2.albumId
+ORDER BY songId ASC
+;
+
+
+
 CREATE OR REPLACE FUNCTION songDurationTotal()
     RETURNS TRIGGER
     LANGUAGE plpgsql
@@ -81,12 +89,12 @@ AS
 $$
 BEGIN
 WITH durationTotal AS (
-    SELECT SUM(S.duration) AS durTot
+    SELECT SUM(S.songDuration) AS durTot
     FROM AlbumSongRelation
              JOIN Song S ON S.songId = AlbumSongRelation.songId
     WHERE AlbumSongRelation.albumId = NEW.albumId)
 UPDATE Album
-SET duration = durationTotal.durTot
+SET albumDuration = durationTotal.durTot
     FROM durationTotal
 WHERE NEW.albumId = albumId;
 RETURN new;
@@ -99,36 +107,13 @@ CREATE TRIGGER updateSongDuration
                         FOR EACH ROW
                         EXECUTE PROCEDURE songDurationTotal();
 
-
-INSERT INTO Album (title)
-VALUES ('RedHotAlbum'), ('NogetMedJohnnyAlbummet');
-INSERT INTO Song(url, title, duration) VALUES
+INSERT INTO Song(url, songTitle, songDuration) VALUES
     ('..\..\..\Util\Audio\Ring_Of_Fire.mp3', 'Ring_Of_Fire', 24);
-INSERT INTO Song(url, title, duration) VALUES
+INSERT INTO Song(url, songTitle, songDuration) VALUES
     ('..\..\..\Util\Audio\Champion.mp3', 'Champion', 55);
-INSERT INTO Song(url, title, duration) VALUES
+INSERT INTO Song(url, songTitle, songDuration) VALUES
     ('..\..\..\Util\Audio\Under_The_Bridge.mp3', 'Under_The_Bridge', 24);
 
-INSERT INTO AlbumSongRelation (albumId, songId)
-VALUES (1, 1);
-SELECT duration
-FROM Album;
-INSERT INTO AlbumSongRelation (albumId, songId)
-VALUES (1, 2);
-SELECT duration
-FROM Album;
-DELETE
-FROM AlbumSongRelation
-WHERE songId = 1;
-DELETE
-FROM AlbumSongRelation
-WHERE songId = 2;
-SELECT duration
-FROM Album;
-INSERT INTO AlbumSongRelation (albumId, songId)
-VALUES (1, 3), (2,1);
-SELECT duration
-FROM Album;
 INSERT INTO Artist (artistName)
 VALUES ('Clemens');
 INSERT INTO Artist (artistName)
@@ -136,13 +121,25 @@ VALUES ('Jon');
 INSERT INTO Artist (artistName)
 VALUES ('Johnny Cash');
 INSERT INTO Artist (artistName)
-VALUES ('Red Hot Chili Peppers');
-INSERT INTO ArtistSongRelation (artistId, songId) VALUES (3, 1);
-INSERT INTO ArtistSongRelation (artistId, songId) VALUES (1, 2);
-INSERT INTO ArtistSongRelation (artistId, songId) VALUES (2, 2);
-INSERT INTO ArtistSongRelation (artistId, songId) VALUES (4, 3);
-INSERT INTO AlbumArtistRelation (albumId, artistId) VALUES (1,4);
-INSERT INTO AlbumArtistRelation (albumId, artistId) VALUES (2,3);
+VALUES ('Red Hot Chili Peppers'), ('TestArtist4');
 
-SELECT * FROM SongWithArtist;
-SELECT * FROM AlbumsWithArtist;
+INSERT INTO Album (albumTitle)
+VALUES ('RedHotAlbum'), ('NogetMedJohnnyAlbummet'), ('Test1'),('Test2'),('Test3');
+
+
+INSERT INTO ArtistSongRelation (artistId, songId) VALUES (1,1), (2,1),(3,1),
+                                                         (2,2),
+                                                         (3,3)
+                                                         ;
+
+
+INSERT INTO AlbumSongRelation (albumId, songId)
+VALUES (1,1), (2,1),
+       (2,2),
+       (1,3)
+       ;
+
+
+
+SELECT *
+FROM AllSongs;

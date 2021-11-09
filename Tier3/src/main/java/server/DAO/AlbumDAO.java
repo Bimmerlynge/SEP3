@@ -25,14 +25,11 @@ public class AlbumDAO extends BaseDAO implements IAlbumDAO
         if (albumId != resultSet.getInt("albumId"))
         {
           Album album = new Album(resultSet.getInt("albumId"),
-              resultSet.getString("title"), resultSet.getInt("duration"), resultSet.getDate("releaseDate"));
+              resultSet.getString("albumTitle"), resultSet.getInt("albumDuration"), resultSet.getDate("albumReleaseDate"));
           albums.add(album);
           albumId = album.getAlbumId();
         }
 
-        Artist artist = new Artist(resultSet.getInt("artistid"),
-            resultSet.getString("artistname"));
-        albums.get(albums.size() - 1).addArtist(artist);
       }
 
       return albums;
