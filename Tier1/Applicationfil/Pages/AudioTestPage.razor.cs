@@ -17,23 +17,31 @@ namespace Client.Pages
         [Inject] public IModalService ModalService { get; set; }
         private IList<Song> songs;
         private Song currentSong;
-        
+
         protected override async Task OnInitializedAsync()
         {
+        }
+
+        protected override async Task OnAfterRenderAsync(bool firstRender)
+        {
+     
             songs = await Model.GetAllSongs();
             Player.CurrentPlaylist = songs;
-
+            Console.WriteLine("DONE");
+            StateHasChanged();
         }
+
         private async Task playSong(ChangeEventArgs e)
         {
             try
-            {           
+            {
                 //Quick fix, skal aligevel udskiftes, gør intet når man vælger "Select Below"
                 if ("Select Below".Equals((string) e.Value))
                 {
                     return;
-                }                
-                currentSong = songs.First(t => t.Id == int.Parse((string)e.Value));
+                }
+
+                currentSong = songs.First(t => t.Id == int.Parse((string) e.Value));
                 await Player.PlaySongAsync(currentSong);
             }
             catch (Exception exception)
@@ -42,6 +50,5 @@ namespace Client.Pages
                 ModalService.Show<Popup>("Error");
             }
         }
-        
     }
-    }
+}

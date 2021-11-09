@@ -19,6 +19,7 @@ namespace Client.model
         private IList<Song> previouslySongs = new List<Song>();
         private Song currentSong;
 
+
         public bool IsPlaying
         {
             get { return waveOut.PlaybackState == PlaybackState.Playing; }
