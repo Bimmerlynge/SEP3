@@ -1,0 +1,40 @@
+@page "/SongTable"
+
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment env 
+<h3>SongTable</h3>
+
+
+@if (songList == null)
+{
+    <em>Loading...</em>
+}
+else if (!songList.Any())
+{
+    <em>No adults in the list. Add some.</em>
+}
+else
+{
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Duration</th>
+            <th>Album</th>
+            <th>Artist</th>
+            <th>Release Date</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var song in songList)
+        {
+            <tr>
+                <td>@song.Title</td>
+                <td>@song.Duration</td>
+                <td>@generateAlbums(song)</td>
+                <td>@generateArtists(song)</td>
+                <td>@song.ReleaseDate</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
