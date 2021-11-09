@@ -15,7 +15,7 @@ namespace AppServer.Networking.DataSide
         public async Task<string> GetAllSongs()
         {
             HttpClient client = new HttpClient();
-            Task<string> stringAsync = client.GetStringAsync(uri + "song");
+            Task<string> stringAsync = client.GetStringAsync(uri + "songs");
             
             return await stringAsync;
         }   

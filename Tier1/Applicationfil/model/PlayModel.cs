@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using Client.Data;
 using Client.Networking;
@@ -18,12 +19,14 @@ namespace Client.model
         private IList<Song> previouslySongs = new List<Song>();
         private Song currentSong;
 
+
         public bool IsPlaying
         {
             get { return waveOut.PlaybackState == PlaybackState.Playing; }
         }
 
         public Action UpdatePlayState { get; set; }
+        public Action ProgressBarUpdate { get; set; }
         public IList<Song> CurrentPlaylist { get; set; }
 
         public PlayerModel(IClient client)
@@ -51,6 +54,15 @@ namespace Client.model
             waveOut.Play();
             currentSong = song;
             UpdatePlayState.Invoke();
+            Thread t1 = new Thread(() =>
+            {
+                while (true)
+                {
+                    ProgressBarUpdate.Invoke();
+                    Thread.Sleep(1000);
+                }
+            });
+            t1.Start();
 
             if (previouslySongs.Count == 0 || previouslySongs[^1].Id != song.Id)
             {
@@ -84,10 +96,9 @@ namespace Client.model
             UpdatePlayState.Invoke();
         }
 
-        public async Task PlayFromAsync(int sec)
+        public async Task PlayFromAsync(float progress)
         {
-            Console.WriteLine(fileReader.CurrentTime);
-
+            int sec = (int)(currentSong.Duration * (progress/100));
             waveOut.Stop();
             fileReader.CurrentTime = TimeSpan.FromSeconds(sec);
             waveOut.Play();
@@ -148,6 +159,14 @@ namespace Client.model
                 waveOut.Dispose();
                 fileReader.Dispose();
             }
+        }
+
+        public async Task<int> UpdateProgressBar()
+        {
+            double currentTime = fileReader.CurrentTime.TotalSeconds;
+            double duration = currentSong.Duration;
+            int progressPercentage = (int)(currentTime / duration * 100);
+            return progressPercentage;
         }
     }
 }
