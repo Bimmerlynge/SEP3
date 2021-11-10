@@ -49,15 +49,14 @@ namespace Client.Pages
             currentSong = await Player.GetCurrentSongAsync();
             songTitle = currentSong.Title;
             artistTitle = currentSong.Artists[0].ArtistName; //Giver kun første artist på listen - skal flyttes ud i modellen.
+            TimeSpan totalDurationSpan = new TimeSpan(0, currentSong.Duration / 60, currentSong.Duration % 60);
+            totalDuration = totalDurationSpan.ToString();
             StateHasChanged();
             
         }
         private async Task updateProgressBar()
         {
             progressValue = await Player.UpdateProgressBar();
-
-            TimeSpan totalDurationSpan = new TimeSpan(0, currentSong.Duration / 60, currentSong.Duration % 60);
-            totalDuration = totalDurationSpan.ToString();
             
             TimeSpan currentDurationSpan = new TimeSpan(0, currentSong.Duration * progressValue / 100 / 60, currentSong.Duration * progressValue / 100 % 60);
             currentDuration = currentDurationSpan.ToString();
