@@ -59,7 +59,7 @@ namespace Client.model
                 while (true)
                 {
                     ProgressBarUpdate.Invoke();
-                    Thread.Sleep(100);
+                    Thread.Sleep(500);
                 }
             });
             t1.Start();
@@ -161,12 +161,9 @@ namespace Client.model
             }
         }
 
-        public async Task<int> UpdateProgressBar()
+        public async Task<double> UpdateProgressBar()
         {
-            double currentTime = fileReader.CurrentTime.TotalSeconds;
-            double duration = currentSong.Duration;
-            int progressPercentage = (int)(currentTime / duration * 100);
-            return progressPercentage;
+            return fileReader.CurrentTime.TotalSeconds;
         }
 
         public async Task<Song> GetCurrentSongAsync()
