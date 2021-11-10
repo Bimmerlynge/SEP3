@@ -15,10 +15,14 @@ namespace Client.Pages
         [Inject] public IPlayerModel Player { get; set; }
         [Inject] public IModalService ModalService { get; set; }
 
-        private string display = "";
+        private string songTitle = "";
+        private string artistTitle = "";
         private bool isPlaying;
         private ElementReference progress;
-        public int progressValue { get; set; } 
+        public int progressValue { get; set; }
+        private string currentDuration = "";
+        private string totalDuration = "";
+        private Song currentSong;
 
         protected override async Task OnInitializedAsync()
         {
@@ -39,16 +43,25 @@ namespace Client.Pages
             await Player.PlayNextSongAsync();
         }
 
-        private void updatePlayState()
-        {
-            
+        private async Task updatePlayState()
+        { 
             isPlaying = Player.IsPlaying;
-            display = Player.UpdateDisplay();
+            currentSong = await Player.GetCurrentSongAsync();
+            songTitle = currentSong.Title;
+            artistTitle = currentSong.Artists[0].ArtistName; //Giver kun første artist på listen - skal flyttes ud i modellen.
             StateHasChanged();
+            
         }
         private async Task updateProgressBar()
         {
             progressValue = await Player.UpdateProgressBar();
+
+            TimeSpan totalDurationSpan = new TimeSpan(0, currentSong.Duration / 60, currentSong.Duration % 60);
+            totalDuration = totalDurationSpan.ToString();
+            
+            TimeSpan currentDurationSpan = new TimeSpan(0, currentSong.Duration * progressValue / 100 / 60, currentSong.Duration * progressValue / 100 % 60);
+            currentDuration = currentDurationSpan.ToString();
+            
             await InvokeAsync(() => StateHasChanged());
 
         }

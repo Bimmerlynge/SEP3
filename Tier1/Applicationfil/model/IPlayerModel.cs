@@ -21,5 +21,6 @@ namespace Client.model
         string UpdateDisplay();
         void StopPlaying();
         Task<int> UpdateProgressBar();
+        Task<Song> GetCurrentSongAsync();
     }
 }

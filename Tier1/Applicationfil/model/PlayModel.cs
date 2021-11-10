@@ -59,7 +59,7 @@ namespace Client.model
                 while (true)
                 {
                     ProgressBarUpdate.Invoke();
-                    Thread.Sleep(1000);
+                    Thread.Sleep(100);
                 }
             });
             t1.Start();
@@ -142,7 +142,7 @@ namespace Client.model
         {
             if (currentSong.Artists.Count < 2)
             {
-                return currentSong.Title + " " + currentSong.Artists[0].ArtistName;
+                return currentSong.Title + " " + currentSong.Artists[0].ArtistName + currentSong.Duration;
             }
             else
             {
@@ -167,6 +167,11 @@ namespace Client.model
             double duration = currentSong.Duration;
             int progressPercentage = (int)(currentTime / duration * 100);
             return progressPercentage;
+        }
+
+        public async Task<Song> GetCurrentSongAsync()
+        {
+             return currentSong;
         }
     }
 }
