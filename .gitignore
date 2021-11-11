@@ -4,4 +4,4 @@ out/
 bin/
 MINKODE.java
 MINKODE.class
-.mp3
+*.mp3
