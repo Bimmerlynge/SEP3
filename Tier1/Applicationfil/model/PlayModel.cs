@@ -114,11 +114,15 @@ namespace Client.model
 
         public async Task PlayPreviousSong()
         {
-            if (previouslySongs.Count >= 2)
+            if (fileReader.CurrentTime.TotalSeconds < 5 && previouslySongs.Count >= 2)
             {
                 previouslySongs.RemoveAt(previouslySongs.Count - 1);
                 Console.WriteLine(previouslySongs.Count);
                 await PlaySongAsync(previouslySongs[^1]);
+            }
+            else
+            {
+                await PlayFromAsync(0);
             }
         }
 
