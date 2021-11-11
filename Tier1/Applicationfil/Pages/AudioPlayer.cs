@@ -20,7 +20,7 @@ namespace Client.Pages
         public int pVP { get; set; }
         private string songTitle = "";
         private string artistTitle = "";
-        private bool isPlaying;
+        private bool isPlaying =false;
         private ElementReference progress;
         
         private string currentDuration = "";
@@ -45,6 +45,12 @@ namespace Client.Pages
         private async Task nextSong()
         {
             await Player.PlayNextSongAsync();
+        }
+
+        private async Task controlVolume()
+        {
+            
+            
         }
 
         private async Task updatePlayState()

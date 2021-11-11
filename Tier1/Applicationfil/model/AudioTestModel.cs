@@ -16,6 +16,8 @@ namespace Client.model
         private IClient client;
         private IList<Song> previouslySongs = new List<Song>();
 
+        
+
 
         public AudioTestModel(IClient client)
         {
