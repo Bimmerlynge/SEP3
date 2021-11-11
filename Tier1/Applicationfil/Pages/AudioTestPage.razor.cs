@@ -24,11 +24,13 @@ namespace Client.Pages
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-     
+            if (!firstRender) return;
+            
             songs = await Model.GetAllSongs();
-            Player.CurrentPlaylist = songs;
-            Console.WriteLine("DONE");
-            StateHasChanged();
+                Player.CurrentPlaylist = songs;
+                Console.WriteLine("DONE");
+                StateHasChanged();
+            
         }
 
         private async Task playSong(ChangeEventArgs e)

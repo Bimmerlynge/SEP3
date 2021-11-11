@@ -10,14 +10,9 @@ namespace Client.Pages
     public partial class SongTable : ComponentBase
     {
         [Inject] private IAudioTestModel Model { get; set; }
-
-        private IList<Song> songList;
-
-        protected override async Task OnInitializedAsync()
-        {
-            songList = await Model.GetAllSongs();
-        }
-
+        [Parameter]
+        public IList<Song> SongList { get; set; }
+        
         private string generateArtists(Song song)
         {
             IList<Artist> artists = song.Artists;
@@ -41,7 +36,6 @@ namespace Client.Pages
            
             }
         
-
         private string generateAlbums(Song song)
         {
             IList<Album> albums = song.Albums;

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
@@ -18,7 +19,18 @@ namespace AppServer.Networking.DataSide
             Task<string> stringAsync = client.GetStringAsync(uri + "songs");
             
             return await stringAsync;
-        }   
+        }
+
+        public async Task<string> GetSongsByFilter(TransferObj tObj)
+        {
+            using HttpClient client = new HttpClient();
+            string[] argsAsJson = JsonSerializer.Deserialize<string[]>(tObj.Arg);
+
+            Console.WriteLine("Type: "+ argsAsJson[0] + ", paramter: " + argsAsJson[1]);
+            
+            Task<string> stringAsync = client.GetStringAsync(uri + $"songs/{argsAsJson[0]}={argsAsJson[1]}");
+            return await stringAsync;
+        }
 
         public async Task<string> GetMessage()
         {

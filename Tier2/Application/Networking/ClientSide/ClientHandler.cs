@@ -34,9 +34,26 @@ namespace AppServer.Networking.ClientSide
                     Song song = JsonSerializer.Deserialize<Song>(fromClient.Arg);
                     await HandlePlaySongAsync(song, client.GetStream());
                     break;
+                case "GETSONGSBYFILTER":
+                    await GetSongsByFilterAsync(fromClient);
+                    Console.WriteLine("SENDING FILTERED SONGS");
+                    break;
             }
 
             client.Dispose();
+        }
+
+        private async Task GetSongsByFilterAsync(TransferObj tObj)
+        {
+            Console.WriteLine(tObj.Arg);
+            string transAsJson = await model.GetSongsByFilterJsonAsync(tObj);
+            Console.WriteLine("clienthandler; " + transAsJson);
+            
+            byte[] bytes = Encoding.ASCII.GetBytes(transAsJson);
+
+            NetworkStream stream = client.GetStream();
+            await stream.WriteAsync(bytes, 0, bytes.Length);
+            
         }
 
         private async Task<TransferObj> readFromClientAsync(NetworkStream stream)

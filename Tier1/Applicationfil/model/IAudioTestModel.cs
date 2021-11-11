@@ -6,13 +6,10 @@ namespace Client.model
 {
     public interface IAudioTestModel
     {
-        Task playSong(Song song);
+       
         Task<IList<Song>> GetAllSongs();
-        
-        Task PauseSongAsync();
-        Task PlayFromAsync(int sec);
-        Task SetVolumeAsync(int percentage);
-        Task PlayPreviousSong();
 
+
+        Task<IList<Song>> GetSongsByFilterAsync(string filterOption, string searchField);
     }
 }

@@ -14,32 +14,12 @@ namespace Client.model
     public class AudioTestModel : IAudioTestModel
     {
         private IClient client;
-        private IList<Song> previouslySongs = new List<Song>();
-
-
+        private IList<Song> songsToShow;
+        
+        
         public AudioTestModel(IClient client)
         {
             this.client = client;
-        }
-
-        public async Task playSong(Song song)
-        {
-            string serverFile = "wwwroot\\audio\\" + song.Title + song.Id + ".mp3";
-            if (!File.Exists(serverFile))
-            {
-                string songAsJson = JsonSerializer.Serialize(song);
-                TransferObj transferObj = new TransferObj() {Action = "PLAYSONG", Arg = songAsJson};
-                string transf = JsonSerializer.Serialize(transferObj);
-
-
-                await client.PlaySong(transf, serverFile);
-            }
-
-            if (previouslySongs.Count == 0 || previouslySongs[^1].Id != song.Id)
-            {
-                previouslySongs.Add(song);
-            }
-            
         }
 
         public async Task<IList<Song>> GetAllSongs()
@@ -55,41 +35,25 @@ namespace Client.model
             // Console.WriteLine("Trans from server: "+ tObj.Action + "   " + tObj.Arg);
             IList<Song> allSongs = JsonSerializer.Deserialize<IList<Song>>(tObj.Arg,
                 new JsonSerializerOptions() {PropertyNameCaseInsensitive = true});
-
-            // int i = 0;
-            // foreach (Song allSong in allSongs)
-            // {
-            //     Console.WriteLine(i++);
-            //     Console.WriteLine(allSong.Title);
-            // }
+            
             return allSongs;
         }
 
-        public async Task PauseSongAsync()
+        public async Task<IList<Song>> GetSongsByFilterAsync(string filterOption, string searchField)
         {
-            throw new NotImplementedException();
-        }
+            string[] args = {filterOption, searchField};
+            string arg = JsonSerializer.Serialize(args);
+            TransferObj transferObj = new TransferObj() {Action = "GETSONGSBYFILTER", Arg = arg};
+            string transString = JsonSerializer.Serialize(transferObj);
 
-        public async Task PlayFromAsync(int sec)
-        {
-            throw new NotImplementedException();
-        }
+            string inFromServer = await client.GetSongsByFilter(transString);
 
-        public async Task SetVolumeAsync(int percentage)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task PlayPreviousSong()
-        {
-            if (previouslySongs.Any())
-            {
-                Console.WriteLine(previouslySongs.Count);
-                await playSong(previouslySongs[^1]);
-                previouslySongs.RemoveAt(previouslySongs.Count - 1);
-            }
+            Console.WriteLine("I model" + inFromServer);
             
-            
+            TransferObj tObj = JsonSerializer.Deserialize<TransferObj>(inFromServer);
+            IList<Song> songsToReturn = JsonSerializer.Deserialize<IList<Song>>(tObj.Arg, 
+                new JsonSerializerOptions(){PropertyNameCaseInsensitive = true});
+            return songsToReturn;
         }
     }
 }

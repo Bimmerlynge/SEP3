@@ -1,22 +1,23 @@
 @page "/SongTable"
+@using Client.model
 
 @inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment env 
-<h3>SongTable</h3>
 
 
-@if (songList == null)
+@if (SongList == null)
 {
     <em>Loading...</em>
 }
-else if (!songList.Any())
+else if (!SongList.Any())
 {
-    <em>No adults in the list. Add some.</em>
+    <em>No songs found.</em>
 }
 else
 {
     <table class="table">
         <thead>
         <tr>
+            <th></th>
             <th>Title</th>
             <th>Duration</th>
             <th>Album</th>
@@ -25,9 +26,12 @@ else
         </tr>
         </thead>
         <tbody>
-        @foreach (var song in songList)
+        @foreach (var song in SongList)
         {
             <tr>
+                <td>
+                    <i class="oi oi-media-play" @onclick="@(() => Console.WriteLine("Klikket på den knap"))"/>
+                </td>
                 <td>@song.Title</td>
                 <td>@song.Duration</td>
                 <td>@generateAlbums(song)</td>

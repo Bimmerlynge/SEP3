@@ -36,6 +36,23 @@ namespace Client.Networking
             await SongFromServer(client, serverFile);
         }
 
+        public async Task<string> GetSongsByFilter(string transString)
+        {
+            using TcpClient client = GetTcpClient();
+
+            NetworkStream stream = client.GetStream();
+            byte[] toServer = Encoding.ASCII.GetBytes(transString);
+            await stream.WriteAsync(toServer);
+
+            byte[] buffer = new byte[50000];
+            int bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+            string inFromServer = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+
+
+            Console.WriteLine("I client" + inFromServer);
+            return inFromServer;
+        }
+
         private async Task SongFromServer(TcpClient client, string serverFile)
         {
             NetworkStream stream = client.GetStream();

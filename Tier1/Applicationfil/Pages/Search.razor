@@ -1,7 +1,24 @@
 @page "/Search"
-@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment env 
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment env
 <h3>Search</h3>
 
+
+    <EditForm Model="@Model">
+        <InputSelect @bind-Value="filterOption">
+            <option>Title</option>
+            <option>Artist</option>
+            <option>Album</option>
+        </InputSelect>
+        <InputText @bind-Value="searchField"/>
+        <button @onclick="Filter">Search</button>
+    </EditForm>
+
+
+<SongTable SongList="songsToShow"/>
+
+
+
+
 @code {
-    
+
 }

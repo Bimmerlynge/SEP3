@@ -26,7 +26,14 @@ namespace AppServer.Model
             return transAsJson;
         }
 
-        
+        public async Task<string> GetSongsByFilterJsonAsync(TransferObj tObj)
+        {
+            string songsToReturn = await dataEndPoint.GetSongsByFilter(tObj);
+            TransferObj sentObj = new TransferObj() {Arg = songsToReturn};
+            return JsonSerializer.Serialize(sentObj);
+        }
+
+
         public async Task<byte[]> PlayAsync(string urlOfSong)
         {
             var filePath = urlOfSong;
