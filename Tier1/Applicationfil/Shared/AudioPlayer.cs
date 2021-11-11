@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Net.Security;
-using System.Threading;
 using System.Threading.Tasks;
 using Blazored.Modal.Services;
 using Client.Data;
@@ -9,7 +7,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.JSInterop;
 
-namespace Client.Pages
+namespace Client.Shared
 {
     public partial class AudioPlayer : ComponentBase
     {
@@ -18,6 +16,7 @@ namespace Client.Pages
 
         public double progressValuePercentage { get; set; }
         public int pVP { get; set; }
+        public int volume { get; set; } = 30;
         private string songTitle = "";
         private string artistTitle = "";
         private bool isPlaying =false;
@@ -66,30 +65,26 @@ namespace Client.Pages
         }
         private async Task updateProgressBar()
         {
-            // progressValue = await Player.UpdateProgressBar();
-            // Console.WriteLine(progressValue);
-            // TimeSpan currentDurationSpan = new TimeSpan(0, (int)(currentSong.Duration * progressValue / 100 / 60), (int)(currentSong.Duration * progressValue / 100 % 60));
-            // currentDuration = currentDurationSpan.ToString();
-            // Console.WriteLine(currentDuration);
-            // await InvokeAsync(() => StateHasChanged());
-            
-            progressValue = await Player.UpdateProgressBar();
+           progressValue = await Player.UpdateProgressBar();
             progressValuePercentage = progressValue / currentSong.Duration * 100;
             pVP = (int) progressValuePercentage;
-            Console.WriteLine(progressValuePercentage);
             TimeSpan currentDurationSpan = new TimeSpan(0, (int)(currentSong.Duration * progressValuePercentage / 100 / 60), (int)(currentSong.Duration * progressValuePercentage / 100 % 60));
             currentDuration = currentDurationSpan.ToString();
             await InvokeAsync(() => StateHasChanged());
-
-
+            
         }
         
         private async Task progressBarClicked(MouseEventArgs mouseEventArgs)
         {
             float returnHack = 1;
-            returnHack = await JS.InvokeAsync<float>("GetProgress", returnHack);
-            Console.WriteLine(returnHack + " returHack efter barclick");
+            returnHack = await JS.InvokeAsync<float>("getProgress", mouseEventArgs);
             await Player.PlayFromAsync(returnHack);
+        }
+        
+        private async Task volumeClicked(MouseEventArgs arg)
+        {
+            volume = await JS.InvokeAsync<int>("getVolume", arg);
+            await Player.SetVolumeAsync(volume);
         }
 
 
