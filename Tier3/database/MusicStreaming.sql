@@ -142,4 +142,5 @@ VALUES (1,1), (2,1),
 
 
 SELECT *
-FROM AllSongs;
+FROM AllSongs
+WHERE songTitle = 'Champion';
