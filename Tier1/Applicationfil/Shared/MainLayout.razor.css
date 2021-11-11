@@ -78,6 +78,10 @@
     padding: 10px;
     color: white;
 }
+
+.progressBar {
+    display: inline;
+}
     
 
 

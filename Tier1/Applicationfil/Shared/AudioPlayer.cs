@@ -22,9 +22,9 @@ namespace Client.Shared
         private bool isPlaying = false;
         private ElementReference progress;
         
-        private string currentDuration = "";
+        private string currentDuration = "00:00:00";
         private double progressValue;
-        private string totalDuration = "";
+        private string totalDuration = "00:00:00";
         private Song currentSong;
 
         protected override async Task OnInitializedAsync()
