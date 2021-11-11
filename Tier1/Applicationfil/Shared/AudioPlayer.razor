@@ -17,11 +17,19 @@
     <label>@currentDuration</label>
     <label>@totalDuration</label>
     
-    
-    <progress id="progressBar" @onclick="progressBarClicked" @ref="progress" value="@pVP" max="100" style="width: 100%">@(pVP + " %")></progress>
+    <div class="slidecontainer">
+        <input @onclick="volumeClicked" type="range" min="1" max="100" value="30" class="slider" id="volumeControl">
+    </div>
+
+    <input @onclick="progressBarClicked" type="range" class="slider" id="progressBar" value="@pVP" max="100" style="width: 100%">
+
 </div>
 
 
+
+
 @code {
+
     
+
 }

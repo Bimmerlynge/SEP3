@@ -7,9 +7,6 @@
     <ItemGroup>
       <Compile Remove="Data\WeatherForecast.cs" />
       <Compile Remove="Data\WeatherForecastService.cs" />
-      <Compile Update="Pages\AudioPlayer.cs">
-        <DependentUpon>AudioPlayer.razor</DependentUpon>
-      </Compile>
     </ItemGroup>
 
     <ItemGroup>
