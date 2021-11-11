@@ -12,7 +12,7 @@ public class Album
   private String title;
   private int duration;
   private Date date;
-  private ArrayList<Artist> artists;
+
 
   public Album(int albumId, String title, int duration, Date date)
   {
@@ -20,7 +20,6 @@ public class Album
     this.title = title;
     this.duration = duration;
     this.date = date;
-    artists = new ArrayList<>();
   }
 
   public String toString(){
@@ -29,9 +28,6 @@ public class Album
     return gson.toJson(this);
   }
 
-  public void addArtist(Artist artist){
-    artists.add(artist);
-  }
 
   public int getAlbumId()
   {

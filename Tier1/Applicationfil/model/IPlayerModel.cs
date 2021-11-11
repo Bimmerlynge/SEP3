@@ -20,6 +20,7 @@ namespace Client.model
         IList<Song> CurrentPlaylist { get; set; }
         string UpdateDisplay();
         void StopPlaying();
-        Task<int> UpdateProgressBar();
+        Task<double> UpdateProgressBar();
+        Task<Song> GetCurrentSongAsync();
     }
 }

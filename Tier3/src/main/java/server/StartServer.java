@@ -20,15 +20,13 @@ public class StartServer
     ISongDAO songDAO = new SongDAO();
     IAlbumDAO albumDAO = new AlbumDAO();
 
-    ArrayList<Song> songs = songDAO.getAllSongsWithArtists();
-    ArrayList<Album> albums = albumDAO.getAllAlbumsWithArtist();
+    ArrayList<Song> songs = songDAO.getAllSongs();
 
+    System.out.println("Ud fra database");
     for (Song song : songs) {
       System.out.println(song.toString());
     }
 
-    for (Album album : albums){
-      System.out.println(album.toString());
-    }
+
   }
 }

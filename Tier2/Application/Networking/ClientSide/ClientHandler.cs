@@ -12,6 +12,7 @@ namespace AppServer.Networking.ClientSide
     {
         private TcpClient client;
         private IPlayService model = new PlayService();
+        
 
         public ClientHandler(TcpClient client)
         {
