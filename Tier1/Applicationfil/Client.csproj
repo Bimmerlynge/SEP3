@@ -7,9 +7,6 @@
     <ItemGroup>
       <Compile Remove="Data\WeatherForecast.cs" />
       <Compile Remove="Data\WeatherForecastService.cs" />
-      <Compile Update="Pages\AudioPlayer.cs">
-        <DependentUpon>AudioPlayer.razor</DependentUpon>
-      </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -29,6 +26,7 @@
         <DependentUpon>AudioTestPage.razor</DependentUpon>
       </Content>
       <Content Remove="wwwroot\audio\Champion2.mp3" />
+      <Content Remove="wwwroot\audio\Under_The_Bridge3.mp3" />
     </ItemGroup>
 
 </Project>

@@ -49,7 +49,7 @@ namespace Client.Networking
             string inFromServer = Encoding.ASCII.GetString(buffer, 0, bytesRead);
 
 
-            Console.WriteLine("I client" + inFromServer);
+            Console.WriteLine("I client: " + inFromServer);
             return inFromServer;
         }
 

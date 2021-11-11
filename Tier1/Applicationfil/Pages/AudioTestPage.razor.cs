@@ -45,6 +45,7 @@ namespace Client.Pages
 
                 currentSong = songs.First(t => t.Id == int.Parse((string) e.Value));
                 await Player.PlaySongAsync(currentSong);
+                
             }
             catch (Exception exception)
             {

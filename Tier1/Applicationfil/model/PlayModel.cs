@@ -33,7 +33,7 @@ namespace Client.model
         {
             this.client = client;
             waveOut = new WaveOutEvent();
-            waveOut.Volume = 0.1f;
+            waveOut.Volume = 0.3f;
 
         }
 
@@ -109,7 +109,6 @@ namespace Client.model
         {
             float toSet = (float) percentage / 100;
             waveOut.Volume = toSet;
-            Console.WriteLine(waveOut.Volume);
         }
 
         public async Task PlayPreviousSong()
