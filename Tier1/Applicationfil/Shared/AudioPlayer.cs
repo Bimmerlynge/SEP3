@@ -19,7 +19,7 @@ namespace Client.Shared
         public int volume { get; set; } = 30;
         private string songTitle = "";
         private string artistTitle = "";
-        private bool isPlaying =false;
+        private bool isPlaying = false;
         private ElementReference progress;
         
         private string currentDuration = "00:00:00";
