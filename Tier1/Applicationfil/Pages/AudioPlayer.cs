@@ -20,7 +20,7 @@ namespace Client.Pages
         public int pVP { get; set; }
         private string songTitle = "";
         private string artistTitle = "";
-        private bool isPlaying =false;
+        private bool isPlaying = false;
         private ElementReference progress;
         
         private string currentDuration = "";

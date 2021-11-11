@@ -5,3 +5,9 @@ window.GetProgress = () => {
     });
     return value_clicked;
 };
+
+function getProgress(e) {
+    var value_clicked = 20;
+    value_clicked = e.offsetX * this.max / this.offsetWidth;
+    return value_clicked;
+}
