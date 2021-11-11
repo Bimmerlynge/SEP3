@@ -24,10 +24,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="wwwroot\audio" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Content Remove="Pages\Counter.razor" />
       <Content Update="Pages\Popup.razor">
         <DependentUpon>AudioTestPage.razor</DependentUpon>

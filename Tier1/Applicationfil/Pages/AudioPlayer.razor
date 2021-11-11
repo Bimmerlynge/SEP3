@@ -12,9 +12,13 @@
         {<span class="oi oi-media-play" aria-hidden="true"></span>}
     </button>
     <button @onclick="nextSong"><span class="oi oi-arrow-circle-right" aria-hidden="true"></span></button>
-    <label>@display</label>
+    <label>Song Title: @songTitle</label>
+    <label>Album: @artistTitle</label>
+    <label>@currentDuration</label>
+    <label>@totalDuration</label>
     
-    <progress id="progressBar" @onclick="progressBarClicked" @ref="progress" value="@progressValue" max="100" style="width: 100%">@(progressValue + " %")></progress>
+    
+    <progress id="progressBar" @onclick="progressBarClicked" @ref="progress" value="@pVP" max="100" style="width: 100%">@(pVP + " %")></progress>
 </div>
 
 
