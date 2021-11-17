@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS Album
 (
     albumId     SERIAL PRIMARY KEY,
     albumTitle       VARCHAR(100) NOT NULL,
-    albumDuration    SMALLINT, -- Lav trigger for at finde summen af alle sange på albummet
+    albumDuration    SMALLINT, -- Lav trigger for at finde summen af alle sange pÃ¥ albummet
     albumReleaseDate _date
     );
 
@@ -117,26 +117,27 @@ INSERT INTO Song(url, songTitle, songDuration) VALUES
 INSERT INTO Artist (artistName)
 VALUES ('Clemens');
 INSERT INTO Artist (artistName)
-VALUES ('Jon');
+VALUES ('Jon Norregaard');
 INSERT INTO Artist (artistName)
 VALUES ('Johnny Cash');
 INSERT INTO Artist (artistName)
 VALUES ('Red Hot Chili Peppers'), ('TestArtist4');
 
 INSERT INTO Album (albumTitle)
-VALUES ('RedHotAlbum'), ('NogetMedJohnnyAlbummet'), ('Test1'),('Test2'),('Test3');
+VALUES ('Blood Sugar Sex Magik'),
+       ('Ring of Fire: The Best of Johnny Cash'),
+       ('Ingen Kender Dagen'),
+       ('Test2'),
+       ('Test3');
 
 
-INSERT INTO ArtistSongRelation (artistId, songId) VALUES (1,1), (2,1),(3,1),
-                                                         (2,2),
-                                                         (3,3)
-                                                         ;
+INSERT INTO ArtistSongRelation (artistId, songId) VALUES (3,1), (2,2),(1,2),
+                                                         (3,3);
 
 
 INSERT INTO AlbumSongRelation (albumId, songId)
-VALUES (1,1), (2,1),
-       (2,2),
-       (1,3)
+VALUES (1,3), (2,1),
+       (3,2)
        ;
 
 
