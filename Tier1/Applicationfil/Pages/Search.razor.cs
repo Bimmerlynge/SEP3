@@ -31,8 +31,7 @@ namespace Client.Pages
             {
                 songsToShow = await Model.GetAllSongs();
             }
-
-            searchField = "";
+            
             StateHasChanged();
         }
     }

@@ -10,8 +10,6 @@ namespace AppServer.Model
 {
     public class PlayService : IPlayService
     {
-        // flyttes ud senere
-        private IList<Song> songs = new List<Song>();
         private IDataEndPoint dataEndPoint = new DataEndPoint();
 
         public async Task<string> GetAllSongsAsJsonAsync()

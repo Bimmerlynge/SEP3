@@ -50,8 +50,7 @@ namespace Client.model
 
             Console.WriteLine("I model" + inFromServer);
             
-            TransferObj tObj = JsonSerializer.Deserialize<TransferObj>(inFromServer);
-            IList<Song> songsToReturn = JsonSerializer.Deserialize<IList<Song>>(tObj.Arg, 
+            IList<Song> songsToReturn = JsonSerializer.Deserialize<IList<Song>>(inFromServer, 
                 new JsonSerializerOptions(){PropertyNameCaseInsensitive = true});
             return songsToReturn;
         }
