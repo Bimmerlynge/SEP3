@@ -1,7 +1,5 @@
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Client.Data;
 using Client.model;
@@ -33,8 +31,7 @@ namespace Client.Pages
             {
                 songsToShow = await Model.GetAllSongs();
             }
-
-            searchField = "";
+            
             StateHasChanged();
         }
     }

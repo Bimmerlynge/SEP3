@@ -53,6 +53,18 @@ namespace Client.Networking
             return inFromServer;
         }
 
+        public async Task<string> getPlayList(string transforObject)
+        {
+            using TcpClient client = GetTcpClient();
+            NetworkStream stream = client.GetStream();
+            byte[] bytes = Encoding.ASCII.GetBytes(transforObject);
+            await stream.WriteAsync(bytes, 0, bytes.Length);
+            
+
+            return bytes.ToString();
+            //TODO
+        }
+
         private async Task SongFromServer(TcpClient client, string serverFile)
         {
             NetworkStream stream = client.GetStream();

@@ -22,9 +22,6 @@
 
     <ItemGroup>
       <Content Remove="Pages\Counter.razor" />
-      <Content Update="Pages\Popup.razor">
-        <DependentUpon>AudioTestPage.razor</DependentUpon>
-      </Content>
       <Content Remove="wwwroot\audio\Champion2.mp3" />
       <Content Remove="wwwroot\audio\Under_The_Bridge3.mp3" />
     </ItemGroup>

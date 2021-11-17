@@ -27,13 +27,6 @@ public class SongController
 //    return new Gson().toJson(songs);
 //  }
 
-  @GetMapping("/songs/{type}={parameter}")
-  public synchronized String getSongsByFilter(@PathVariable String type, @PathVariable String parameter) throws Exception {
-    System.out.println("Type: " + type + ", parameter: " + parameter);
-    ArrayList<Song> songs = songDAO.getSongsByFilter(type, parameter);
-    System.out.println("Sender list, size: " + songs.size());
-    return new Gson().toJson(songs);
-  }
 
   @GetMapping("/message")
   public synchronized String getMessage() {

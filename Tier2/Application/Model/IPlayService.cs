@@ -9,7 +9,6 @@ namespace AppServer.Model
         public Task<byte[]> PlayAsync(string urlOfSong);
 
         Task<string> GetAllSongsAsJsonAsync();
-
-        Task<string> GetSongsByFilterJsonAsync(TransferObj tObj);
+        
     }
 }
