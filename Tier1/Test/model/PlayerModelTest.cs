@@ -31,7 +31,7 @@ namespace ClientTest.model
         }
 
 
-/*
+
         [Test]
         public async Task SkipToNextSong()
         {
@@ -47,6 +47,6 @@ namespace ClientTest.model
             Assert.AreNotEqual(currentSong.Id, newCurrentSong.Id);
 
         }
-        */
+        
     }
 }

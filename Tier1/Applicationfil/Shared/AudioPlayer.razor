@@ -13,12 +13,13 @@
     </button>
     <button @onclick="nextSong"><span class="oi oi-arrow-circle-right" aria-hidden="true"></span></button>
     <label>Song Title: @songTitle</label>
-    <label>Album: @artistTitle</label>
+    <label>Artist: @artistTitle</label>
     
     
     
     <div class="slidecontainer">
         <input @onclick="volumeClicked" type="range" min="1" max="100" value="30" class="slider" id="volumeControl">
+        <label>Volume: @volume</label>
     </div>
     
     <div class="progressBar">

@@ -12,5 +12,6 @@ namespace AppServer.Networking.DataSide
         Task<string> GetMessage();
         Task<Song> GetSong();
         Task<string> GetSongsByFilter(TransferObj tObj);
+        Task<PlayList> GetPlayList();
     }
 }

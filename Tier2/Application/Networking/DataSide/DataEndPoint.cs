@@ -32,6 +32,19 @@ namespace AppServer.Networking.DataSide
             return await stringAsync;
         }
 
+        public async Task<PlayList> GetPlayList()
+        {
+            
+            HttpClient client = new HttpClient();
+            Task<string> stringAsync = client.GetStringAsync(uri + "playList/1");
+            string json = await stringAsync;
+            PlayList playList = JsonSerializer.Deserialize<PlayList>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            return playList;
+        }
+
         public async Task<string> GetMessage()
         {
             HttpClient client = new HttpClient();
