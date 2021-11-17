@@ -121,7 +121,7 @@ VALUES ('Jon Norregaard');
 INSERT INTO Artist (artistName)
 VALUES ('Johnny Cash');
 INSERT INTO Artist (artistName)
-VALUES ('Red Hot Chili Peppers'), ('TestArtist4');
+VALUES ('Red Hot Chili Peppers');
 
 INSERT INTO Album (albumTitle)
 VALUES ('Blood Sugar Sex Magik'),
@@ -132,7 +132,7 @@ VALUES ('Blood Sugar Sex Magik'),
 
 
 INSERT INTO ArtistSongRelation (artistId, songId) VALUES (3,1), (2,2),(1,2),
-                                                         (3,3);
+                                                         (4,3);
 
 
 INSERT INTO AlbumSongRelation (albumId, songId)
@@ -145,3 +145,8 @@ VALUES (1,3), (2,1),
 SELECT *
 FROM AllSongs
 WHERE songTitle = 'Champion';
+
+
+SELECT *
+FROM AllSongs
+WHERE artistId = 3;
