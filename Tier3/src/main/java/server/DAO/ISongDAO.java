@@ -7,5 +7,5 @@ public interface ISongDAO {
 
     ArrayList<Song> getAllSongs();
     ArrayList<Song> getAllSongsWithArtists();
-    ArrayList<Song> getSongsByFilter(String type, String parameter);
+    ArrayList<Song> getSongsByFilter(String type, String parameter) throws Exception;
 }

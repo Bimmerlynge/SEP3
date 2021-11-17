@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class SongDAO extends BaseDAO implements ISongDAO
 {
-  @Override public ArrayList<Song> getSongsByFilter(String type, String parameter){
+  @Override public ArrayList<Song> getSongsByFilter(String type, String parameter) throws Exception {
 
     String typeString ="";
     if (type.equals("Title"))
@@ -21,6 +21,8 @@ public class SongDAO extends BaseDAO implements ISongDAO
       typeString = "artistname";
     else if (type.equals("Album"))
       typeString = "albumtitle";
+    else
+      throw new Exception("Not valid Type");
 
     System.out.println("typeString: " + typeString);
     try (Connection connection = getConnection())

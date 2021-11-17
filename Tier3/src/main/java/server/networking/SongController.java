@@ -28,7 +28,7 @@ public class SongController
 //  }
 
   @GetMapping("/songs/{type}={parameter}")
-  public synchronized String getSongsByFilter(@PathVariable String type, @PathVariable String parameter){
+  public synchronized String getSongsByFilter(@PathVariable String type, @PathVariable String parameter) throws Exception {
     System.out.println("Type: " + type + ", parameter: " + parameter);
     ArrayList<Song> songs = songDAO.getSongsByFilter(type, parameter);
     System.out.println("Sender list, size: " + songs.size());

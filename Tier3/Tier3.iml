@@ -84,7 +84,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../../../../Skrivebord/SW/Libs &amp; Jars/GSon/gson-2.8.2.jar!/" />
+          <root url="jar://C:/../Skrivebord/SW/Libs &amp; Jars/GSon/gson-2.8.2.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -93,7 +93,7 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../../../../../Skrivebord/SW/Libs &amp; Jars/postgresql/postgresql-42.2.5.jar!/" />
+          <root url="jar://C:/../Skrivebord/SW/Libs &amp; Jars/postgresql/postgresql-42.2.5.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
