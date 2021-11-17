@@ -108,11 +108,11 @@ CREATE TRIGGER updateSongDuration
                         EXECUTE PROCEDURE songDurationTotal();
 
 INSERT INTO Song(url, songTitle, songDuration) VALUES
-    ('..\..\..\Util\Audio\Ring_Of_Fire.mp3', 'Ring_Of_Fire', 24);
+    ('..\..\..\Util\Audio\Ring_Of_Fire.mp3', 'Ring_Of_Fire', 155);
 INSERT INTO Song(url, songTitle, songDuration) VALUES
-    ('..\..\..\Util\Audio\Champion.mp3', 'Champion', 55);
+    ('..\..\..\Util\Audio\Champion.mp3', 'Champion', 180);
 INSERT INTO Song(url, songTitle, songDuration) VALUES
-    ('..\..\..\Util\Audio\Under_The_Bridge.mp3', 'Under_The_Bridge', 24);
+    ('..\..\..\Util\Audio\Under_The_Bridge.mp3', 'Under_The_Bridge', 180);
 
 INSERT INTO Artist (artistName)
 VALUES ('Clemens');
