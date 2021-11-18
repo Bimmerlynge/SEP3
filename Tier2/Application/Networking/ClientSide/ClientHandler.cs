@@ -44,6 +44,7 @@ namespace AppServer.Networking.ClientSide
 
             client.Dispose();
         }
+
         private async Task GetSongsByFilterAsync(TransferObj tObj)
         {
             string transAsJson;
@@ -66,19 +67,6 @@ namespace AppServer.Networking.ClientSide
             await stream.WriteAsync(bytes, 0, bytes.Length);
             
         }
-        // private async Task GetSongsByFilterAsync(TransferObj tObj)
-        // {
-        //     
-        //     Console.WriteLine(tObj.Arg);
-        //     string transAsJson = await songSearchService.GetSongsByFilterJsonAsync(tObj);
-        //     Console.WriteLine("clienthandler; " + transAsJson);
-        //     
-        //     byte[] bytes = Encoding.ASCII.GetBytes(transAsJson);
-        //
-        //     NetworkStream stream = client.GetStream();
-        //     await stream.WriteAsync(bytes, 0, bytes.Length);
-        //     
-        // }
 
         private async Task<TransferObj> readFromClientAsync(NetworkStream stream)
         {
@@ -105,9 +93,10 @@ namespace AppServer.Networking.ClientSide
 
         private async Task HandlePlaySongAsync(Song song, NetworkStream stream)
         {
-            byte[] songBytes = await playSongService.PlayAsync(song.Url);
-            Console.WriteLine("Length of {0}: {1}", song.Title, songBytes.Length);
-            await stream.WriteAsync(songBytes, 0, songBytes.Length);
+            
+            string jsonSong = await playSongService.PlayAsync(song);
+            byte[] bytes = Encoding.ASCII.GetBytes(jsonSong);
+            await stream.WriteAsync(bytes, 0, bytes.Length);
         }
     }
 }

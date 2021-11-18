@@ -62,7 +62,7 @@ namespace AppServerTest.Model
             int songNumberTest = 0;
             var listOfAllSongs = await GetListOfAllSongs();
 
-            string songAlbumTitle = listOfAllSongs[songNumberTest].Albums[0].Title;
+            string songAlbumTitle = listOfAllSongs[songNumberTest].AlbumProperty.AlbumTitle;
 
             string[] args = {"Album", songAlbumTitle};
 
@@ -92,7 +92,7 @@ namespace AppServerTest.Model
             int songNumberTest = 0;
             var listOfAllSongs = await GetListOfAllSongs();
 
-            string songAlbumTitle = listOfAllSongs[songNumberTest].Albums[0].Title;
+            string songAlbumTitle = listOfAllSongs[songNumberTest].AlbumProperty.AlbumTitle;
             string[] args = {null, songAlbumTitle};
 
             string arg = JsonSerializer.Serialize(args);
@@ -110,7 +110,7 @@ namespace AppServerTest.Model
             int songNumberTest = 0;
             var listOfAllSongs = await GetListOfAllSongs();
 
-            string songAlbumTitle = listOfAllSongs[songNumberTest].Albums[0].Title;
+            string songAlbumTitle = listOfAllSongs[songNumberTest].AlbumProperty.AlbumTitle;
             string[] args = {"", songAlbumTitle};
 
             string arg = JsonSerializer.Serialize(args);

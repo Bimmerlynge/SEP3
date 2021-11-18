@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AppServer.Data;
@@ -21,6 +22,14 @@ namespace AppServer.Networking.DataSide
             return await stringAsync;
         }
 
+        public async Task<string> GetSongWithMP3(Song song)
+        {
+            using HttpClient client = new HttpClient();
+            Task<string> stringAsync = client.GetStringAsync(uri + $"songs/{song.Id}");
+            Console.WriteLine(stringAsync.Result.Length);
+            return await stringAsync;
+        }
+
         public async Task<string> GetSongsByFilter(TransferObj tObj)
         {
             using HttpClient client = new HttpClient();
@@ -32,38 +41,40 @@ namespace AppServer.Networking.DataSide
             return await stringAsync;
         }
 
-        public async Task<PlayList> GetPlayList()
+        public async Task<IList<byte[]>> GetAllMP3()
         {
-
             using HttpClient client = new HttpClient();
-            Task<string> stringAsync = client.GetStringAsync(uri + "playList/1");
-            string json = await stringAsync;
-            PlayList playList = JsonSerializer.Deserialize<PlayList>(json, new JsonSerializerOptions
+            int count = 0;
+            IList<byte[]> toReturn = new List<byte[]>();
+            while (true)
             {
-                PropertyNameCaseInsensitive = true
-            });
-            return playList;
+                try
+                {
+                    byte[] byteArrayAsync = await client.GetByteArrayAsync(uri + "mp3/" + count++);
+                    Console.WriteLine(byteArrayAsync.Length);
+                    toReturn.Add(byteArrayAsync);
+                }
+                catch (Exception e)
+                {
+                    break;
+                }
+            }
+
+            return toReturn;
         }
 
-        public async Task<string> GetMessage()
+        public async Task PostAllSongs(IList<Song> songList)
         {
             using HttpClient client = new HttpClient();
-            Task<string> stringAsync = client.GetStringAsync(uri + "message");
-            string json = await stringAsync;
-            string message = JsonSerializer.Deserialize<string>(json);
-            return message;
-        }
-
-        public async Task<Song> GetSong()
-        {
-            using HttpClient client = new HttpClient();
-            Task<string> stringAsync = client.GetStringAsync(uri + "song/1");
-            string json = await stringAsync;
-            Song song = JsonSerializer.Deserialize<Song>(json, new JsonSerializerOptions
+            string songListAsJson = JsonSerializer.Serialize(songList, new JsonSerializerOptions{PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
+        
+            StringContent content = new StringContent(songListAsJson, Encoding.UTF8, "application/json");
+            
+            HttpResponseMessage response = await client.PostAsync(uri + "songss", content);
+            if (!response.IsSuccessStatusCode)
             {
-                PropertyNameCaseInsensitive = true
-            });
-            return song;
+                throw new Exception($@"Error: {response.StatusCode}, {response.ReasonPhrase}");
+            }
         }
     }
 }

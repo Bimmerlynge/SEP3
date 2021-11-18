@@ -56,9 +56,10 @@ else
                
                 <td>@song.Title</td>
                 <td>@song.Duration</td>
-                <td>@generateAlbums(song)</td>
+                <td></td>
+                @* @generateAlbums(song) *@
                 <td>@generateArtists(song)</td>
-                <td>@song.ReleaseDate</td>
+                <td>@song.ReleaseYear</td>
             </tr>
         }
         </tbody>

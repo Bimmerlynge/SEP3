@@ -2,7 +2,10 @@ using System;
 using System.IO;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
+using Client.Data;
+using Client.Util;
 
 
 namespace Client.Networking
@@ -25,7 +28,7 @@ namespace Client.Networking
             return inFromServer;
         }
 
-        public async Task PlaySong(string transfAsJson, string serverFile)
+        public async Task<Song> PlaySong(string transfAsJson)
         {
             TcpClient client = GetTcpClient();
             NetworkStream stream = client.GetStream();
@@ -33,7 +36,8 @@ namespace Client.Networking
             byte[] toServer = Encoding.ASCII.GetBytes(transfAsJson);
             await stream.WriteAsync(toServer);
 
-            await SongFromServer(client, serverFile);
+            return await SongFromServer(client);
+            
         }
 
         public async Task<string> GetSongsByFilter(string transString)
@@ -53,31 +57,20 @@ namespace Client.Networking
             return inFromServer;
         }
 
-        public async Task<string> getPlayList(string transforObject)
-        {
-            using TcpClient client = GetTcpClient();
-            NetworkStream stream = client.GetStream();
-            byte[] bytes = Encoding.ASCII.GetBytes(transforObject);
-            await stream.WriteAsync(bytes, 0, bytes.Length);
-            
-
-            return bytes.ToString();
-            //TODO
-        }
-
-        private async Task SongFromServer(TcpClient client, string serverFile)
+        private async Task<Song> SongFromServer(TcpClient client)
         {
             NetworkStream stream = client.GetStream();
             
-            byte[] dataFromServer = new byte[20000000];
+            byte[] dataFromServer = new byte[30000000];
             int bytesRead = await stream.ReadAsync(dataFromServer, 0, dataFromServer.Length);
-
-            using (FileStream byteToMp3 = File.Create(serverFile))
+            
+            string inFromServer = Encoding.ASCII.GetString(dataFromServer, 0, bytesRead);
+            Song song = JsonSerializer.Deserialize<Song>(inFromServer, new JsonSerializerOptions
             {
-                await byteToMp3.WriteAsync(dataFromServer, 0, bytesRead);
-            }
-
-            client.Dispose();
+                PropertyNameCaseInsensitive = true,
+                Converters = { new ByteArrayConverter() }
+            });
+            return song;
         }
 
         private TcpClient GetTcpClient()

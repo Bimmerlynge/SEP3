@@ -32,12 +32,10 @@ namespace AppServer.Model
         }
 
 
-        public async Task<byte[]> PlayAsync(string urlOfSong)
+        public async Task<string> PlayAsync(Song song)
         {
-            var filePath = urlOfSong;
-            Console.WriteLine($"Does file exist on path {filePath}? " + File.Exists(filePath));
-            return await File.ReadAllBytesAsync(filePath);
+            return await dataEndPoint.GetSongWithMP3(song);
         }
-        
+
     }
 }
