@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace AppServer.Data
+namespace Client.Data
 {
     public class User
     {

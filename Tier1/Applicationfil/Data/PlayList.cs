@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Client.Data;
 
-namespace AppServer.Data
+namespace Client.Data
 {
     public class PlayList
     {
