@@ -9,17 +9,15 @@ import java.util.ArrayList;
 public class Album
 {
   private int albumId;
-  private String title;
+  private String albumTitle;
   private int duration;
-  private Date date;
 
 
-  public Album(int albumId, String title, int duration, Date date)
+  public Album(int albumId, String title, int duration)
   {
     this.albumId = albumId;
-    this.title = title;
+    this.albumTitle = title;
     this.duration = duration;
-    this.date = date;
   }
 
   public String toString(){
@@ -37,21 +35,23 @@ public class Album
 
   public String getTitle()
   {
-    return title;
+    return albumTitle;
   }
 
+  public void setAlbumTitle(String albumTitle)
+  {
+    this.albumTitle = albumTitle;
+  }
+
+  public void setDuration(int duration)
+  {
+    this.duration = duration;
+  }
 
   public int getDuration()
   {
     return duration;
   }
-
-
-  public Date getDate()
-  {
-    return date;
-  }
-
 
 
 }

@@ -3,43 +3,48 @@ package shared;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.sql.Date;
 import java.util.ArrayList;
 
 public class Song {
 
     private int id;
-    private String url;
     private String title;
     private int duration;
-    private Date releaseDate;
+    private int releaseYear;
     private ArrayList<Artist> artists;
-    private ArrayList<Album> albums;
+    private Album albumProperty;
+    private byte[] mp3;
 
-
-
-    public Song(int id, String url, String title, int duration, Date releaseDate) {
+    public Song(int id, String title, int duration, int releaseYear) {
         this.id = id;
-        this.url = url;
         this.title = title;
         this.duration = duration;
-        this.releaseDate = releaseDate;
+        this.releaseYear = releaseYear;
         artists = new ArrayList<>();
-        albums = new ArrayList<>();
     }
 
-    public void addAlbum(Album album){
-        albums.add(album);
-    }
-
-    public ArrayList<Album> getAlbums()
+    public byte[] getMp3()
     {
-        return albums;
+        return mp3;
     }
 
-    public void setAlbums(ArrayList<Album> albums)
+    public void setMp3(byte[] mp3)
     {
-        this.albums = albums;
+        this.mp3 = mp3;
+    }
+
+    public String getArtistName() {
+        return artists.get(0).getArtistName();
+    }
+
+    public Album getAlbumProperty()
+    {
+        return albumProperty;
+    }
+
+    public void setAlbums(Album album)
+    {
+        this.albumProperty = album;
     }
 
     public String toString(){
@@ -54,14 +59,6 @@ public class Song {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public String getTitle() {
@@ -80,12 +77,12 @@ public class Song {
         this.duration = duration;
     }
 
-    public Date getReleaseDate() {
-        return releaseDate;
+    public int getReleaseYear() {
+        return releaseYear;
     }
 
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
+    public void setReleaseDate(int releaseYear) {
+        this.releaseYear = releaseYear;
     }
 
     public void addArtist(Artist artist) {
