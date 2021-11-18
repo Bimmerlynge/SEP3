@@ -14,6 +14,11 @@ public class SongSearchDAO extends BaseDAO implements ISongSearchDAO {
     @Override
     public ArrayList<Song> getSongsByTitle(String songTitle) {
 
+        if (songTitle == null || songTitle.isEmpty())
+        {
+            throw new IllegalArgumentException("song title is null or empty");
+
+        }
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection
                     .prepareStatement("SELECT * FROM AllSongs WHERE songTitle = ?");
@@ -32,6 +37,12 @@ public class SongSearchDAO extends BaseDAO implements ISongSearchDAO {
 
     @Override
     public ArrayList<Song> getSongsByArtist(String artistName) {
+
+        if (artistName == null || artistName.isEmpty())
+        {
+            throw new IllegalArgumentException("artist name is null or empty");
+
+        }
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection
                     .prepareStatement("SELECT * FROM AllSongs WHERE artistName = ?");
@@ -49,6 +60,11 @@ public class SongSearchDAO extends BaseDAO implements ISongSearchDAO {
 
     @Override
     public ArrayList<Song> getSongsByAlbum(String albumTitle) {
+
+        if(albumTitle == null || albumTitle.isEmpty())
+        {
+            throw new IllegalArgumentException("album title is null or empty");
+        }
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection
                     .prepareStatement("SELECT * FROM AllSongs WHERE albumTitle = ?");
