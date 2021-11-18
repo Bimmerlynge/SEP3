@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Song {
 
@@ -30,6 +31,23 @@ public class Song {
 
     public void addAlbum(Album album){
         albums.add(album);
+    }
+
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Song ))
+        {
+            return false;
+        }
+        Song song = (Song) o;
+        return id == song.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     public ArrayList<Album> getAlbums()

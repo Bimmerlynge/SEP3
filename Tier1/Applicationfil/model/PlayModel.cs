@@ -116,7 +116,7 @@ namespace Client.model
             float toSet = (float) percentage / 100;
             waveOut.Volume = toSet;
         }
-
+        
         public async Task PlayPreviousSong()
         {
             if (fileReader.CurrentTime.TotalSeconds < 5 && previouslySongs.Count >= 2)
@@ -131,6 +131,8 @@ namespace Client.model
             }
         }
 
+        
+        
         public async Task PlayNextSongAsync()
         {
             int index = CurrentPlaylist.IndexOf(currentSong);

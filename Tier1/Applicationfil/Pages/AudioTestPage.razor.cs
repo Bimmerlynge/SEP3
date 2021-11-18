@@ -17,11 +17,7 @@ namespace Client.Pages
         [Inject] public IModalService ModalService { get; set; }
         private IList<Song> songs;
         private Song currentSong;
-
-        protected override async Task OnInitializedAsync()
-        {
-        }
-
+        
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
             if (!firstRender) return;

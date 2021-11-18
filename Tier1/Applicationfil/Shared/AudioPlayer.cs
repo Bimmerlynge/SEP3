@@ -46,12 +46,7 @@ namespace Client.Shared
             await Player.PlayNextSongAsync();
         }
 
-        private async Task controlVolume()
-        {
-            
-            
-        }
-
+       
         private async Task updatePlayState()
         { 
             isPlaying = Player.IsPlaying;

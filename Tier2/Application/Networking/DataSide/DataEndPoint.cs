@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AppServer.Data;
@@ -65,13 +64,11 @@ namespace AppServer.Networking.DataSide
 
         public async Task PostAllSongs(IList<Song> songList)
         {
-            Console.WriteLine(songList.Count);
             using HttpClient client = new HttpClient();
             string songListAsJson = JsonSerializer.Serialize(songList, new JsonSerializerOptions{PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
         
             StringContent content = new StringContent(songListAsJson, Encoding.UTF8, "application/json");
-
-            Console.WriteLine("ER vi her?");
+            
             HttpResponseMessage response = await client.PostAsync(uri + "songss", content);
             if (!response.IsSuccessStatusCode)
             {

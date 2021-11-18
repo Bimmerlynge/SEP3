@@ -15,6 +15,10 @@ namespace AppServer.Data
         public Album AlbumProperty { get; set; }
 
         public IList<Artist> Artists { get; set; }
+        public IList<Album> Albums { get; set; }
+        //public DateTime ReleaseDate { get; set; }
+        
+        //public DateTime ReleaseDate { get; set; }
         
         public int ReleaseYear { get; set; }
         

@@ -1,7 +1,5 @@
 
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Client.Data;
 using Client.model;
@@ -11,7 +9,9 @@ namespace Client.Pages
 {
     public partial class Search : ComponentBase
     {
-        [Inject] private IAudioTestModel Model { get; set; }
+        [Inject] private IAudioTestModel AudioTestModel { get; set; }
+        [Inject] private ISongSearchModel SongSearchModel { get; set; }
+
         
         private IList<Song> songsToShow;
         private string filterOption = "Title";
@@ -19,7 +19,7 @@ namespace Client.Pages
         
         protected override async Task OnInitializedAsync()
         {
-            songsToShow = await Model.GetAllSongs();
+            songsToShow = await AudioTestModel.GetAllSongs();
         }
 
         private async void Filter()
@@ -27,14 +27,13 @@ namespace Client.Pages
             songsToShow = null;
             if (!string.IsNullOrEmpty(searchField))
             {
-                songsToShow = await Model.GetSongsByFilterAsync(filterOption, searchField);
+                songsToShow = await SongSearchModel.GetSongsByFilterAsync(filterOption, searchField);
             }
             else
             {
-                songsToShow = await Model.GetAllSongs();
+                songsToShow = await AudioTestModel.GetAllSongs();
             }
-
-            searchField = "";
+            
             StateHasChanged();
         }
     }

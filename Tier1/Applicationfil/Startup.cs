@@ -34,6 +34,7 @@ namespace Client
             services.AddScoped<IAudioTestModel,AudioTestModel>();
             services.AddScoped<IPlayerModel, PlayerModel>();
             services.AddScoped<CircuitHandler, CircuitHandlerService>();
+            services.AddScoped<ISongSearchModel, SongSearchModel>();
             services.AddBlazoredModal();
             
 

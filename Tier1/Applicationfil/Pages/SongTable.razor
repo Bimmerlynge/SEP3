@@ -10,12 +10,14 @@
 }
 else if (!SongList.Any())
 {
+    <br/>
     <em>No songs found.</em>
 }
 else
 {
     <table class="table">
         <thead>
+        
         <tr>
             <th></th>
             <th>Title</th>
@@ -29,9 +31,29 @@ else
         @foreach (var song in SongList)
         {
             <tr>
-                <td>
-                    <i class="oi oi-media-play" @onclick="@(() => Console.WriteLine("Klikket på den knap"))"/>
-                </td>
+                @if (CurrentSong != null && CurrentSong.Id == song.Id)
+                {
+                    if (IsPlaying())
+                    {
+                        <td>
+                            <i class="oi oi-media-pause" @onclick="() => TogglePlay()"/>
+                        </td> 
+                    }
+                    else
+                    {
+                        <td>
+                            <i class="oi oi-media-play" @onclick="() => TogglePlay()"/>
+                        </td> 
+                    }
+                   
+                }
+                else
+                {
+                    <td>
+                        <i class="oi oi-media-play" @onclick="() => PlaySong(song)"/>
+                    </td> 
+                }
+               
                 <td>@song.Title</td>
                 <td>@song.Duration</td>
                 <td></td>
@@ -42,4 +64,5 @@ else
         }
         </tbody>
     </table>
+    
 }

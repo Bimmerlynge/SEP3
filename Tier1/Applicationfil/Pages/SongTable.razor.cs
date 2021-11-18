@@ -9,10 +9,20 @@ namespace Client.Pages
 {
     public partial class SongTable : ComponentBase
     {
-        [Inject] private IAudioTestModel Model { get; set; }
+        [Inject] public IAudioTestModel Model { get; set; }
+        [Inject] public IPlayerModel PlayerModel { get; set; }
         [Parameter]
         public IList<Song> SongList { get; set; }
-        
+
+        public Song CurrentSong;
+
+        protected async override Task OnInitializedAsync()
+        {
+            SongPlaying();
+            PlayerModel.UpdatePlayState += () => SongPlaying();
+            StateHasChanged();
+        }
+
         private string generateArtists(Song song)
         {
             IList<Artist> artists = song.Artists;
@@ -35,6 +45,12 @@ namespace Client.Pages
             return toReturn;
            
             }
+
+        private async void SongPlaying()
+        {
+            CurrentSong = await PlayerModel.GetCurrentSongAsync();
+            StateHasChanged();
+        }
         
         private string generateAlbums(Song song)
         {
@@ -57,6 +73,20 @@ namespace Client.Pages
             }
             return toReturn;
             
+        }
+
+        private async void PlaySong(Song song)
+        {
+           await PlayerModel.PlaySongAsync(song);
+        }
+
+        private bool IsPlaying()
+        {
+            return PlayerModel.IsPlaying;
+        }
+        private void TogglePlay()
+        {
+            PlayerModel.PlayPauseToggleAsync();
         }
     }
 }
