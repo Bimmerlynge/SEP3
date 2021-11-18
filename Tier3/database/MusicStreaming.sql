@@ -7,26 +7,25 @@ CREATE DOMAIN _date AS DATE
 
 CREATE TABLE IF NOT EXISTS Song
 (
-    songId      SERIAL PRIMARY KEY,
-    url         VARCHAR  NOT NULL,
-    songTitle       VARCHAR  NOT NULL,
+    songId          SERIAL PRIMARY KEY,
+    songTitle       VARCHAR  NOT NULL UNIQUE ,
     songDuration    SMALLINT NOT NULL,
-    songReleaseDate _date
+    songReleaseYear SMALLINT,
+    mp3             bytea
 );
 
 CREATE TABLE IF NOT EXISTS Album
 (
-    albumId     SERIAL PRIMARY KEY,
+    albumId          SERIAL PRIMARY KEY,
     albumTitle       VARCHAR(100) NOT NULL,
-    albumDuration    SMALLINT, -- Lav trigger for at finde summen af alle sange pÃ¥ albummet
-    albumReleaseDate _date
-    );
+    albumDuration    SMALLINT -- Lav trigger for at finde summen af alle sange på albummet
+);
 
 CREATE TABLE IF NOT EXISTS Artist
 (
-    artistId SERIAL PRIMARY KEY,
-    artistName     VARCHAR(100)
-    );
+    artistId   SERIAL PRIMARY KEY,
+    artistName VARCHAR(100)
+);
 
 CREATE TABLE IF NOT EXISTS ArtistSongRelation
 (
@@ -35,7 +34,7 @@ CREATE TABLE IF NOT EXISTS ArtistSongRelation
     PRIMARY KEY (artistId, songId),
     FOREIGN KEY (artistId) REFERENCES Artist (artistId),
     FOREIGN KEY (songId) REFERENCES Song (songId)
-    );
+);
 
 CREATE TABLE IF NOT EXISTS AlbumSongRelation
 (
@@ -44,14 +43,14 @@ CREATE TABLE IF NOT EXISTS AlbumSongRelation
     PRIMARY KEY (albumId, songId),
     FOREIGN KEY (albumId) REFERENCES Album (albumId),
     FOREIGN KEY (songId) REFERENCES Song (songId)
-    );
+);
 CREATE TABLE IF NOT EXISTS AlbumArtistRelation
 (
-    albumId SMALLINT,
+    albumId  SMALLINT,
     artistId SMALLINT,
     PRIMARY KEY (albumId, artistId),
-    FOREIGN KEY (albumId) REFERENCES Album(albumId),
-    FOREIGN KEY (artistId) REFERENCES Artist(artistId)
+    FOREIGN KEY (albumId) REFERENCES Album (albumId),
+    FOREIGN KEY (artistId) REFERENCES Artist (artistId)
 );
 
 CREATE TABLE IF NOT EXISTS AlbumRelease
@@ -61,22 +60,30 @@ CREATE TABLE IF NOT EXISTS AlbumRelease
     PRIMARY KEY (albumId, artistId),
     FOREIGN KEY (albumId) REFERENCES Album (albumId),
     FOREIGN KEY (artistId) REFERENCES Artist (artistId)
-    );
+);
 
 CREATE VIEW SongWithArtist AS
-    SELECT S.*, A.* FROM Song AS S JOIN ArtistSongRelation ASR ON S.songId = ASR.songId
-JOIN Artist A ON A.artistId = ASR.artistId
+SELECT S.*, A.*
+FROM Song AS S
+         JOIN ArtistSongRelation ASR ON S.songId = ASR.songId
+         JOIN Artist A ON A.artistId = ASR.artistId
 ORDER BY songId ASC;
 
 
 CREATE VIEW AlbumsWithArtist AS
-    SELECT Al.*, Ar.* FROM Artist Ar Join AlbumArtistRelation AAR ON Ar.artistId = AAR.artistId
-JOIN Album Al ON Al.albumId = AAR.albumId
+SELECT Al.*, Ar.*
+FROM Artist Ar
+         JOIN AlbumArtistRelation AAR ON Ar.artistId = AAR.artistId
+         JOIN Album Al ON Al.albumId = AAR.albumId
 ORDER BY albumId ASC;
 
 CREATE VIEW AllSongs AS
-    SELECT A2.*, Ar.*, S.* From Song AS S JOIN ArtistSongRelation ASR ON S.songId = ASR.songId JOIN Artist Ar ON ASR.artistId = Ar.artistId
-    JOIN AlbumSongRelation A ON S.songId = A.songId JOIN Album A2 ON A.albumId = A2.albumId
+SELECT A2.*, Ar.*, S.*
+FROM Song AS S
+         JOIN ArtistSongRelation ASR ON S.songId = ASR.songId
+         JOIN Artist Ar ON ASR.artistId = Ar.artistId
+         JOIN AlbumSongRelation A ON S.songId = A.songId
+         JOIN Album A2 ON A.albumId = A2.albumId
 ORDER BY songId ASC
 ;
 
@@ -88,65 +95,22 @@ CREATE OR REPLACE FUNCTION songDurationTotal()
 AS
 $$
 BEGIN
-WITH durationTotal AS (
-    SELECT SUM(S.songDuration) AS durTot
-    FROM AlbumSongRelation
-             JOIN Song S ON S.songId = AlbumSongRelation.songId
-    WHERE AlbumSongRelation.albumId = NEW.albumId)
-UPDATE Album
-SET albumDuration = durationTotal.durTot
+    WITH durationTotal AS (
+        SELECT SUM(S.songDuration) AS durTot
+        FROM AlbumSongRelation
+                 JOIN Song S ON S.songId = AlbumSongRelation.songId
+        WHERE AlbumSongRelation.albumId = NEW.albumId)
+    UPDATE Album
+    SET albumDuration = durationTotal.durTot
     FROM durationTotal
-WHERE NEW.albumId = albumId;
-RETURN new;
+    WHERE NEW.albumId = albumId;
+    RETURN new;
 END;
 $$;
 
 CREATE TRIGGER updateSongDuration
     AFTER INSERT OR UPDATE OR DELETE
-                    ON AlbumSongRelation
-                        FOR EACH ROW
-                        EXECUTE PROCEDURE songDurationTotal();
+    ON AlbumSongRelation
+    FOR EACH ROW
+EXECUTE PROCEDURE songDurationTotal();
 
-INSERT INTO Song(url, songTitle, songDuration) VALUES
-    ('..\..\..\Util\Audio\Ring_Of_Fire.mp3', 'Ring_Of_Fire', 155);
-INSERT INTO Song(url, songTitle, songDuration) VALUES
-    ('..\..\..\Util\Audio\Champion.mp3', 'Champion', 180);
-INSERT INTO Song(url, songTitle, songDuration) VALUES
-    ('..\..\..\Util\Audio\Under_The_Bridge.mp3', 'Under_The_Bridge', 180);
-
-INSERT INTO Artist (artistName)
-VALUES ('Clemens');
-INSERT INTO Artist (artistName)
-VALUES ('Jon Norregaard');
-INSERT INTO Artist (artistName)
-VALUES ('Johnny Cash');
-INSERT INTO Artist (artistName)
-VALUES ('Red Hot Chili Peppers');
-
-INSERT INTO Album (albumTitle)
-VALUES ('Blood Sugar Sex Magik'),
-       ('Ring of Fire: The Best of Johnny Cash'),
-       ('Ingen Kender Dagen'),
-       ('Test2'),
-       ('Test3');
-
-
-INSERT INTO ArtistSongRelation (artistId, songId) VALUES (3,1), (2,2),(1,2),
-                                                         (4,3);
-
-
-INSERT INTO AlbumSongRelation (albumId, songId)
-VALUES (1,3), (2,1),
-       (3,2)
-       ;
-
-
-
-SELECT *
-FROM AllSongs
-WHERE songTitle = 'Champion';
-
-
-SELECT *
-FROM AllSongs
-WHERE artistId = 3;

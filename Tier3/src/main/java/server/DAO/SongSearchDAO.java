@@ -89,19 +89,22 @@ public class SongSearchDAO extends BaseDAO implements ISongSearchDAO {
             System.out.println("Inde i loop");
             if (songId != resultSet.getInt("songid")) {
                 Song song = new Song(resultSet.getInt("songid"),
-                        resultSet.getString("url"), resultSet.getString("songtitle"),
-                        resultSet.getInt("songduration"), resultSet.getDate("songreleasedate"));
+                        resultSet.getString("songtitle"),
+                        resultSet.getInt("songduration"), resultSet.getInt("songreleaseyear"));
                 listOfSongs.add(song);
                 songId = song.getId();
+
+
+              Album album = new Album(resultSet.getInt("albumId"), resultSet.getString("albumtitle"),
+                  resultSet.getInt("albumduration"));
+              song.setAlbums(album);
             }
 
-            Artist artist = new Artist(resultSet.getInt("artistid"),
-                    resultSet.getString("artistname"));
-            listOfSongs.get(listOfSongs.size() - 1).addArtist(artist);
-            Album album = new Album(resultSet.getInt("albumId"), resultSet.getString("albumtitle"),
-                    resultSet.getInt("albumduration"),
-                    resultSet.getDate("albumreleasedate"));
-            listOfSongs.get(listOfSongs.size() - 1).addAlbum(album);
+          Artist artist = new Artist(resultSet.getInt("artistid"),
+              resultSet.getString("artistname"));
+          listOfSongs.get(listOfSongs.size() - 1).addArtist(artist);
+
+
         }
         return listOfSongs;
     }

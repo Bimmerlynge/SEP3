@@ -6,6 +6,7 @@ import server.DAO.ISongDAO;
 import server.DAO.SongDAO;
 import shared.Song;
 
+import java.lang.instrument.Instrumentation;
 import java.sql.Date;
 import java.util.ArrayList;
 
@@ -28,16 +29,11 @@ public class SongController
 //  }
 
 
-  @GetMapping("/message")
-  public synchronized String getMessage() {
-    String message = "Hello Solaiman";
-    return new Gson().toJson(message);
-  }
-
-  @GetMapping("/song/{songId}")
-  public synchronized String getSong(@PathVariable int songId) {
-    System.out.println("Hallo");
-    Song song = new Song(songId, "Somewhere", "111sygsang", 5, new Date(2));
+  @GetMapping("/songs/{songId}")
+  public synchronized String getSongWithMP3(@PathVariable int songId) {
+    Song song = songDAO.getSongWithMP3(songId);
+    System.out.println(song.getMp3().length);
+    System.out.println(new Gson().toJson(song).length());
     return new Gson().toJson(song);
   }
 

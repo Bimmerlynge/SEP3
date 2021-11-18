@@ -7,21 +7,7 @@
 
     <ItemGroup>
       <PackageReference Include="NAudio" Version="1.9.0" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Content Include="Util\Audio\Champion.mp3">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
-      <Content Include="Util\Audio\Ring_Of_Fire.mp3">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
-      <Content Include="Util\Audio\Under_The_Bridge.mp3">
-        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      </Content>
+      <PackageReference Include="TagLibSharp" Version="2.2.0" />
     </ItemGroup>
 
     <ItemGroup>
