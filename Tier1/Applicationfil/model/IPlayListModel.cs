@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using AppServer.Data;
+using Client.Data;
 
-namespace AppServer.Model
+namespace Client.model
 {
     public interface IPlayListModel
     {

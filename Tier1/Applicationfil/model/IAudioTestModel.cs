@@ -8,8 +8,5 @@ namespace Client.model
     {
        
         Task<IList<Song>> GetAllSongs();
-
-
-        Task<IList<Song>> GetSongsByFilterAsync(string filterOption, string searchField);
     }
 }
