@@ -20,7 +20,6 @@ public class Song {
 
     public Song(int id, String title, int duration, int releaseYear) {
         this.id = id;
-        this.url = url;
         this.title = title;
         this.duration = duration;
         this.releaseYear = releaseYear;
@@ -54,7 +53,10 @@ public class Song {
         return Objects.hash(id);
     }
 
-    public ArrayList<Album> getAlbums()
+    public ArrayList<Album> getAlbums() {
+        return albums;
+    }
+
     public String getArtistName() {
         return artists.get(0).getArtistName();
     }
