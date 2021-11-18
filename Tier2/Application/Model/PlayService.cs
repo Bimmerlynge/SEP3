@@ -10,8 +10,6 @@ namespace AppServer.Model
 {
     public class PlayService : IPlayService
     {
-        // flyttes ud senere
-        private IList<Song> songs = new List<Song>();
         private IDataEndPoint dataEndPoint = new DataEndPoint();
 
         public async Task<string> GetAllSongsAsJsonAsync()
@@ -34,12 +32,10 @@ namespace AppServer.Model
         }
 
 
-        public async Task<byte[]> PlayAsync(string urlOfSong)
+        public async Task<string> PlayAsync(Song song)
         {
-            var filePath = urlOfSong;
-            Console.WriteLine($"Does file exist on path {filePath}? " + File.Exists(filePath));
-            return await File.ReadAllBytesAsync(filePath);
+            return await dataEndPoint.GetSongWithMP3(song);
         }
-        
+
     }
 }

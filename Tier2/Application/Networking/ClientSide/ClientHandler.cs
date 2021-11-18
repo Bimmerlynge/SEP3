@@ -82,9 +82,10 @@ namespace AppServer.Networking.ClientSide
 
         private async Task HandlePlaySongAsync(Song song, NetworkStream stream)
         {
-            byte[] songBytes = await model.PlayAsync(song.Url);
-            Console.WriteLine("Length of {0}: {1}", song.Title, songBytes.Length);
-            await stream.WriteAsync(songBytes, 0, songBytes.Length);
+            
+            string jsonSong = await model.PlayAsync(song);
+            byte[] bytes = Encoding.ASCII.GetBytes(jsonSong);
+            await stream.WriteAsync(bytes, 0, bytes.Length);
         }
     }
 }
