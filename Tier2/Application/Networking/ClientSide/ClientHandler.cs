@@ -44,12 +44,21 @@ namespace AppServer.Networking.ClientSide
 
             client.Dispose();
         }
-
         private async Task GetSongsByFilterAsync(TransferObj tObj)
         {
-            Console.WriteLine(tObj.Arg);
-            string transAsJson = await songSearchService.GetSongsByFilterJsonAsync(tObj);
-            Console.WriteLine("clienthandler; " + transAsJson);
+            string transAsJson;
+            try
+            {
+                string songsAsJSon = await songSearchService.GetSongsByFilterJsonAsync(tObj);
+                TransferObj transferObj = new TransferObj(){Action = "Ok 200",Arg = songsAsJSon};
+                transAsJson = JsonSerializer.Serialize(transferObj);
+
+            }
+            catch (Exception e)
+            {
+                TransferObj transferObj = new TransferObj() {Action = "Bad Request 400", Arg = e.Message};
+                transAsJson = JsonSerializer.Serialize(transferObj);
+            }
             
             byte[] bytes = Encoding.ASCII.GetBytes(transAsJson);
 
@@ -57,6 +66,19 @@ namespace AppServer.Networking.ClientSide
             await stream.WriteAsync(bytes, 0, bytes.Length);
             
         }
+        // private async Task GetSongsByFilterAsync(TransferObj tObj)
+        // {
+        //     
+        //     Console.WriteLine(tObj.Arg);
+        //     string transAsJson = await songSearchService.GetSongsByFilterJsonAsync(tObj);
+        //     Console.WriteLine("clienthandler; " + transAsJson);
+        //     
+        //     byte[] bytes = Encoding.ASCII.GetBytes(transAsJson);
+        //
+        //     NetworkStream stream = client.GetStream();
+        //     await stream.WriteAsync(bytes, 0, bytes.Length);
+        //     
+        // }
 
         private async Task<TransferObj> readFromClientAsync(NetworkStream stream)
         {
