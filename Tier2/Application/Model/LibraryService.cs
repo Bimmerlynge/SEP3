@@ -21,18 +21,16 @@ namespace AppServer.Model
 
         public async Task SendSongListToDBAsync()
         {
-            string path = @"C:\Users\basti\RiderProjects\SEP3\Tier2\Application\Util\Audio\tempFile.mp3";
+            string fileStreamPath = "../../../Util/Audio/tempFile.mp3";
             songsByte = await GetAllMP3Async();
-            
             //Builder Pattern!!!! GO go implement
             foreach (byte[] MP3Byte in songsByte)
             {
-                using (FileStream byteToMp3 = File.Create(path))
+                using (FileStream byteToMp3 = File.Create(fileStreamPath))
                 {
                     await byteToMp3.WriteAsync(MP3Byte, 0, MP3Byte.Length);
                 }
-                
-                TagLib.File file = TagLib.File.Create(path);
+                TagLib.File file = TagLib.File.Create(fileStreamPath);
                 string title = file.Tag.Title;
                 string albumName = file.Tag.Album;
                 string[] artistName = file.Tag.Performers;
