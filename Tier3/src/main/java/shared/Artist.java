@@ -11,6 +11,8 @@ public class Artist
     this.artistName = artistName;
   }
 
+
+
   public int getArtistId()
   {
     return artistId;

@@ -57,53 +57,74 @@ class SongSearchDAOTest {
     }
 
 
-
-
-    //TODO
-
     @Test
-    void TitleIsEmpty() {
+    void SongTitleIsEmpty() {
 
-        ArrayList<Song> listWithEverySongInDatabase = songDAO.getAllSongs();
-
-        String songTest1 = listWithEverySongInDatabase.get(1).getTitle();
-
-        ArrayList<Song> songWithTitle = songSearchDAO.getSongsByTitle(songTest1);
-
-        assertTrue(songWithTitle.contains(listWithEverySongInDatabase.get(1)));
-        //TODO
+        assertThrows(IllegalArgumentException.class,()-> songSearchDAO.getSongsByTitle(""));
 
     }
 
     @Test
-    void TitleIsNull() {
+    void SongTitleIsNull() {
 
-        ArrayList<Song> listWithEverySongInDatabase = songDAO.getAllSongs();
+        assertThrows(IllegalArgumentException.class,()-> songSearchDAO.getSongsByTitle(null));
+    }
 
-        String songTest1 = listWithEverySongInDatabase.get(1).getTitle();
 
-        ArrayList<Song> songWithTitle = songSearchDAO.getSongsByTitle(songTest1);
+    @Test
+    void SongTitleNotFound() {
 
-        assertTrue(songWithTitle.contains(listWithEverySongInDatabase.get(1)));
-        //TODO
+        assertEquals(0,songSearchDAO.getSongsByTitle("asdfasaj21nfNotASongTitle").size());
+
+
+    }
+
+
+    @Test
+    void ArtistNameIsEmpty() {
+
+        assertThrows(IllegalArgumentException.class,()-> songSearchDAO.getSongsByArtist(""));
 
     }
 
     @Test
-    void TitleNotFound() {
+    void ArtistNameIsNull() {
 
-        ArrayList<Song> listWithEverySongInDatabase = songDAO.getAllSongs();
+        assertThrows(IllegalArgumentException.class,()-> songSearchDAO.getSongsByArtist(null));
+    }
 
-        String songTest1 = listWithEverySongInDatabase.get(1).getTitle();
 
-        ArrayList<Song> songWithTitle = songSearchDAO.getSongsByTitle(songTest1);
+    @Test
+    void ArtistNameNotFound() {
 
-        assertTrue(songWithTitle.contains(listWithEverySongInDatabase.get(1)));
+        assertEquals(0,songSearchDAO.getSongsByArtist("asdfasaj21nfNotAnArtistName").size());
 
-        //TODO
 
     }
 
+
+
+    @Test
+    void AlbumTitleIsEmpty() {
+
+        assertThrows(IllegalArgumentException.class,()-> songSearchDAO.getSongsByAlbum(""));
+
+    }
+
+    @Test
+    void AlbumTitleIsNull() {
+
+        assertThrows(IllegalArgumentException.class,()-> songSearchDAO.getSongsByAlbum(null));
+    }
+
+
+    @Test
+    void AlbumTitleNotFound() {
+
+        assertEquals(0,songSearchDAO.getSongsByAlbum("asdfasaj21nfNotAnAlbumName").size());
+
+
+    }
 
 
 }
