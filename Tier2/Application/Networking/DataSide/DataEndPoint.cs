@@ -15,7 +15,7 @@ namespace AppServer.Networking.DataSide
         
         public async Task<string> GetAllSongs()
         {
-            HttpClient client = new HttpClient();
+            using HttpClient client = new HttpClient();
             Task<string> stringAsync = client.GetStringAsync(uri + "songs");
             
             return await stringAsync;
@@ -32,9 +32,22 @@ namespace AppServer.Networking.DataSide
             return await stringAsync;
         }
 
+        public async Task<PlayList> GetPlayList()
+        {
+
+            using HttpClient client = new HttpClient();
+            Task<string> stringAsync = client.GetStringAsync(uri + "playList/1");
+            string json = await stringAsync;
+            PlayList playList = JsonSerializer.Deserialize<PlayList>(json, new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            });
+            return playList;
+        }
+
         public async Task<string> GetMessage()
         {
-            HttpClient client = new HttpClient();
+            using HttpClient client = new HttpClient();
             Task<string> stringAsync = client.GetStringAsync(uri + "message");
             string json = await stringAsync;
             string message = JsonSerializer.Deserialize<string>(json);
@@ -43,7 +56,7 @@ namespace AppServer.Networking.DataSide
 
         public async Task<Song> GetSong()
         {
-            HttpClient client = new HttpClient();
+            using HttpClient client = new HttpClient();
             Task<string> stringAsync = client.GetStringAsync(uri + "song/1");
             string json = await stringAsync;
             Song song = JsonSerializer.Deserialize<Song>(json, new JsonSerializerOptions

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Song {
 
@@ -12,11 +13,14 @@ public class Song {
     private int duration;
     private int releaseYear;
     private ArrayList<Artist> artists;
+    private ArrayList<Album> albums;
     private Album albumProperty;
     private byte[] mp3;
 
+
     public Song(int id, String title, int duration, int releaseYear) {
         this.id = id;
+        this.url = url;
         this.title = title;
         this.duration = duration;
         this.releaseYear = releaseYear;
@@ -33,6 +37,24 @@ public class Song {
         this.mp3 = mp3;
     }
 
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Song ))
+        {
+            return false;
+        }
+        Song song = (Song) o;
+        return id == song.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    public ArrayList<Album> getAlbums()
     public String getArtistName() {
         return artists.get(0).getArtistName();
     }

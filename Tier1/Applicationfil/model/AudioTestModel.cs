@@ -38,22 +38,6 @@ namespace Client.model
             
             return allSongs;
         }
-
-        public async Task<IList<Song>> GetSongsByFilterAsync(string filterOption, string searchField)
-        {
-            string[] args = {filterOption, searchField};
-            string arg = JsonSerializer.Serialize(args);
-            TransferObj transferObj = new TransferObj() {Action = "GETSONGSBYFILTER", Arg = arg};
-            string transString = JsonSerializer.Serialize(transferObj);
-
-            string inFromServer = await client.GetSongsByFilter(transString);
-
-            Console.WriteLine("I model" + inFromServer);
-            
-            TransferObj tObj = JsonSerializer.Deserialize<TransferObj>(inFromServer);
-            IList<Song> songsToReturn = JsonSerializer.Deserialize<IList<Song>>(tObj.Arg, 
-                new JsonSerializerOptions(){PropertyNameCaseInsensitive = true});
-            return songsToReturn;
-        }
+        
     }
 }
