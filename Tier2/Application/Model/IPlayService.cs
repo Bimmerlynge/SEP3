@@ -6,10 +6,9 @@ namespace AppServer.Model
 {
     public interface IPlayService
     {
-        public Task<byte[]> PlayAsync(string urlOfSong);
+        Task<string> PlayAsync(Song song);
 
         Task<string> GetAllSongsAsJsonAsync();
-
-        Task<string> GetSongsByFilterJsonAsync(TransferObj tObj);
+        
     }
 }

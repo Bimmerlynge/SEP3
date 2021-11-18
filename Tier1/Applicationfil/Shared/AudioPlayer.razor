@@ -13,16 +13,21 @@
     </button>
     <button @onclick="nextSong"><span class="oi oi-arrow-circle-right" aria-hidden="true"></span></button>
     <label>Song Title: @songTitle</label>
-    <label>Album: @artistTitle</label>
-    <label>@currentDuration</label>
-    <label>@totalDuration</label>
+    <label>Artist: @artistTitle</label>
+    
+    
     
     <div class="slidecontainer">
         <input @onclick="volumeClicked" type="range" min="1" max="100" value="30" class="slider" id="volumeControl">
+        <label>Volume: @volume</label>
     </div>
-
-    <input @onclick="progressBarClicked" type="range" class="slider" id="progressBar" value="@pVP" max="100" style="width: 100%">
-
+    
+    <div class="progressBar">
+        <label>@currentDuration</label>
+        <input @onclick="progressBarClicked" type="range" class="slider" id="progressBar" value="@pVP" max="100" style="width: 90%">
+        <label>@totalDuration</label>
+    </div>
+    
 </div>
 
 

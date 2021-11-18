@@ -45,6 +45,8 @@ namespace Client.model
             }
 
             waveOut.Dispose();
+            
+            
             string serverFile = "wwwroot\\audio\\" + song.Title + song.Id + ".mp3";
             
             await FileExists(song, serverFile);
@@ -77,7 +79,11 @@ namespace Client.model
                 string songAsJson = JsonSerializer.Serialize(song);
                 TransferObj transferObj = new TransferObj() {Action = "PLAYSONG", Arg = songAsJson};
                 string transf = JsonSerializer.Serialize(transferObj);
-                await client.PlaySong(transf, serverFile);
+                song = await client.PlaySong(transf);
+                using (FileStream byteToSong = File.Create(serverFile))
+                {
+                    await byteToSong.WriteAsync(song.Mp3, 0, song.Mp3.Length);
+                }
             }
         }
 
@@ -110,7 +116,7 @@ namespace Client.model
             float toSet = (float) percentage / 100;
             waveOut.Volume = toSet;
         }
-
+        
         public async Task PlayPreviousSong()
         {
             if (fileReader.CurrentTime.TotalSeconds < 5 && previouslySongs.Count >= 2)
@@ -125,6 +131,8 @@ namespace Client.model
             }
         }
 
+        
+        
         public async Task PlayNextSongAsync()
         {
             int index = CurrentPlaylist.IndexOf(currentSong);

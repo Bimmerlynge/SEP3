@@ -16,7 +16,6 @@ namespace ClientTest.model
     {
  
         private static IClient client = new _Client();
-        //private static global::Client.Networking.Client _client = new();
         private IAudioTestModel Model = new AudioTestModel(client);
         private IPlayerModel PlayerModel = new PlayerModel(client);
 
@@ -31,7 +30,7 @@ namespace ClientTest.model
         }
 
 
-/*
+
         [Test]
         public async Task SkipToNextSong()
         {
@@ -47,6 +46,6 @@ namespace ClientTest.model
             Assert.AreNotEqual(currentSong.Id, newCurrentSong.Id);
 
         }
-        */
+        
     }
 }

@@ -2,10 +2,7 @@ package server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import server.DAO.AlbumDAO;
-import server.DAO.IAlbumDAO;
-import server.DAO.ISongDAO;
-import server.DAO.SongDAO;
+import server.DAO.*;
 import shared.Album;
 import shared.Song;
 
@@ -22,6 +19,8 @@ public class StartServer
 
     ArrayList<Song> songs = songDAO.getAllSongs();
 
+    IMP3DAO dao = new MP3DAO();
+    dao.getAllMP3();
     System.out.println("Ud fra database");
     for (Song song : songs) {
       System.out.println(song.toString());

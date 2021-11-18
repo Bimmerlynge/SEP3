@@ -4,6 +4,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using AppServer.Model;
 using AppServer.Networking;
 using AppServer.Networking.ClientSide;
 using NAudio.Wave;
@@ -19,6 +20,7 @@ namespace AppServer
         {
             IServer server = new Server();
             server.startServer();
+            
         }
     }
 }
