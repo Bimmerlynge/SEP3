@@ -65,7 +65,6 @@ namespace Client.Networking
             int bytesRead = await stream.ReadAsync(dataFromServer, 0, dataFromServer.Length);
             
             string inFromServer = Encoding.ASCII.GetString(dataFromServer, 0, bytesRead);
-            Console.WriteLine(inFromServer);
             Song song = JsonSerializer.Deserialize<Song>(inFromServer, new JsonSerializerOptions
             {
                 PropertyNameCaseInsensitive = true,
