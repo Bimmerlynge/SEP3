@@ -88,5 +88,31 @@ namespace Client.Pages
         {
             PlayerModel.PlayPauseToggleAsync();
         }
+
+        private string songDurationDisplay(Song song)
+        {
+            string timestamp = "";
+
+            int minutes = song.Duration / 60;
+
+            if (minutes < 10)
+            {
+                timestamp += "0";
+            }
+
+            timestamp += minutes + ":";
+
+            int seconds = song.Duration % 60;
+
+            if (seconds < 10)
+            {
+                timestamp += "0";
+            }
+
+            timestamp += seconds;
+
+            return timestamp;
+
+        }
     }
 }
