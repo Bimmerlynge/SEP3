@@ -21,6 +21,11 @@ CREATE TABLE IF NOT EXISTS Album
     albumDuration    SMALLINT -- Lav trigger for at finde summen af alle sange på albummet
 );
 
+CREATE TABLE IF NOT EXISTS _User(
+    userId VARCHAR PRIMARY KEY,
+    password VARCHAR
+);
+
 CREATE TABLE IF NOT EXISTS Artist
 (
     artistId   SERIAL PRIMARY KEY,
@@ -114,3 +119,4 @@ CREATE TRIGGER updateSongDuration
     FOR EACH ROW
 EXECUTE PROCEDURE songDurationTotal();
 
+SELECT * FROM AllSongs;
