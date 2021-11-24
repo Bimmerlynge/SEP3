@@ -1,0 +1,33 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/CodeInspection/PencilsConfiguration/ActualSeverity/@EntryValue">SUGGESTION</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=69199475_002D54dd_002D487c_002Db294_002Dc583b32eff76/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="SongSearchServiceTest" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::9041E9EA-6B2F-8CE6-ED8F-743373EA6E24::net5.0::AppServerTest.Model.SongSearchServiceTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=9843c52f_002Db4f6_002D4715_002Dbee8_002D18845c21270d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="TestIfCorrectSongIsFoundByTitle #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::9041E9EA-6B2F-8CE6-ED8F-743373EA6E24::net5.0::AppServerTest.Model.SongSearchServiceTest&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest.TestIfCorrectSongIsFoundByTitle&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest.TestIfCorrectSongIsFoundByArtistName&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest.TestIfCorrectSongIsFoundByAlbum&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest.SearchBySomethingNotImplemented&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest.SearchByNull&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest.SearchByEmptyString&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest.SongTitleIsEmpty&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest.SongTitleIsNull&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest.SongTitleNotFound&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest.ArtistNameIsEmpty&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest.ArtistNameIsNull&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest.ArtistNameNotFound&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest.AlbumTitleIsEmpty&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest.AlbumTitleIsNull&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest.AlbumTitleNotFound&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::954F9D19-E32D-58A2-A732-8D6D8B54B5EF::net5.0::ClientTest.model.SongSearchModelTest&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=dacf795a_002D5ab3_002D41b3_002D908a_002D4c00c391f1e1/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="TestIfCorrectSongIsFoundByTitle" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;NUnit3x::9041E9EA-6B2F-8CE6-ED8F-743373EA6E24::net5.0::AppServerTest.Model.SongSearchServiceTest.TestIfCorrectSongIsFoundByTitle&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
