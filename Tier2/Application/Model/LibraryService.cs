@@ -21,7 +21,7 @@ namespace AppServer.Model
 
         public async Task SendSongListToDBAsync()
         {
-            string path = @"C:\Users\basti\RiderProjects\SEP3\Tier2\Application\Util\Audio\tempFile.mp3";
+            string path = @"C:\Users\Solaiman\RiderProjects\SEP3Final\Tier2\Application\Util\Audio\tempfile.mp3";
             songsByte = await GetAllMP3Async();
             
             //Builder Pattern!!!! GO go implement
