@@ -53,7 +53,7 @@ namespace ClientTest.model
             int songNumberTest = 0;
 
             IList<Song> listOfAllSongs = await audioTestModel.GetAllSongs();
-            string albumTitle = listOfAllSongs[songNumberTest].Albums[0].Title;
+            string albumTitle = listOfAllSongs[songNumberTest].Album.AlbumTitle;
 
             IList<Song> songList = await songSearchModel.GetSongsByFilterAsync("Album", albumTitle);
             
@@ -75,7 +75,7 @@ namespace ClientTest.model
             int songNumberTest = 0;
 
             IList<Song> listOfAllSongs = await audioTestModel.GetAllSongs();
-            string albumTitle = listOfAllSongs[songNumberTest].Albums[0].Title;
+            string albumTitle = listOfAllSongs[songNumberTest].Album.AlbumTitle;
             
             Assert.ThrowsAsync<Exception>(() => songSearchModel.GetSongsByFilterAsync(null,albumTitle));
 
@@ -88,7 +88,7 @@ namespace ClientTest.model
             int songNumberTest = 0;
 
             IList<Song> listOfAllSongs = await audioTestModel.GetAllSongs();
-            string albumTitle = listOfAllSongs[songNumberTest].Albums[0].Title;
+            string albumTitle = listOfAllSongs[songNumberTest].Album.AlbumTitle;
         
         
             Assert.ThrowsAsync<Exception>(() => songSearchModel.GetSongsByFilterAsync("",albumTitle));

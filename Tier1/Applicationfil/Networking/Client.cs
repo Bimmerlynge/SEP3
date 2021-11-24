@@ -77,19 +77,6 @@ namespace Client.Networking
         {
             return new TcpClient("localhost", 1098);
         }
-
-
-        /*
-         * Ikke brugt, skal nok heller ikke bruges
-         
-        private void Play(string serverFile)
-        {
-            var mp3Reader = new Mp3FileReader(serverFile);
-            var waveOut = new WaveOutEvent();
-            waveOut.Init(mp3Reader);
-            waveOut.Play();
-            Thread.Sleep(10000);
-        }
-        */
+        
     }
 }

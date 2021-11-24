@@ -29,12 +29,13 @@ namespace Client.model
 
             string inFromServer = await client.GetAllSongs(transString);
             // Console.WriteLine("infroms sarea: " + inFromServer);
-
+            
             TransferObj tObj = JsonSerializer.Deserialize<TransferObj>(inFromServer,
                 new JsonSerializerOptions() {PropertyNameCaseInsensitive = true});
             // Console.WriteLine("Trans from server: "+ tObj.Action + "   " + tObj.Arg);
             IList<Song> allSongs = JsonSerializer.Deserialize<IList<Song>>(tObj.Arg,
                 new JsonSerializerOptions() {PropertyNameCaseInsensitive = true});
+            
             
             return allSongs;
         }
