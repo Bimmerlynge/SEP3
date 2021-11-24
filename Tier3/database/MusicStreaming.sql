@@ -14,6 +14,15 @@ CREATE TABLE IF NOT EXISTS Song
     mp3             bytea
 );
 
+
+CREATE TABLE IF NOT EXISTS User_
+(
+    userName       VARCHAR PRIMARY KEY,
+    password       VARCHAR  NOT NULL
+
+);
+
+
 CREATE TABLE IF NOT EXISTS Album
 (
     albumId          SERIAL PRIMARY KEY,
