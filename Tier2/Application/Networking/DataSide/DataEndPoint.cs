@@ -18,7 +18,7 @@ namespace AppServer.Networking.DataSide
         {
             using HttpClient client = new HttpClient();
             Task<string> stringAsync = client.GetStringAsync(uri + "songs");
-            
+            Console.WriteLine(stringAsync.Result);
             return await stringAsync;
         }
 
@@ -63,14 +63,13 @@ namespace AppServer.Networking.DataSide
             return toReturn;
         }
 
-        public async Task PostAllSongs(IList<Song> songList)
+        public async Task PostAllSongs(List<Song> songList)
         {
             using HttpClient client = new HttpClient();
             string songListAsJson = JsonSerializer.Serialize(songList, new JsonSerializerOptions{PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
-        
             StringContent content = new StringContent(songListAsJson, Encoding.UTF8, "application/json");
             
-            HttpResponseMessage response = await client.PostAsync(uri + "songss", content);
+            HttpResponseMessage response = await client.PostAsync(uri + "songs", content);
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception($@"Error: {response.StatusCode}, {response.ReasonPhrase}");
