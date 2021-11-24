@@ -6,10 +6,11 @@ namespace Client.model
 {
     public interface IPlayListModel
     {
-        Task<PlayList> CreatePlaylist(PlayList playList);
-        Task<IList<PlayList>> GetAllPlaylist();
-        Task UpdatePlaylist(PlayList playlist);
-        Task DeletePlayList(int playListID);
+        Task<PlayList> CreatePlaylist(PlayList playList, User user);
+        Task<IList<PlayList>> GetAllPlayForUser(User user);
+        Task RemoveSongFromPlaylist(PlayList playList, Song song);
+        Task AddSongToPlaylist(PlayList playList, Song song);
+        Task DeletePlayList(PlayList playList);
         
 
 
