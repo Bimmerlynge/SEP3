@@ -52,28 +52,6 @@ namespace Client.Pages
             StateHasChanged();
         }
         
-        private string generateAlbums(Song song)
-        {
-            IList<Album> albums = song.Albums;
-            string toReturn = albums[0].Title;
-            int count = albums.Count;
-            switch (count)
-            {
-                case 1:
-                    break;
-                case 2:
-                    toReturn += ", " + albums[1].Title;
-                    break;
-                case 3:
-                    toReturn += ", " + albums[1].Title + ", " + albums[2].Title;
-                    break;
-                default:
-                    toReturn += ", " + albums[1].Title + " and various more"; 
-                    break;
-            }
-            return toReturn;
-            
-        }
 
         private async void PlaySong(Song song)
         {
@@ -87,6 +65,32 @@ namespace Client.Pages
         private void TogglePlay()
         {
             PlayerModel.PlayPauseToggleAsync();
+        }
+
+        private string songDurationDisplay(Song song)
+        {
+            string timestamp = "";
+
+            int minutes = song.Duration / 60;
+
+            if (minutes < 10)
+            {
+                timestamp += "0";
+            }
+
+            timestamp += minutes + ":";
+
+            int seconds = song.Duration % 60;
+
+            if (seconds < 10)
+            {
+                timestamp += "0";
+            }
+
+            timestamp += seconds;
+
+            return timestamp;
+
         }
     }
 }

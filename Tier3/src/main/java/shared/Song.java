@@ -13,16 +13,29 @@ public class Song {
     private int duration;
     private int releaseYear;
     private ArrayList<Artist> artists;
-    private ArrayList<Album> albums;
-    private Album albumProperty;
+    private Album album;
     private byte[] mp3;
 
+    public ArrayList<Artist> getArtists()
+    {
+        return artists;
+    }
 
-    public Song(int id, String title, int duration, int releaseYear) {
+    public void setArtists(ArrayList<Artist> artists)
+    {
+        this.artists = artists;
+    }
+
+    public void addArtist(Artist artist){
+        artists.add(artist);
+    }
+
+    public Song(int id, String title, int duration, int releaseYear, Album album) {
         this.id = id;
         this.title = title;
         this.duration = duration;
         this.releaseYear = releaseYear;
+        this.album = album;
         artists = new ArrayList<>();
     }
 
@@ -53,22 +66,24 @@ public class Song {
         return Objects.hash(id);
     }
 
-    public ArrayList<Album> getAlbums() {
-        return albums;
-    }
-
-    public String getArtistName() {
-        return artists.get(0).getArtistName();
-    }
+//    public Album[] getAlbums()
+//    {
+//        return albums;
+//    }
+//
+//    public void setAlbums(Album[] albums)
+//    {
+//        this.albums = albums;
+//    }
 
     public Album getAlbumProperty()
     {
-        return albumProperty;
+        return album;
     }
 
     public void setAlbums(Album album)
     {
-        this.albumProperty = album;
+        this.album = album;
     }
 
     public String toString(){
@@ -109,17 +124,9 @@ public class Song {
         this.releaseYear = releaseYear;
     }
 
-    public void addArtist(Artist artist) {
-        artists.add(artist);
-    }
 
-    public void setArtists(ArrayList<Artist> artists)
-    {
-        this.artists = artists;
-    }
 
-    public ArrayList<Artist> getArtists()
-    {
-        return artists;
-    }
+
+
+
 }

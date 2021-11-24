@@ -4,10 +4,7 @@ import shared.Album;
 import shared.Artist;
 import shared.Song;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class SongDAO extends BaseDAO implements ISongDAO
@@ -21,37 +18,62 @@ public class SongDAO extends BaseDAO implements ISongDAO
     {
       try (Connection connection = getConnection())
       {
-        PreparedStatement preparedStatement = connection.prepareStatement(
-            "WITH data(songTitle, songDuration, songReleaseYear, MP3, albumTitle, artistName) AS (\n"
-                + "    VALUES (?, ?, ?, ?, ?, ?)\n" + "),\n"
-                + "     ins1 AS (\n"
-                + "         INSERT INTO Song (songTitle, songDuration, songReleaseYear, MP3) SELECT songTitle, songDuration, songReleaseYear, MP3\n"
-                + "                                                                          FROM data\n"
-                + "             RETURNING songId\n" + "     ),\n"
-                + "     ins2 AS (\n"
-                + "         INSERT INTO Album (albumTitle) SELECT albumTitle FROM data RETURNING albumId\n"
-                + "     ),\n" + "     ins3 AS (\n"
-                + "         INSERT INTO Artist (artistName) SELECT artistName FROM data RETURNING artistId\n"
-                + "     ),\n" + "     ins4 AS (\n"
-                + "         INSERT INTO ArtistSongRelation (artistId, songId) SELECT ins3.artistId, ins1.songId FROM ins3, ins1\n"
-                + "     ),\n" + "     ins5 AS (\n"
-                + "         INSERT INTO AlbumSongRelation (albumId, songId) SELECT ins2.albumId, ins1.songId FROM ins2, ins1\n"
-                + "     )\n" + "\n" + "INSERT\n"
-                + "INTO AlbumArtistRelation (albumId, artistId)\n"
-                + "SELECT ins2.albumId, ins3.artistId FROM ins2, ins3;");
-        preparedStatement.setString(1, song.getTitle());
-        preparedStatement.setInt(2, song.getDuration());
-        preparedStatement.setInt(3, song.getReleaseYear());
-        preparedStatement.setBytes(4, song.getMp3());
-        preparedStatement.setString(5, song.getAlbumProperty().getTitle());
-        preparedStatement.setString(6, song.getArtistName());
-        preparedStatement.executeUpdate();
+        PreparedStatement songStatement = connection.prepareStatement(
+            "INSERT INTO Song"
+                + "(songTitle, songDuration, songReleaseYear, MP3) VALUES (?, ?, ?, ?)",
+            PreparedStatement.RETURN_GENERATED_KEYS);
+        songStatement.setString(1, song.getTitle());
+        songStatement.setInt(2, song.getDuration());
+        songStatement.setInt(3, song.getReleaseYear());
+        songStatement.setBytes(4, song.getMp3());
+        songStatement.executeUpdate();
+        ResultSet songSet = songStatement.getGeneratedKeys();
+        if (songSet.next())
+        {
+          for (Artist artist : song.getArtists())
+          {
+            PreparedStatement artistStatement = connection
+                .prepareStatement("INSERT INTO Artist (artistName) VALUES (?)",
+                    PreparedStatement.RETURN_GENERATED_KEYS);
+            artistStatement.setString(1, artist.getArtistName());
+            artistStatement.executeUpdate();
+            ResultSet artistSet = artistStatement.getGeneratedKeys();
+            if (artistSet.next())
+            {
+
+              PreparedStatement artistSongStatement = connection
+                  .prepareStatement(
+                      "INSERT INTO ArtistSongRelation (artistId, songId) VALUES (?, ?)");
+              artistSongStatement.setInt(1, artistSet.getInt("artistId"));
+              artistSongStatement.setInt(2, songSet.getInt("songId"));
+              artistSongStatement.executeUpdate();
+            }
+          }
+          PreparedStatement albumStatement = connection
+              .prepareStatement("INSERT INTO Album (albumTitle) VALUES (?)",
+                  PreparedStatement.RETURN_GENERATED_KEYS);
+          albumStatement.setString(1, song.getAlbumProperty().getTitle());
+          albumStatement.executeUpdate();
+          ResultSet albumSet = albumStatement.getGeneratedKeys();
+          if (albumSet.next())
+          {
+            PreparedStatement albumSongStatement = connection.prepareStatement(
+                "INSERT INTO AlbumSongRelation (albumId, songId)"
+                    + "VALUES (?, ?)");
+            albumSongStatement.setInt(1, albumSet.getInt("albumId"));
+            albumSongStatement.setInt(2, songSet.getInt("songId"));
+            albumSongStatement.executeUpdate();
+          }
+        }
+
       }
       catch (SQLException throwables)
       {
         throwables.printStackTrace();
       }
+
     }
+    System.out.println("DONE INSERTING");
   }
 
   @Override public Song getSongWithMP3(int songId)
@@ -63,20 +85,20 @@ public class SongDAO extends BaseDAO implements ISongDAO
       preparedStatement.setInt(1, songId);
       ResultSet resultSet = preparedStatement.executeQuery();
       Song song = null;
+      ArrayList<Artist> listOfArtists = new ArrayList<>();
       while (resultSet.next())
       {
         song = new Song(resultSet.getInt("songid"),
             resultSet.getString("songtitle"), resultSet.getInt("songduration"),
-            resultSet.getInt("songreleaseyear"));
+            resultSet.getInt("songreleaseyear"),
+            new Album(resultSet.getInt("albumId"),
+                resultSet.getString("albumtitle"),
+                resultSet.getInt("albumduration")));
         song.setMp3(resultSet.getBytes("mp3"));
 
         Artist artist = new Artist(resultSet.getInt("artistid"),
             resultSet.getString("artistname"));
-        song.addArtist(artist);
-        Album album = new Album(resultSet.getInt("albumId"),
-            resultSet.getString("albumtitle"),
-            resultSet.getInt("albumduration"));
-        song.setAlbums(album);
+        listOfArtists.add(artist);
 
       }
       return song;
@@ -107,7 +129,10 @@ public class SongDAO extends BaseDAO implements ISongDAO
           Song song = new Song(resultSet.getInt("songid"),
               resultSet.getString("songtitle"),
               resultSet.getInt("songduration"),
-              resultSet.getInt("songreleaseyear"));
+              resultSet.getInt("songreleaseyear"),
+              new Album(resultSet.getInt("albumId"),
+                  resultSet.getString("albumtitle"),
+                  resultSet.getInt("albumduration")));
           listOfSongs.add(song);
           songId = song.getId();
         }
@@ -115,6 +140,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
         Artist artist = new Artist(resultSet.getInt("artistid"),
             resultSet.getString("artistname"));
         listOfSongs.get(listOfSongs.size() - 1).addArtist(artist);
+
         Album album = new Album(resultSet.getInt("albumId"),
             resultSet.getString("albumtitle"),
             resultSet.getInt("albumduration"));
@@ -131,41 +157,4 @@ public class SongDAO extends BaseDAO implements ISongDAO
 
   }
 
-  @Override public ArrayList<Song> getAllSongsWithArtists()
-  {
-    try (Connection connection = getConnection())
-    {
-      PreparedStatement preparedStatement = connection
-          .prepareStatement("SELECT * FROM SongWithArtist");
-      ResultSet resultSet = preparedStatement.executeQuery();
-
-      ArrayList<Song> listOfSongs = new ArrayList<>();
-      int songId = 0;
-
-      while (resultSet.next())
-      {
-        if (songId != resultSet.getInt("songId"))
-        {
-          Song song = new Song(resultSet.getInt("songId"),
-              resultSet.getString("songTitle"),
-              resultSet.getInt("songDuration"),
-              resultSet.getInt("songReleaseYear"));
-          listOfSongs.add(song);
-          songId = song.getId();
-        }
-
-        Artist artist = new Artist(resultSet.getInt("artistid"),
-            resultSet.getString("artistname"));
-        listOfSongs.get(listOfSongs.size() - 1).addArtist(artist);
-      }
-      return listOfSongs;
-
-    }
-    catch (SQLException throwables)
-    {
-      throwables.printStackTrace();
-      return null;
-    }
-
-  }
 }

@@ -47,6 +47,8 @@ namespace ClientTest.model
         }
         
         
+        /*
+         //TODO Skal tilbage når vi får flere albums på igen
         [Test]
         public async Task TestIfCorrectSongIsFoundByAlbum()
         {
@@ -60,6 +62,7 @@ namespace ClientTest.model
             Assert.That(songList.Any(song => song.Id == listOfAllSongs[songNumberTest].Id));
         }
         
+        */
         
         [Test]
         public async Task SearchBySomethingNotImplemented()
@@ -75,7 +78,7 @@ namespace ClientTest.model
             int songNumberTest = 0;
 
             IList<Song> listOfAllSongs = await audioTestModel.GetAllSongs();
-            string albumTitle = listOfAllSongs[songNumberTest].Albums[0].Title;
+            string albumTitle = listOfAllSongs[songNumberTest].Album.AlbumTitle;
             
             Assert.ThrowsAsync<Exception>(() => songSearchModel.GetSongsByFilterAsync(null,albumTitle));
 
@@ -88,7 +91,7 @@ namespace ClientTest.model
             int songNumberTest = 0;
 
             IList<Song> listOfAllSongs = await audioTestModel.GetAllSongs();
-            string albumTitle = listOfAllSongs[songNumberTest].Albums[0].Title;
+            string albumTitle = listOfAllSongs[songNumberTest].Album.AlbumTitle;
         
         
             Assert.ThrowsAsync<Exception>(() => songSearchModel.GetSongsByFilterAsync("",albumTitle));

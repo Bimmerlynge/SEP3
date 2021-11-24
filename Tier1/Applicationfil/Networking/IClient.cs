@@ -9,6 +9,7 @@ namespace Client.Networking
         Task<string> GetAllSongs(string transforObject);
         Task<Song> PlaySong(string tansfAsJson);
 
+        
         Task<string> GetSongsByFilter(string transString);
         
     }

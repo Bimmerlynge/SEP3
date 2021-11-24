@@ -11,7 +11,7 @@ namespace AppServer.Networking.DataSide
         Task<string> GetAllSongs();
         Task<string> GetSongsByFilter(TransferObj tObj);
         Task<IList<byte[]>> GetAllMP3();
-        Task PostAllSongs(IList<Song> songList);
+        Task PostAllSongs(List<Song> songList);
         Task<string> GetSongWithMP3(Song song);
     }
 }
