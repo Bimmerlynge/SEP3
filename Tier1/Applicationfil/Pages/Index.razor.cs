@@ -1,11 +1,13 @@
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using AppServer.Model;
 using Blazored.Modal.Services;
 using Client.Authentication;
 using Client.Data;
 using Client.model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using IUserService = Client.model.IUserService;
 
 
 namespace Client.Pages

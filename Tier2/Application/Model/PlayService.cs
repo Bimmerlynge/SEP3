@@ -19,7 +19,7 @@ namespace AppServer.Model
           
         }
 
-        public async Task<string> PlayAsync(Song song)
+        public async Task<Song> PlayAsync(Song song)
         {
             return await dataEndPoint.GetSongWithMP3(song);
         }

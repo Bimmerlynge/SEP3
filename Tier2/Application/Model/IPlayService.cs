@@ -6,7 +6,7 @@ namespace AppServer.Model
 {
     public interface IPlayService
     {
-        Task<string> PlayAsync(Song song);
+        Task<Song> PlayAsync(Song song);
 
         Task<IList<Song>> GetAllSongsAsync();
         

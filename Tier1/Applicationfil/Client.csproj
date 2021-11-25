@@ -27,4 +27,8 @@
       <Content Remove="wwwroot\audio\Under_The_Bridge3.mp3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Tier2\Application\AppServer.csproj" />
+    </ItemGroup>
+
 </Project>

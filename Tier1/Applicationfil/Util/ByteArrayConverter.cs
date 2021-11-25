@@ -8,7 +8,7 @@ namespace Client.Util
     {
         public override byte[] Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
-            short[] sByteArray = JsonSerializer.Deserialize<short[]>(ref reader);
+            byte[] sByteArray = JsonSerializer.Deserialize<byte[]>(ref reader);
             byte[] value = new byte[sByteArray.Length];
             for (int i = 0; i < sByteArray.Length; i++)
             {
