@@ -244,7 +244,7 @@ namespace AppServerTest.Model
             //Help Method
         private async Task<IList<Song>> GetListOfAllSongs()
         {
-            string listWithEverySongInDatabase = await playService.GetAllSongsAsJsonAsync();
+            string listWithEverySongInDatabase = await playService.GetAllSongsAsync();
 
             TransferObj transferObj = JsonSerializer.Deserialize<TransferObj>(listWithEverySongInDatabase);
 

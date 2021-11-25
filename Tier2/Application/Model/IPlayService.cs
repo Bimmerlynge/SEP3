@@ -8,7 +8,7 @@ namespace AppServer.Model
     {
         Task<string> PlayAsync(Song song);
 
-        Task<string> GetAllSongsAsJsonAsync();
+        Task<IList<Song>> GetAllSongsAsync();
         
     }
 }

@@ -13,13 +13,15 @@ namespace AppServer.Networking.DataSide
     {
         private string uri = "http://localhost:8080/";
 
-        
-        public async Task<string> GetAllSongs()
+
+        public async Task<IList<Song>> GetAllSongs()
         {
             using HttpClient client = new HttpClient();
-            Task<string> stringAsync = client.GetStringAsync(uri + "songs");
-            Console.WriteLine(stringAsync.Result);
-            return await stringAsync;
+            string stringAsync = await client.GetStringAsync(uri + "songs");
+
+            Console.WriteLine(stringAsync);
+            return JsonSerializer.Deserialize<IList<Song>>(stringAsync,
+                new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
         }
 
         public async Task<string> GetSongWithMP3(Song song)
@@ -30,16 +32,6 @@ namespace AppServer.Networking.DataSide
             return await stringAsync;
         }
 
-        public async Task<string> GetSongsByFilter(TransferObj tObj)
-        {
-            using HttpClient client = new HttpClient();
-            string[] argsAsJson = JsonSerializer.Deserialize<string[]>(tObj.Arg);
-
-            Console.WriteLine("Type: "+ argsAsJson[0] + ", paramter: " + argsAsJson[1]);
-            
-            Task<string> stringAsync = client.GetStringAsync(uri + $"songs/{argsAsJson[0]}={argsAsJson[1]}");
-            return await stringAsync;
-        }
 
         public async Task<IList<byte[]>> GetAllMP3()
         {
@@ -66,9 +58,10 @@ namespace AppServer.Networking.DataSide
         public async Task PostAllSongs(List<Song> songList)
         {
             using HttpClient client = new HttpClient();
-            string songListAsJson = JsonSerializer.Serialize(songList, new JsonSerializerOptions{PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
+            string songListAsJson = JsonSerializer.Serialize(songList,
+                new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
             StringContent content = new StringContent(songListAsJson, Encoding.UTF8, "application/json");
-            
+
             HttpResponseMessage response = await client.PostAsync(uri + "songs", content);
             if (!response.IsSuccessStatusCode)
             {

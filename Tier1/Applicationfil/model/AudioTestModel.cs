@@ -1,22 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Text.Json;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Client.Data;
 using Client.Networking;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Client.model
 {
     public class AudioTestModel : IAudioTestModel
     {
         private IClient client;
-        private IList<Song> songsToShow;
-        
-        
+
+
         public AudioTestModel(IClient client)
         {
             this.client = client;
@@ -24,21 +17,7 @@ namespace Client.model
 
         public async Task<IList<Song>> GetAllSongs()
         {
-            TransferObj transferObj = new TransferObj() {Action = "GETSONGS"};
-            string transString = JsonSerializer.Serialize(transferObj);
-
-            string inFromServer = await client.GetAllSongs(transString);
-            // Console.WriteLine("infroms sarea: " + inFromServer);
-            
-            TransferObj tObj = JsonSerializer.Deserialize<TransferObj>(inFromServer,
-                new JsonSerializerOptions() {PropertyNameCaseInsensitive = true});
-            // Console.WriteLine("Trans from server: "+ tObj.Action + "   " + tObj.Arg);
-            IList<Song> allSongs = JsonSerializer.Deserialize<IList<Song>>(tObj.Arg,
-                new JsonSerializerOptions() {PropertyNameCaseInsensitive = true});
-            
-            
-            return allSongs;
+            return await client.GetAllSongs();
         }
-        
     }
 }
