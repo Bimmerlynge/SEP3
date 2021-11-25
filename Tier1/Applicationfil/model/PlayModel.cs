@@ -76,9 +76,10 @@ namespace Client.model
         {
             if (!File.Exists(serverFile))
             {
-               
+
+                Console.WriteLine("SONG BEFORE NULL POINTER: " + song.Title);
                 Song songToPlay = await client.PlaySong(song);
-                Console.WriteLine("song to play " + songToPlay.Mp3.Length);
+                Console.WriteLine("song to play " + songToPlay.Title);
                 using (FileStream byteToSong = File.Create(serverFile))
                 {
                     await byteToSong.WriteAsync(songToPlay.Mp3, 0, songToPlay.Mp3.Length);

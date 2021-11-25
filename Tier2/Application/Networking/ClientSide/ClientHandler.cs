@@ -1,14 +1,12 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AppServer.Data;
 using AppServer.Model;
-using Client.Util;
 
 namespace AppServer.Networking.ClientSide
 {
@@ -39,6 +37,7 @@ namespace AppServer.Networking.ClientSide
                     break;
                 case "PLAYSONG":
                     Console.WriteLine("arguemnt of song " + result.Arg);
+                    Console.WriteLine("Argument of song type = : " + result.Arg.GetType());
                     Song song = ElementToObject<Song>((JsonElement) result.Arg);
                     await HandlePlaySongAsync(song, client.GetStream());
                     break;
@@ -98,7 +97,7 @@ namespace AppServer.Networking.ClientSide
             TransferObj<Object> transferObj = JsonSerializer.Deserialize<TransferObj<Object>>(readFromClient,
                 new JsonSerializerOptions
                 {
-                    PropertyNameCaseInsensitive = true,Converters = { new ByteArrayConverter() }
+                    PropertyNameCaseInsensitive = true,
                 });
 
             return transferObj;
@@ -135,8 +134,17 @@ namespace AppServer.Networking.ClientSide
 
         private async Task HandlePlaySongAsync(Song song, NetworkStream stream)
         {
-            string jsonSong = await playSongService.PlayAsync(song);
-            byte[] bytes = Encoding.UTF8.GetBytes(jsonSong);
+            Console.WriteLine("HandlePlaySongAsync Song.Title::::: " +song.Title);
+            Song songWithMp3 = await playSongService.PlayAsync(song);
+            
+            Console.WriteLine("HandlePlaySongAsync SongWithMp3.Lenght::::: " + songWithMp3.Mp3.Length);
+            TransferObj<Song> transferObj = new TransferObj<Song>() {Action = "Response", Arg = songWithMp3};
+            
+            string jsonTrans = JsonSerializer.Serialize(transferObj);
+            Console.WriteLine("HandlePlaySongAsync Trans.Lenght::::: " + songWithMp3.Mp3.Length);
+            
+            byte[] bytes = Encoding.UTF8.GetBytes(jsonTrans);
+            Console.WriteLine("HandlePlaySongAsync jsonTransByte.Lenght::::: " + bytes.Length);
             await stream.WriteAsync(bytes, 0, bytes.Length);
         }
     }

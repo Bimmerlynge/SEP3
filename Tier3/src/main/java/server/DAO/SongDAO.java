@@ -35,7 +35,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
             PreparedStatement artistStatement = connection
                 .prepareStatement("INSERT INTO Artist (artistName) VALUES (?)",
                     PreparedStatement.RETURN_GENERATED_KEYS);
-            artistStatement.setString(1, artist.getArtistName());
+            artistStatement.setString(1, artist.getName());
             artistStatement.executeUpdate();
             ResultSet artistSet = artistStatement.getGeneratedKeys();
             if (artistSet.next())

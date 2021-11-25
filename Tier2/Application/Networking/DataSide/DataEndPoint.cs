@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AppServer.Data;
+using Client.Util;
 
 namespace AppServer.Networking.DataSide
 {
@@ -24,12 +24,14 @@ namespace AppServer.Networking.DataSide
                 new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
         }
 
-        public async Task<string> GetSongWithMP3(Song song)
+        public async Task<Song> GetSongWithMP3(Song song)
         {
             using HttpClient client = new HttpClient();
-            Task<string> stringAsync = client.GetStringAsync(uri + $"songs/{song.Id}");
-            Console.WriteLine(stringAsync.Result.Length);
-            return await stringAsync;
+            string stringAsync = await client.GetStringAsync(uri + $"songs/{song.Id}");
+            Console.WriteLine("GetSongWithMp3.lenght::::: " + stringAsync.Length);
+            Song songWithMP3 = JsonSerializer.Deserialize<Song>(stringAsync, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true, Converters = { new ByteArrayConverter() }});
+            Console.WriteLine("GetSongWithMp3.Song.Mp3.Lenth::::: " + songWithMP3.Title);
+            return  songWithMP3;
         }
 
 
@@ -62,11 +64,14 @@ namespace AppServer.Networking.DataSide
                 new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
             StringContent content = new StringContent(songListAsJson, Encoding.UTF8, "application/json");
 
-            HttpResponseMessage response = await client.PostAsync(uri + "songs", content);
+            Console.WriteLine("Yike");
+            HttpResponseMessage response = await client.PostAsync(uri + "songss", content);
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception($@"Error: {response.StatusCode}, {response.ReasonPhrase}");
             }
+
+            Console.WriteLine("Done");
         }
     }
 }

@@ -5,6 +5,7 @@ using System.IO;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Client.Data;
 using Client.Pages;
@@ -18,23 +19,23 @@ namespace Client.Networking
         public async Task<IList<Song>> GetAllSongs()
         {
             using TcpClient client = GetTcpClient();
-            await SendServerRequest("GETSONGS", "",client);
-            return await ServerResponse<IList<Song>>(client, 100000);
+            await SendServerRequest("GETSONGS", "", client);
+            return await serverResponse<IList<Song>>(client, 100000);
         }
 
 
         public async Task<Song> PlaySong(Song song)
         {
-            using TcpClient client = GetTcpClient();
-           await SendServerRequest("PLAYSONG", song,client);
-            return await ServerResponse<Song>(client, 30000000);
+            TcpClient client = new TcpClient("localhost", 1098);
+            await SendServerRequest<Song>("PLAYSONG", song, client);
+            return await serverResponse<Song>(client, 80000000);
         }
 
         public async Task<IList<Song>> GetSongsByFilterAsync(string[] filterOptions)
         {
             using TcpClient client = GetTcpClient();
              await SendServerRequest("GETSONGSBYFILTER", filterOptions,client);
-            return await ServerResponse<IList<Song>>(client, 500000);
+            return await serverResponse<IList<Song>>(client, 500000);
         }
 
         public async Task RegisterUser(User user)
@@ -47,11 +48,11 @@ namespace Client.Networking
         {
             using TcpClient client = GetTcpClient();
            await SendServerRequest("VALIDATEUSER", user,client);
-            return await ServerResponse<User>(client, 5000);
+            return await serverResponse<User>(client, 5000);
         }
 
         
-        private async Task SendServerRequest<T>(string action, T TObject,TcpClient client)
+        private async Task SendServerRequest<T>(string action, T TObject, TcpClient client)
         {
             NetworkStream stream = client.GetStream();
             TransferObj<T> transferObj = new TransferObj<T>
@@ -65,7 +66,7 @@ namespace Client.Networking
         }
         
 
-        private async Task<T> ServerResponse<T>(TcpClient client, int bufferSize)
+        private async Task<T> serverResponse<T>(TcpClient client, int bufferSize)
         {
             NetworkStream stream = client.GetStream();
 
@@ -75,8 +76,8 @@ namespace Client.Networking
             string inFromServer = Encoding.UTF8.GetString(dataFromServer, 0, bytesRead);
             TransferObj<T> objectFromServer = JsonSerializer.Deserialize<TransferObj<T>>(inFromServer, new JsonSerializerOptions
             {
-                PropertyNameCaseInsensitive = true,
-                Converters = {new ByteArrayConverter()}
+                PropertyNameCaseInsensitive = true
+
             });
             
             return objectFromServer.Arg;
