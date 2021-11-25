@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -11,43 +13,43 @@ namespace AppServer.Model
 {
     public class SongSearchService : ISongSearchService
     {
-        private IDataEndPointSearchSong endPointSearchSong = new DataEndPointSearchSong();
+        private readonly IDataEndPointSearchSong endPointSearchSong = new DataEndPointSearchSong();
         
-        public async Task<string> GetSongsByFilterJsonAsync(TransferObj tObj)
+        public async Task<IList<Song>> GetSongsByFilterJsonAsync(string[] args)
         {
-            string[] stringArray = JsonSerializer.Deserialize<string[]>(tObj.Arg);
-            switch (stringArray[0])
+            switch (args[0])
             {
                 case "Title":
-                    return await getSongFromTitle(stringArray[1]);
+                    return await getSongFromTitle(args[1]);
 
                 case "Artist":
-                    return await getSongFromArtist(stringArray[1]);
+                    return await getSongFromArtist(args[1]);
 
                 case "Album":
-                    return await getSongFromAlbum(stringArray[1]);
+                    return await getSongFromAlbum(args[1]);
                 
                 default:
-                    throw new Exception("You have tried to search " + stringArray[0] + " which is not valid");
+                    throw new Exception("You have tried to search " + args[0] + " which is not valid");
             }
             
         }
 
-        private async Task<string> getSongFromArtist(string artistName)
+        private async Task<IList<Song>> getSongFromArtist(string artistName)
         {
-            return await endPointSearchSong.GetSongsByArtistNameAsync(artistName);
+            return await  endPointSearchSong.GetSongsByArtistNameAsync(artistName);
         }
 
-        private async Task<string>  getSongFromAlbum(string albumTitle)
+        private async Task<IList<Song>>  getSongFromAlbum(string albumTitle)
         {
             return await endPointSearchSong.GetSongsByAlbumTitleAsync(albumTitle);
             
         }
 
-        private async Task<string> getSongFromTitle(string songTitle)
+        private async Task<IList<Song>> getSongFromTitle(string songTitle)
         {
             return await endPointSearchSong.GetSongsByTitleAsync(songTitle);
             
         }
+        
     }
 }

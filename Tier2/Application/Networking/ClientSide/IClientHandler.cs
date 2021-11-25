@@ -1,3 +1,4 @@
+using System;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using AppServer.Data;
@@ -8,6 +9,8 @@ namespace AppServer.Networking.ClientSide
     {
         void ListenToClientAsync();
         Task GetAllSongsAsync();
+
+
 
 
     }
