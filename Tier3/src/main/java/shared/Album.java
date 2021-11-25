@@ -3,20 +3,17 @@ package shared;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.sql.Date;
-import java.util.ArrayList;
-
 public class Album
 {
-  private int albumId;
-  private String albumTitle;
+  private int id;
+  private String title;
   private int duration;
 
 
-  public Album(int albumId, String title, int duration)
+  public Album(int id, String title, int duration)
   {
-    this.albumId = albumId;
-    this.albumTitle = title;
+    this.id = id;
+    this.title = title;
     this.duration = duration;
   }
 
@@ -27,20 +24,20 @@ public class Album
   }
 
 
-  public int getAlbumId()
+  public int getId()
   {
-    return albumId;
+    return id;
   }
 
 
   public String getTitle()
   {
-    return albumTitle;
+    return title;
   }
 
-  public void setAlbumTitle(String albumTitle)
+  public void setTitle(String title)
   {
-    this.albumTitle = albumTitle;
+    this.title = title;
   }
 
   public void setDuration(int duration)

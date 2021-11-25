@@ -2,34 +2,34 @@ package shared;
 
 public class Artist
 {
-  private int artistId;
-  private String artistName;
+  private int id;
+  private String name;
 
-  public Artist(int artistId, String artistName)
+  public Artist(int id, String name)
   {
-    this.artistId = artistId;
-    this.artistName = artistName;
+    this.id = id;
+    this.name = name;
   }
 
 
 
-  public int getArtistId()
+  public int getId()
   {
-    return artistId;
+    return id;
   }
 
-  public void setArtistId(int artistId)
+  public void setId(int id)
   {
-    this.artistId = artistId;
+    this.id = id;
   }
 
-  public String getArtistName()
+  public String getName()
   {
-    return artistName;
+    return name;
   }
 
-  public void setArtistName(String artistName)
+  public void setName(String name)
   {
-    this.artistName = artistName;
+    this.name = name;
   }
 }

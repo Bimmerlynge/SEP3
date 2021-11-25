@@ -1,7 +1,7 @@
 package server.DAO;
 
 import shared.Album;
-import shared.Artist;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,7 +27,7 @@ public class AlbumDAO extends BaseDAO implements IAlbumDAO
           Album album = new Album(resultSet.getInt("albumId"),
               resultSet.getString("albumTitle"), resultSet.getInt("albumDuration"));
           albums.add(album);
-          albumId = album.getAlbumId();
+          albumId = album.getId();
         }
 
       }
