@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AppServer.Data;
 
 namespace AppServer.Model
@@ -6,7 +7,7 @@ namespace AppServer.Model
     public interface ISongSearchService
     {
         
-        Task<string> GetSongsByFilterJsonAsync(TransferObj tObj);
+        Task<IList<Song>> GetSongsByFilterJsonAsync(string[] args);
 
         
     }

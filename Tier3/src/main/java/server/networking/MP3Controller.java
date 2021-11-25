@@ -27,15 +27,5 @@ public class MP3Controller
     //return new Gson().toJson(MP3s);
   }
 
-  @PostMapping("/songss")
-  public synchronized void postAllSongs(@RequestBody ArrayList<Song> songs)
-  {
-    ISongDAO songDAO = new SongDAO();
-    System.out.println(songs.get(0).getArtistName());
-    System.out.println(songs.get(0).getAlbumProperty());
-    songDAO.postAllSongs(songs);
 
-    //ArrayList<Song> songList = gson.fromJson(jsonSongs, new TypeToken<ArrayList<Song>>(){}.getType());
-
-  }
 }

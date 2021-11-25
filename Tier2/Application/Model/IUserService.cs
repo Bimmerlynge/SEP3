@@ -6,10 +6,8 @@ namespace AppServer.Model
 {
     public interface IUserService
     {
-        public Task<IList<User>> GetUsers();
-        public Task<User> AddUser(User user);
-        public  void RemoveUser(User user);
+        public Task RegisterUser(User user);
         
-        public User ValidateUser(string userName, string password);
+        public Task<User> ValidateUser(User user);
     }
 }

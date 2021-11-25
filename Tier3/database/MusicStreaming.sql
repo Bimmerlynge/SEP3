@@ -14,11 +14,20 @@ CREATE TABLE IF NOT EXISTS Song
     mp3             bytea
 );
 
+
 CREATE TABLE IF NOT EXISTS Album
 (
     albumId          SERIAL PRIMARY KEY,
     albumTitle       VARCHAR(100) NOT NULL,
     albumDuration    SMALLINT -- Lav trigger for at finde summen af alle sange på albummet
+);
+
+CREATE TABLE IF NOT EXISTS _User(
+    username VARCHAR PRIMARY KEY,
+    password VARCHAR NOT NULL,
+    role VARCHAR NOT NULL
+
+
 );
 
 CREATE TABLE IF NOT EXISTS Artist
@@ -114,3 +123,9 @@ CREATE TRIGGER updateSongDuration
     FOR EACH ROW
 EXECUTE PROCEDURE songDurationTotal();
 
+SELECT * FROM AllSongs;
+
+
+SELECT  *FROM Song;
+
+SELECT * FROM _User;

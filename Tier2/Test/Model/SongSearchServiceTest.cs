@@ -62,7 +62,7 @@ namespace AppServerTest.Model
             int songNumberTest = 0;
             var listOfAllSongs = await GetListOfAllSongs();
 
-            string songAlbumTitle = listOfAllSongs[songNumberTest].AlbumProperty.AlbumTitle;
+            string songAlbumTitle = listOfAllSongs[songNumberTest].Album.AlbumTitle;
 
             string[] args = {"Album", songAlbumTitle};
 
@@ -92,7 +92,7 @@ namespace AppServerTest.Model
             int songNumberTest = 0;
             var listOfAllSongs = await GetListOfAllSongs();
 
-            string songAlbumTitle = listOfAllSongs[songNumberTest].AlbumProperty.AlbumTitle;
+            string songAlbumTitle = listOfAllSongs[songNumberTest].Album.AlbumTitle;
             string[] args = {null, songAlbumTitle};
 
             string arg = JsonSerializer.Serialize(args);
@@ -110,7 +110,7 @@ namespace AppServerTest.Model
             int songNumberTest = 0;
             var listOfAllSongs = await GetListOfAllSongs();
 
-            string songAlbumTitle = listOfAllSongs[songNumberTest].AlbumProperty.AlbumTitle;
+            string songAlbumTitle = listOfAllSongs[songNumberTest].Album.AlbumTitle;
             string[] args = {"", songAlbumTitle};
 
             string arg = JsonSerializer.Serialize(args);
@@ -244,7 +244,7 @@ namespace AppServerTest.Model
             //Help Method
         private async Task<IList<Song>> GetListOfAllSongs()
         {
-            string listWithEverySongInDatabase = await playService.GetAllSongsAsJsonAsync();
+            string listWithEverySongInDatabase = await playService.GetAllSongsAsync();
 
             TransferObj transferObj = JsonSerializer.Deserialize<TransferObj>(listWithEverySongInDatabase);
 
