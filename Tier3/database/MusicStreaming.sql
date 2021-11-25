@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS Song
     mp3             bytea
 );
 
+
 CREATE TABLE IF NOT EXISTS Album
 (
     albumId          SERIAL PRIMARY KEY,
@@ -22,8 +23,11 @@ CREATE TABLE IF NOT EXISTS Album
 );
 
 CREATE TABLE IF NOT EXISTS _User(
-    userId VARCHAR PRIMARY KEY,
-    password VARCHAR
+    username VARCHAR PRIMARY KEY,
+    password VARCHAR NOT NULL,
+    role VARCHAR NOT NULL
+
+
 );
 
 CREATE TABLE IF NOT EXISTS Artist
@@ -120,3 +124,8 @@ CREATE TRIGGER updateSongDuration
 EXECUTE PROCEDURE songDurationTotal();
 
 SELECT * FROM AllSongs;
+
+
+SELECT  *FROM Song;
+
+SELECT * FROM _User;

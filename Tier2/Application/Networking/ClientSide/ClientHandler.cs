@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Net.Sockets;
+using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -12,8 +14,9 @@ namespace AppServer.Networking.ClientSide
     {
         private TcpClient client;
         private IPlayService playSongService = new PlayService();
+        private IUserService userService = new UserService();
         private ISongSearchService songSearchService = new SongSearchService();
-        
+
 
         public ClientHandler(TcpClient client)
         {
@@ -24,57 +27,78 @@ namespace AppServer.Networking.ClientSide
         public async void ListenToClientAsync()
         {
             Console.WriteLine("LISTEN");
-            TransferObj fromClient = readFromClientAsync(client.GetStream()).Result;
+            TransferObj<Object> result = await readFromClientAsync(client.GetStream());
 
-            switch (fromClient.Action)
+            switch (result.Action)
             {
                 case "GETSONGS":
                     await GetAllSongsAsync();
                     Console.WriteLine("SEND SONGS");
                     break;
                 case "PLAYSONG":
-                    Song song = JsonSerializer.Deserialize<Song>(fromClient.Arg);
+                    Console.WriteLine("arguemnt of song " + result.Arg);
+                    Console.WriteLine("Argument of song type = : " + result.Arg.GetType());
+                    Song song = ElementToObject<Song>((JsonElement) result.Arg);
                     await HandlePlaySongAsync(song, client.GetStream());
                     break;
                 case "GETSONGSBYFILTER":
-                    await GetSongsByFilterAsync(fromClient);
+                    await GetSongsByFilterAsync((string[]) result.Arg);
                     Console.WriteLine("SENDING FILTERED SONGS");
+                    break;
+                case "REGISTERUSER":
+                    User user = (User) result.Arg;
+                    Console.WriteLine("REGISTERING NEW USER");
+                    await RegisterUser(user);
                     break;
             }
 
             client.Dispose();
         }
 
-        private async Task GetSongsByFilterAsync(TransferObj tObj)
+
+
+
+
+        private T ElementToObject<T>(JsonElement element)
+        {
+            string stringElement = element.GetRawText();
+            return JsonSerializer.Deserialize<T>(stringElement,new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
+
+        }
+
+        private async Task GetSongsByFilterAsync(string[] args)
         {
             string transAsJson;
             try
             {
-                string songsAsJSon = await songSearchService.GetSongsByFilterJsonAsync(tObj);
-                TransferObj transferObj = new TransferObj(){Action = "Ok 200",Arg = songsAsJSon};
+                IList<Song> songs = await songSearchService.GetSongsByFilterJsonAsync(args);
+                TransferObj<IList<Song>> transferObj = new TransferObj<IList<Song>>() {Action = "Ok 200", Arg = songs};
                 transAsJson = JsonSerializer.Serialize(transferObj);
-
             }
             catch (Exception e)
             {
-                TransferObj transferObj = new TransferObj() {Action = "Bad Request 400", Arg = e.Message};
+                TransferObj<string> transferObj = new TransferObj<string>()
+                    {Action = "Bad Request 400", Arg = e.Message};
                 transAsJson = JsonSerializer.Serialize(transferObj);
             }
-            
-            byte[] bytes = Encoding.ASCII.GetBytes(transAsJson);
+
+            byte[] bytes = Encoding.UTF8.GetBytes(transAsJson);
 
             NetworkStream stream = client.GetStream();
             await stream.WriteAsync(bytes, 0, bytes.Length);
-            
         }
 
-        private async Task<TransferObj> readFromClientAsync(NetworkStream stream)
+        private async Task<TransferObj<Object>> readFromClientAsync(NetworkStream stream)
         {
             byte[] dataFromServer = new byte[5000];
             int bytesRead = await stream.ReadAsync(dataFromServer, 0, dataFromServer.Length);
-            string readFromClient = Encoding.ASCII.GetString(dataFromServer, 0, bytesRead);
+            string readFromClient = Encoding.UTF8.GetString(dataFromServer, 0, bytesRead);
             Console.WriteLine(readFromClient);
-            TransferObj transferObj = JsonSerializer.Deserialize<TransferObj>(readFromClient);
+            TransferObj<Object> transferObj = JsonSerializer.Deserialize<TransferObj<Object>>(readFromClient,
+                new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                });
 
             return transferObj;
         }
@@ -82,20 +106,45 @@ namespace AppServer.Networking.ClientSide
 
         public async Task GetAllSongsAsync()
         {
-            string transAsJson = await playSongService.GetAllSongsAsJsonAsync();
-            byte[] bytes = Encoding.ASCII.GetBytes(transAsJson);
+            IList<Song> songs = await playSongService.GetAllSongsAsync();
 
-            Console.WriteLine("GetallSongs sending: {0} bytes", bytes.Length);
-
-            NetworkStream stream = client.GetStream();
-            await stream.WriteAsync(bytes, 0, bytes.Length);
+            await SendToClient("RESPONSE FROM SERVER", songs);
         }
+
+        private async Task RegisterUser(User user)
+        {
+            await userService.RegisterUser(user);
+        }
+
+
+        private async Task SendToClient<T>(string action, T TObject)
+        {
+            NetworkStream stream = client.GetStream();
+            TransferObj<T> transferObj = new TransferObj<T>
+            {
+                Action = action, Arg = TObject
+            };
+            string transferAsJson = JsonSerializer.Serialize(transferObj);
+
+            Console.WriteLine("transfer as JSON " + transferAsJson);
+            byte[] toServer = Encoding.UTF8.GetBytes(transferAsJson);
+            await stream.WriteAsync(toServer);
+        }
+
 
         private async Task HandlePlaySongAsync(Song song, NetworkStream stream)
         {
+            Console.WriteLine("HandlePlaySongAsync Song.Title::::: " +song.Title);
+            Song songWithMp3 = await playSongService.PlayAsync(song);
             
-            string jsonSong = await playSongService.PlayAsync(song);
-            byte[] bytes = Encoding.ASCII.GetBytes(jsonSong);
+            Console.WriteLine("HandlePlaySongAsync SongWithMp3.Lenght::::: " + songWithMp3.Mp3.Length);
+            TransferObj<Song> transferObj = new TransferObj<Song>() {Action = "Response", Arg = songWithMp3};
+            
+            string jsonTrans = JsonSerializer.Serialize(transferObj);
+            Console.WriteLine("HandlePlaySongAsync Trans.Lenght::::: " + songWithMp3.Mp3.Length);
+            
+            byte[] bytes = Encoding.UTF8.GetBytes(jsonTrans);
+            Console.WriteLine("HandlePlaySongAsync jsonTransByte.Lenght::::: " + bytes.Length);
             await stream.WriteAsync(bytes, 0, bytes.Length);
         }
     }

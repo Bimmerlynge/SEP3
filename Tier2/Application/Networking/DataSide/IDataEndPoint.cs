@@ -8,10 +8,9 @@ namespace AppServer.Networking.DataSide
 {
     public interface IDataEndPoint
     {
-        Task<string> GetAllSongs();
-        Task<string> GetSongsByFilter(TransferObj tObj);
+        Task<IList<Song>> GetAllSongs();
         Task<IList<byte[]>> GetAllMP3();
         Task PostAllSongs(List<Song> songList);
-        Task<string> GetSongWithMP3(Song song);
+        Task<Song> GetSongWithMP3(Song song);
     }
 }

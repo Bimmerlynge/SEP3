@@ -2,12 +2,11 @@
 using System.Threading.Tasks;
 using AppServer.Data;
 
-namespace AppServer.Model
+namespace AppServer.Networking.DataSide
 {
-    public interface IUserService
+    public interface IDataEndPointUser
     {
         public Task RegisterUser(User user);
-        
         public Task<User> ValidateUser(User user);
     }
 }

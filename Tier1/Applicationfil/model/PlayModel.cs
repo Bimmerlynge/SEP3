@@ -76,13 +76,13 @@ namespace Client.model
         {
             if (!File.Exists(serverFile))
             {
-                string songAsJson = JsonSerializer.Serialize(song);
-                TransferObj transferObj = new TransferObj() {Action = "PLAYSONG", Arg = songAsJson};
-                string transf = JsonSerializer.Serialize(transferObj);
-                song = await client.PlaySong(transf);
+
+                Console.WriteLine("SONG BEFORE NULL POINTER: " + song.Title);
+                Song songToPlay = await client.PlaySong(song);
+                Console.WriteLine("song to play " + songToPlay.Title);
                 using (FileStream byteToSong = File.Create(serverFile))
                 {
-                    await byteToSong.WriteAsync(song.Mp3, 0, song.Mp3.Length);
+                    await byteToSong.WriteAsync(songToPlay.Mp3, 0, songToPlay.Mp3.Length);
                 }
             }
         }

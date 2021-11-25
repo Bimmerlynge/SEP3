@@ -1,35 +1,23 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AppServer.Data;
+using AppServer.Networking.DataSide;
 
 namespace AppServer.Model
 {
     public class UserService : IUserService
     {
-        
-        public IList<User> Users { get; }
+        private IDataEndPointUser dataEndPoint = new DataEndPointUser();
 
-        public Task<IList<User>> GetUsers()
+        public async Task RegisterUser(User user)
         {
-            throw new System.NotImplementedException();
+            await dataEndPoint.RegisterUser(user);
         }
 
-        public Task<User> AddUser(User user)
+        public async Task<User> ValidateUser(User user)
         {
-            throw new System.NotImplementedException();
+            User userToReturn = await dataEndPoint.ValidateUser(user);
+            return userToReturn;
         }
-
-        public void RemoveUser(User user)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        
-        public User ValidateUser(string userName, string password)
-        {
-            throw new System.NotImplementedException();
-        }
-        
-        
     }
 }

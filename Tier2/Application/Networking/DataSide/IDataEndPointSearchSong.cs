@@ -1,13 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using AppServer.Data;
 
 namespace AppServer.Networking.DataSide
 {
     public interface IDataEndPointSearchSong
     {
-        Task<string> GetSongsByTitleAsync(string songTitle);
-        Task<string> GetSongsByArtistNameAsync(string artistName);
+        Task<IList<Song>> GetSongsByTitleAsync(string songTitle);
+        Task<IList<Song>> GetSongsByArtistNameAsync(string artistName);
 
-        Task<string> GetSongsByAlbumTitleAsync(string albumTitle);
+        Task<IList<Song>> GetSongsByAlbumTitleAsync(string albumTitle);
     }
 }

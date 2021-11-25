@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using AppServer.Data;
+using Client.Util;
 
 namespace AppServer.Networking.DataSide
 {
@@ -13,33 +13,27 @@ namespace AppServer.Networking.DataSide
     {
         private string uri = "http://localhost:8080/";
 
-        
-        public async Task<string> GetAllSongs()
+
+        public async Task<IList<Song>> GetAllSongs()
         {
             using HttpClient client = new HttpClient();
-            Task<string> stringAsync = client.GetStringAsync(uri + "songs");
-            Console.WriteLine(stringAsync.Result);
-            return await stringAsync;
+            string stringAsync = await client.GetStringAsync(uri + "songs");
+
+            Console.WriteLine(stringAsync);
+            return JsonSerializer.Deserialize<IList<Song>>(stringAsync,
+                new JsonSerializerOptions {PropertyNameCaseInsensitive = true});
         }
 
-        public async Task<string> GetSongWithMP3(Song song)
+        public async Task<Song> GetSongWithMP3(Song song)
         {
             using HttpClient client = new HttpClient();
-            Task<string> stringAsync = client.GetStringAsync(uri + $"songs/{song.Id}");
-            Console.WriteLine(stringAsync.Result.Length);
-            return await stringAsync;
+            string stringAsync = await client.GetStringAsync(uri + $"songs/{song.Id}");
+            Console.WriteLine("GetSongWithMp3.lenght::::: " + stringAsync.Length);
+            Song songWithMP3 = JsonSerializer.Deserialize<Song>(stringAsync, new JsonSerializerOptions() { PropertyNameCaseInsensitive = true, Converters = { new ByteArrayConverter() }});
+            Console.WriteLine("GetSongWithMp3.Song.Mp3.Lenth::::: " + songWithMP3.Title);
+            return  songWithMP3;
         }
 
-        public async Task<string> GetSongsByFilter(TransferObj tObj)
-        {
-            using HttpClient client = new HttpClient();
-            string[] argsAsJson = JsonSerializer.Deserialize<string[]>(tObj.Arg);
-
-            Console.WriteLine("Type: "+ argsAsJson[0] + ", paramter: " + argsAsJson[1]);
-            
-            Task<string> stringAsync = client.GetStringAsync(uri + $"songs/{argsAsJson[0]}={argsAsJson[1]}");
-            return await stringAsync;
-        }
 
         public async Task<IList<byte[]>> GetAllMP3()
         {
@@ -66,14 +60,18 @@ namespace AppServer.Networking.DataSide
         public async Task PostAllSongs(List<Song> songList)
         {
             using HttpClient client = new HttpClient();
-            string songListAsJson = JsonSerializer.Serialize(songList, new JsonSerializerOptions{PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
+            string songListAsJson = JsonSerializer.Serialize(songList,
+                new JsonSerializerOptions {PropertyNamingPolicy = JsonNamingPolicy.CamelCase});
             StringContent content = new StringContent(songListAsJson, Encoding.UTF8, "application/json");
-            
-            HttpResponseMessage response = await client.PostAsync(uri + "songs", content);
+
+            Console.WriteLine("Yike");
+            HttpResponseMessage response = await client.PostAsync(uri + "songss", content);
             if (!response.IsSuccessStatusCode)
             {
                 throw new Exception($@"Error: {response.StatusCode}, {response.ReasonPhrase}");
             }
+
+            Console.WriteLine("Done");
         }
     }
 }
