@@ -3,7 +3,6 @@ package server;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import server.DAO.*;
-import shared.Album;
 import shared.Song;
 
 import java.util.ArrayList;

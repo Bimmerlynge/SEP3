@@ -43,4 +43,32 @@ public class AlbumDAO extends BaseDAO implements IAlbumDAO
 
 
   }
+
+  @Override
+  public ArrayList<Album> searchForAlbums(String title) {
+
+    try (Connection connection = getConnection()){
+      PreparedStatement statement = connection.prepareStatement(
+              "SELECT * FROM Album WHERE albumTitle ILIKE ?"
+      );
+      statement.setString(1, "%"+title+"%");
+      ResultSet resultSet = statement.executeQuery();
+
+      ArrayList<Album> albums = new ArrayList<>();
+      while(resultSet.next()){
+       Album newAlbum = new Album(resultSet.getInt("albumId"), resultSet.getString("albumTitle"), resultSet.getInt("albumDuration"));
+
+       albums.add(newAlbum);
+      }
+
+      return albums;
+
+    }
+    catch (SQLException throwables)
+    {
+      throwables.printStackTrace();
+      return null;
+    }
+
+  }
 }
