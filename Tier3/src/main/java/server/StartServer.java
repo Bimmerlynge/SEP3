@@ -5,16 +5,20 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import server.DAO.*;
 import shared.Song;
 
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 @SpringBootApplication
 public class StartServer
 {
-  public static void main(String[] args)
-  {
+  public static void main(String[] args) throws SQLException {
     SpringApplication.run(StartServer.class, args);
     ISongDAO songDAO = new SongDAO();
     IAlbumDAO albumDAO = new AlbumDAO();
+
+    DriverManager.registerDriver(new org.postgresql.Driver());
+
 
     ArrayList<Song> songs = songDAO.getAllSongs();
 
