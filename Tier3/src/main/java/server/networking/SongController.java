@@ -22,7 +22,7 @@ public class SongController
     return new Gson().toJson(songs);
   }
 
-  @PostMapping("/songs")
+  @PostMapping("/songss")
   public synchronized void postAllSongs(@RequestBody ArrayList<Song> songs)
   {
     System.out.println("Getting post request");
@@ -30,6 +30,15 @@ public class SongController
 
     songDAO.postAllSongs(songs);
 
+  }
+
+  @PostMapping("/song")
+  public void postSong(@RequestBody Song newSong)
+  {
+    System.out.println("Getting post request on " + newSong.getTitle());
+    ISongDAO songDAO = new SongDAO();
+
+    songDAO.addNewSong(newSong);
   }
 
   @GetMapping("/songs/{songId}")
