@@ -128,6 +128,18 @@ public class SongDAO extends BaseDAO implements ISongDAO
     }
   }
 
+  @Override
+  public void removeSongFromId(int songId) {
+    try(Connection connection = getConnection()) {
+      PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Song WHERE songId = ?;");
+      preparedStatement.setInt(1, songId);
+      preparedStatement.executeUpdate();
+
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+    }
+  }
+
   private void addNewSongToDatabase(Song newSong, Connection connection) throws SQLException {
     PreparedStatement preparedStatement = connection
             .prepareStatement("INSERT INTO Song(songTitle, songDuration, songReleaseYear, mp3) VALUES" +
