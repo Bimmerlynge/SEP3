@@ -3,7 +3,9 @@ package shared;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-public class Album
+import java.io.Serializable;
+
+public class Album implements Serializable
 {
   private int id;
   private String title;

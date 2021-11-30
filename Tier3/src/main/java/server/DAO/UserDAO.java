@@ -4,14 +4,17 @@ import shared.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class UserDAO extends BaseDAO implements IUserDAO {
+public class UserDAO extends BaseDAO implements IUserDAO
+{
 
-    @Override
-    public void registerUser(User user) {
+  @Override public void registerUser(User user)
+  {
 
-        try (Connection connection = getConnection()) {
+    try (Connection connection = getConnection())
+    {
 
       PreparedStatement preparedStatement = connection.prepareStatement(
           "insert into _User (username,password,role) VALUES  (?, ?, ? )");
@@ -75,4 +78,5 @@ public class UserDAO extends BaseDAO implements IUserDAO {
       throwables.printStackTrace();
       return null;
     }
+  }
 }

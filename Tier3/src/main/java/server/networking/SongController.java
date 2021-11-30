@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import org.springframework.web.bind.annotation.*;
 import server.DAO.ISongDAO;
 import server.DAO.SongDAO;
+import server.util.ByteConverter;
 import shared.Song;
 
+import java.io.IOException;
 import java.lang.instrument.Instrumentation;
 import java.sql.Date;
 import java.util.ArrayList;
@@ -16,7 +18,7 @@ public class SongController
   ISongDAO songDAO = new SongDAO();
 
   @GetMapping("/songs")
-  public synchronized String getAllSongs() {
+  public String getAllSongs() {
     ArrayList<Song> songs = songDAO.getAllSongs();
 
     return new Gson().toJson(songs);
@@ -33,7 +35,7 @@ public class SongController
   }
 
   @PostMapping("/song")
-  public void postSong(@RequestBody Song newSong)
+  public synchronized void postSong(@RequestBody Song newSong)
   {
     System.out.println("Getting post request on " + newSong.getTitle());
     ISongDAO songDAO = new SongDAO();
@@ -42,10 +44,11 @@ public class SongController
   }
 
   @GetMapping("/songs/{songId}")
-  public synchronized String getSongWithMP3(@PathVariable int songId) {
+  public byte[] getSongWithMP3(@PathVariable int songId)
+  {
     Song song = songDAO.getSongWithMP3(songId);
 
-    return new Gson().toJson(song);
+    return song.getMp3();
   }
 
   @DeleteMapping("/song/{songId}")

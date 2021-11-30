@@ -17,7 +17,7 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO
     {
       PreparedStatement statement = connection
           .prepareStatement("SELECT * FROM Playlist WHERE username = ?");
-      statement.setString(1, user.getUserName());
+      statement.setString(1, user.getUsername());
       ResultSet resultSet = statement.executeQuery();
       ArrayList<Playlist> playlists = new ArrayList<>();
       while (resultSet.next())

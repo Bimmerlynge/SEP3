@@ -3,10 +3,12 @@ package shared;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class Song {
+public class Song implements Serializable
+{
 
     private int id;
     private String title;
