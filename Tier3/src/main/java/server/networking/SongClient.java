@@ -22,19 +22,19 @@ public class SongClient
 
   private void run()
   {
-    System.out.println(getMessage());
-    Song song1 = getSong();
-    System.out.println(song1.getTitle());
-    ArrayList<Song> songList = getAllSongsWithArtists();
-    ArrayList<Artist> artistList;
+    ArrayList<Song> songList = getPlaylistSongs();
 
     for (Song song: songList) {
-      artistList = song.getArtists();
       System.out.println(song.getTitle());
-      for (Artist artist: artistList) {
-        System.out.println(artist.getArtistName());
-      }
     }
+  }
+
+  private ArrayList<Song> getPlaylistSongs()
+  {
+    Gson gson = new Gson();
+    Type type = new TypeToken<ArrayList<Song>> (){}.getType();
+    String json = rest.getForObject(ROOT + "playlist/1", String.class);
+    return gson.fromJson(json, type);
   }
 
   private String getMessage(){
