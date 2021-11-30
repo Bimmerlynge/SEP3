@@ -125,5 +125,5 @@ EXECUTE PROCEDURE songDurationTotal();
 
 INSERT INTO _User(username, password, role) VALUES ('Admin', 'Admin', 'Admin');
 
-SELECT * FROM _User;
+SELECT * FROM AllSongs;
 
