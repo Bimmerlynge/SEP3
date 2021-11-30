@@ -22,4 +22,11 @@ public class ArtistController {
 
         return new Gson().toJson(artistArrayList);
     }
+
+    @GetMapping("/artist")
+    public String getAllArtist() {
+        ArrayList<Artist> artistArrayList = artistDAO.getAllArtist();
+
+        return new Gson().toJson(artistArrayList);
+    }
 }

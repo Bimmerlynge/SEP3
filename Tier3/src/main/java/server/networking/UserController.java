@@ -1,8 +1,7 @@
 package server.networking;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import com.google.gson.Gson;
+import org.springframework.web.bind.annotation.*;
 import server.DAO.ISongDAO;
 import server.DAO.IUserDAO;
 import server.DAO.SongDAO;
@@ -20,13 +19,17 @@ public class UserController {
 
 
     @PostMapping("/users")
-    public synchronized void postAllSongs(@RequestBody User user)
+    public synchronized void postUser(@RequestBody User user)
     {
-        System.out.println("Getting post request");
-        System.out.println("user name " + user);
         userDAO.registerUser(user);
+    }
 
+    @GetMapping("/users/{username}&{password}")
+    public synchronized String validateUser(@PathVariable String username, @PathVariable String password){
 
+        User user = userDAO.validateUser(new User(username, password, null));
+
+        return new Gson().toJson(user);
     }
 
 

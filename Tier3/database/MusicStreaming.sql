@@ -123,9 +123,7 @@ CREATE TRIGGER updateSongDuration
     FOR EACH ROW
 EXECUTE PROCEDURE songDurationTotal();
 
+INSERT INTO _User(username, password, role) VALUES ('Admin', 'Admin', 'Admin');
+
 SELECT * FROM AllSongs;
 
-
-SELECT  *FROM Song;
-
-SELECT * FROM _User;
