@@ -8,7 +8,7 @@ CREATE DOMAIN _date AS DATE
 CREATE TABLE IF NOT EXISTS Song
 (
     songId          SERIAL PRIMARY KEY,
-    songTitle       VARCHAR  NOT NULL UNIQUE ,
+    songTitle       VARCHAR  NOT NULL UNIQUE,
     songDuration    SMALLINT NOT NULL,
     songReleaseYear SMALLINT,
     mp3             bytea
@@ -17,15 +17,16 @@ CREATE TABLE IF NOT EXISTS Song
 
 CREATE TABLE IF NOT EXISTS Album
 (
-    albumId          SERIAL PRIMARY KEY,
-    albumTitle       VARCHAR(100) NOT NULL,
-    albumDuration    SMALLINT -- Lav trigger for at finde summen af alle sange på albummet
+    albumId       SERIAL PRIMARY KEY,
+    albumTitle    VARCHAR(100) NOT NULL,
+    albumDuration SMALLINT
 );
 
-CREATE TABLE IF NOT EXISTS _User(
+CREATE TABLE IF NOT EXISTS _User
+(
     username VARCHAR PRIMARY KEY,
     password VARCHAR NOT NULL,
-    role VARCHAR NOT NULL
+    role     VARCHAR NOT NULL
 
 
 );
@@ -41,8 +42,8 @@ CREATE TABLE IF NOT EXISTS ArtistSongRelation
     artistId SMALLINT,
     songId   SMALLINT,
     PRIMARY KEY (artistId, songId),
-    FOREIGN KEY (artistId) REFERENCES Artist (artistId),
-    FOREIGN KEY (songId) REFERENCES Song (songId)
+    FOREIGN KEY (artistId) REFERENCES Artist (artistId) ON DELETE CASCADE,
+    FOREIGN KEY (songId) REFERENCES Song (songId) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS AlbumSongRelation
@@ -50,16 +51,16 @@ CREATE TABLE IF NOT EXISTS AlbumSongRelation
     albumId SMALLINT,
     songId  SMALLINT,
     PRIMARY KEY (albumId, songId),
-    FOREIGN KEY (albumId) REFERENCES Album (albumId),
-    FOREIGN KEY (songId) REFERENCES Song (songId)
+    FOREIGN KEY (albumId) REFERENCES Album (albumId) ON DELETE CASCADE,
+    FOREIGN KEY (songId) REFERENCES Song (songId) ON DELETE CASCADE
 );
 CREATE TABLE IF NOT EXISTS AlbumArtistRelation
 (
     albumId  SMALLINT,
     artistId SMALLINT,
     PRIMARY KEY (albumId, artistId),
-    FOREIGN KEY (albumId) REFERENCES Album (albumId),
-    FOREIGN KEY (artistId) REFERENCES Artist (artistId)
+    FOREIGN KEY (albumId) REFERENCES Album (albumId) ON DELETE CASCADE,
+    FOREIGN KEY (artistId) REFERENCES Artist (artistId) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS AlbumRelease
@@ -123,7 +124,11 @@ CREATE TRIGGER updateSongDuration
     FOR EACH ROW
 EXECUTE PROCEDURE songDurationTotal();
 
-INSERT INTO _User(username, password, role) VALUES ('Admin', 'Admin', 'Admin');
+INSERT INTO _User(username, password, role)
+VALUES ('Admin', 'Admin', 'Admin');
 
-SELECT * FROM AllSongs;
+SELECT *
+FROM AllSongs;
 
+SELECT *
+FROM _User;
