@@ -9,4 +9,6 @@ public interface IAlbumDAO
   ArrayList<Album> getAllAlbumsWithArtist();
 
     ArrayList<Album> searchForAlbums(String title);
+
+  ArrayList<Album> getAllAlbums();
 }

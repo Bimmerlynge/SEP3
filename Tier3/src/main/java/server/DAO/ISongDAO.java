@@ -10,4 +10,6 @@ public interface ISongDAO {
     Song getSongWithMP3(int songId);
 
     void addNewSong(Song newSong);
+
+    void removeSongFromId(int songId);
 }

@@ -22,4 +22,12 @@ public class AlbumController {
 
         return new Gson().toJson(albumArrayList);
     }
+
+    @GetMapping("/album")
+    public String getAllAlbums() {
+        ArrayList<Album> albumArrayList = albumDAO.getAllAlbums();
+
+        return new Gson().toJson(albumArrayList);
+    }
+
 }

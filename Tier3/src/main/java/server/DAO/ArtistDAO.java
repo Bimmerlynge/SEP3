@@ -19,15 +19,7 @@ public class ArtistDAO extends BaseDAO implements IArtistDAO {
                     "SELECT * FROM Artist WHERE artistName ILIKE ?"
             );
             statement.setString(1,"%"+name+"%");
-            ResultSet resultSet = statement.executeQuery();
-
-            ArrayList<Artist> foundArtists = new ArrayList<>();
-            while(resultSet.next()){
-                Artist newArtist = new Artist(resultSet.getInt("artistId"), resultSet.getString("artistName"));
-                foundArtists.add(newArtist);
-            }
-
-            return foundArtists;
+            return getArtistAndReturnFromResultSet(statement);
 
         }
         catch (SQLException throwables)
@@ -36,4 +28,33 @@ public class ArtistDAO extends BaseDAO implements IArtistDAO {
             return null;
         }
     }
+
+    @Override
+    public ArrayList<Artist> getAllArtist() {
+        try (Connection connection = getConnection()){
+            PreparedStatement statement = connection.prepareStatement(
+                    "SELECT * FROM Artist"
+            );
+            return getArtistAndReturnFromResultSet(statement);
+        }
+        catch (SQLException throwables)
+        {
+            throwables.printStackTrace();
+            return null;
+        }
+    }
+
+    private ArrayList<Artist> getArtistAndReturnFromResultSet(PreparedStatement statement) throws SQLException {
+        ResultSet resultSet = statement.executeQuery();
+
+        ArrayList<Artist> foundArtists = new ArrayList<>();
+        while(resultSet.next()){
+            Artist newArtist = new Artist(resultSet.getInt("artistId"), resultSet.getString("artistName"));
+            foundArtists.add(newArtist);
+        }
+
+        return foundArtists;
+    }
+
+
 }

@@ -48,4 +48,9 @@ public class SongController
     return new Gson().toJson(song);
   }
 
+  @DeleteMapping("/song/{songId}")
+  public synchronized void deleteSongFromId(@PathVariable int songId){
+    songDAO.removeSongFromId(songId);
+  }
+
 }
