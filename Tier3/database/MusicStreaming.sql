@@ -72,6 +72,23 @@ CREATE TABLE IF NOT EXISTS AlbumRelease
     FOREIGN KEY (artistId) REFERENCES Artist (artistId)
 );
 
+CREATE TABLE IF NOT EXISTS Playlist
+(
+    playlistId    SERIAL PRIMARY KEY,
+    playlistTitle VARCHAR(50) NOT NULL,
+    username      VARCHAR     NOT NULL,
+    FOREIGN KEY (username) REFERENCES _User (username)
+);
+
+CREATE TABLE IF NOT EXISTS PlaylistSongRelation
+(
+    playlistId SMALLINT,
+    songId     SMALLINT,
+    PRIMARY KEY (playlistId, songId),
+    FOREIGN KEY (playlistId) REFERENCES Playlist (playlistId),
+    FOREIGN KEY (songId) REFERENCES Song (songId)
+);
+
 CREATE VIEW SongWithArtist AS
 SELECT S.*, A.*
 FROM Song AS S
@@ -97,7 +114,12 @@ FROM Song AS S
 ORDER BY songId ASC
 ;
 
-
+CREATE VIEW PlaylistWithSongs AS
+SELECT PSR.*
+FROM Song AS S
+         JOIN PlaylistSongRelation PSR ON S.songId = PSR.songId
+         JOIN Playlist P ON P.playlistId = PSR.playlistId
+ORDER BY PSR.playlistId ASC;
 
 CREATE OR REPLACE FUNCTION songDurationTotal()
     RETURNS TRIGGER
