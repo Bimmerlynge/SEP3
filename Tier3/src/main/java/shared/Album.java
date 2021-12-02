@@ -44,6 +44,7 @@ public class Album implements Serializable
   public void setTitle(String title)
   {
     this.title = title;
+
   }
 
   public void setDuration(int duration)
@@ -55,6 +56,7 @@ public class Album implements Serializable
   {
     return duration;
   }
+
 
 
 }

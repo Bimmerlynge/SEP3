@@ -85,8 +85,8 @@ CREATE TABLE IF NOT EXISTS PlaylistSongRelation
     playlistId SMALLINT,
     songId     SMALLINT,
     PRIMARY KEY (playlistId, songId),
-    FOREIGN KEY (playlistId) REFERENCES Playlist (playlistId),
-    FOREIGN KEY (songId) REFERENCES Song (songId)
+    FOREIGN KEY (playlistId) REFERENCES Playlist (playlistId) ON DELETE  CASCADE ,
+    FOREIGN KEY (songId) REFERENCES Song (songId) ON DELETE CASCADE
 );
 
 CREATE VIEW SongWithArtist AS
@@ -149,8 +149,24 @@ EXECUTE PROCEDURE songDurationTotal();
 INSERT INTO _User(username, password, role)
 VALUES ('Admin', 'Admin', 'Admin');
 
+
+INSERT INTO playlist(playlistTitle, username)
+VALUES ('TestPlaylist', 'Admin'),('SoloList','Admin');
+
+
+INSERT INTO playlistsongrelation(playlistId, songId)
+VALUES ('1', '1'),
+       ('1', '2'),
+       ('1', '3'),
+       ('1', '4'),
+       ('2','1'),('2','3');
+
 SELECT *
 FROM AllSongs;
 
 SELECT *
 FROM _User;
+
+SELECT *
+From Playlist;
+

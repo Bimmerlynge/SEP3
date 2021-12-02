@@ -10,5 +10,7 @@ public interface IPlaylistDAO
 {
   ArrayList<Playlist> getAllPlaylistForUser(User user);
   ArrayList<Song> getSongsInPlaylist(int playlistId);
+  void createNewPlaylist(Playlist playlist);
+  void removePlaylistFromId(int playlistId);
 
 }
