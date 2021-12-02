@@ -81,6 +81,33 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO
     }
   }
 
+  @Override
+  public void createNewPlaylist(Playlist playlist) {
+    try (Connection connection = getConnection()) {
 
+      PreparedStatement preparedStatement = connection.prepareStatement(
+              "INSERT INTO playlist(playlistTitle, username) VALUES  (?, ?)");
+      preparedStatement.setString(1, playlist.getTitle());
+      preparedStatement.setString(2, playlist.getUser().getUsername());
+      preparedStatement.executeUpdate();
 
-}
+    } catch (SQLException throwables) {
+      throwables.printStackTrace();
+    }
+  }
+
+  @Override
+  public void removePlaylistFromId(int playlistId) {
+
+      try(Connection connection = getConnection()) {
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM playlist where playlistId = ?;");
+        preparedStatement.setInt(1, playlistId);
+        preparedStatement.executeUpdate();
+
+      } catch (SQLException throwables) {
+        throwables.printStackTrace();
+      }
+    }
+
+  }
+

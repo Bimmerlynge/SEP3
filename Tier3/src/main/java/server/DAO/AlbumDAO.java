@@ -19,6 +19,7 @@ public class AlbumDAO extends BaseDAO implements IAlbumDAO
       );
       ResultSet resultSet = statement.executeQuery();
 
+
       ArrayList<Album> albums = new ArrayList<>();
       int albumId = 0;
       while(resultSet.next()){

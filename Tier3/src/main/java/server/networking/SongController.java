@@ -4,12 +4,7 @@ import com.google.gson.Gson;
 import org.springframework.web.bind.annotation.*;
 import server.DAO.ISongDAO;
 import server.DAO.SongDAO;
-import server.util.ByteConverter;
 import shared.Song;
-
-import java.io.IOException;
-import java.lang.instrument.Instrumentation;
-import java.sql.Date;
 import java.util.ArrayList;
 
 @RestController
