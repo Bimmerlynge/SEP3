@@ -149,8 +149,13 @@ EXECUTE PROCEDURE songDurationTotal();
 INSERT INTO _User(username, password, role)
 VALUES ('Admin', 'Admin', 'Admin');
 
+INSERT INTO Playlist(playlistTitle, username) VALUES ('Fuck dig', 'Admin');
+INSERT INTO PlaylistSongRelation(playlistId, songId) VALUES (1,1);
+
 SELECT *
 FROM AllSongs;
 
 SELECT *
-FROM _User;
+FROM Playlist WHERE playlistId = 1;
+
+SELECT * FROM PlaylistSongRelation;

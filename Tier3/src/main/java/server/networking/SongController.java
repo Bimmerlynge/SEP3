@@ -47,7 +47,9 @@ public class SongController
   public byte[] getSongWithMP3(@PathVariable int songId)
   {
     Song song = songDAO.getSongWithMP3(songId);
-
+    System.out.println("Length of byte array: " + song.getMp3().length);
+    String songJson = new Gson().toJson(song.getMp3());
+    System.out.println("Length of Json mp3: " + songJson.length());
     return song.getMp3();
   }
 
