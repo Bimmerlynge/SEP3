@@ -155,11 +155,11 @@ VALUES ('TestPlaylist', 'Admin'),('SoloList','Admin');
 
 
 INSERT INTO playlistsongrelation(playlistId, songId)
-VALUES ('1', '1'),
-       ('1', '2'),
-       ('1', '3'),
-       ('1', '4'),
-       ('2','1'),('2','3');
+VALUES (1, 1),
+       (1, 2),
+       (1, 3),
+       (1, 4),
+       (2,1),(2,3);
 
 SELECT *
 FROM AllSongs;
