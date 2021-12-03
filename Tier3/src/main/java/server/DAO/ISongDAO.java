@@ -7,9 +7,10 @@ public interface ISongDAO {
 
     ArrayList<Song> getAllSongs();
     void postAllSongs(ArrayList<Song> songs);
-    Song getSongWithMP3(int songId);
+    //Song getSongWithMP3(int songId);
 
-    void addNewSong(Song newSong);
+    Song addNewSong(Song newSong);
 
     void removeSongFromId(int songId);
+    Song getSongById(int id);
 }

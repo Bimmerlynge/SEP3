@@ -25,7 +25,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
         songStatement.setString(1, song.getTitle());
         songStatement.setInt(2, song.getDuration());
         songStatement.setInt(3, song.getReleaseYear());
-        songStatement.setBytes(4, song.getMp3());
+        songStatement.setString(4, song.getMp3());
         songStatement.executeUpdate();
         ResultSet songSet = songStatement.getGeneratedKeys();
         if (songSet.next())
@@ -76,30 +76,52 @@ public class SongDAO extends BaseDAO implements ISongDAO
     System.out.println("DONE INSERTING");
   }
 
-  @Override public Song getSongWithMP3(int songId)
-  {
-    try (Connection connection = getConnection())
+//  @Override public Song getSongWithMP3(int songId)
+//  {
+//    try (Connection connection = getConnection())
+//    {
+//      PreparedStatement preparedStatement = connection
+//          .prepareStatement("SELECT * FROM AllSongs WHERE songId = ?");
+//      preparedStatement.setInt(1, songId);
+//      ResultSet resultSet = preparedStatement.executeQuery();
+//      Song song = null;
+//      ArrayList<Artist> listOfArtists = new ArrayList<>();
+//      while (resultSet.next())
+//      {
+//        song = new Song(resultSet.getInt("songid"),
+//            resultSet.getString("songtitle"), resultSet.getInt("songduration"),
+//            resultSet.getInt("songreleaseyear"),
+//            new Album(resultSet.getInt("albumId"),
+//                resultSet.getString("albumtitle"),
+//                resultSet.getInt("albumduration")));
+//        song.setMp3(resultSet.getString("mp3"));
+//
+//        Artist artist = new Artist(resultSet.getInt("artistid"),
+//            resultSet.getString("artistname"));
+//        listOfArtists.add(artist);
+//
+//      }
+//      return song;
+//    }
+//    catch (SQLException throwables)
+//    {
+//      throwables.printStackTrace();
+//      return null;
+//    }
+//
+//  }
+  @Override
+  public Song getSongById(int id){
+    Song song = null;
+    try(Connection connection = getConnection())
     {
-      PreparedStatement preparedStatement = connection
-          .prepareStatement("SELECT * FROM AllSongs WHERE songId = ?");
-      preparedStatement.setInt(1, songId);
+      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Song WHERE songId = ?");
+      preparedStatement.setInt(1,id);
       ResultSet resultSet = preparedStatement.executeQuery();
-      Song song = null;
-      ArrayList<Artist> listOfArtists = new ArrayList<>();
-      while (resultSet.next())
-      {
-        song = new Song(resultSet.getInt("songid"),
-            resultSet.getString("songtitle"), resultSet.getInt("songduration"),
-            resultSet.getInt("songreleaseyear"),
-            new Album(resultSet.getInt("albumId"),
-                resultSet.getString("albumtitle"),
-                resultSet.getInt("albumduration")));
-        song.setMp3(resultSet.getBytes("mp3"));
-
-        Artist artist = new Artist(resultSet.getInt("artistid"),
-            resultSet.getString("artistname"));
-        listOfArtists.add(artist);
-
+      if (resultSet.next()){
+        song = new Song(resultSet.getInt("songId"), resultSet.getString("songTitle"),
+            resultSet.getInt("songDuration"), resultSet.getInt("songReleaseYear"),
+            null, resultSet.getString("mp3"));
       }
       return song;
     }
@@ -108,11 +130,11 @@ public class SongDAO extends BaseDAO implements ISongDAO
       throwables.printStackTrace();
       return null;
     }
-
   }
 
   @Override
-  public void addNewSong(Song newSong) {
+  public Song addNewSong(Song newSong) {
+
     try (Connection connection = getConnection())
     {
       addNewSongToDatabase(newSong, connection);
@@ -120,11 +142,13 @@ public class SongDAO extends BaseDAO implements ISongDAO
       newSongAlbum(newSong, connection);
 
       songArtistRelation(newSong, connection);
-
+      Song song = getSongById(newSong.getId());
+      return song;
     }
     catch (SQLException throwables)
     {
       throwables.printStackTrace();
+      return null;
     }
   }
 
@@ -140,19 +164,21 @@ public class SongDAO extends BaseDAO implements ISongDAO
     }
   }
 
-  private void addNewSongToDatabase(Song newSong, Connection connection) throws SQLException {
+  private int addNewSongToDatabase(Song newSong, Connection connection) throws SQLException {
+    int songId = -1;
     PreparedStatement preparedStatement = connection
             .prepareStatement("INSERT INTO Song(songTitle, songDuration, songReleaseYear, mp3) VALUES" +
                     "    (?,?,?,?);", PreparedStatement.RETURN_GENERATED_KEYS);
     preparedStatement.setString(1, newSong.getTitle());
     preparedStatement.setInt(2, newSong.getDuration());
     preparedStatement.setInt(3, newSong.getReleaseYear());
-    preparedStatement.setBytes(4, newSong.getMp3());
+    preparedStatement.setString(4, newSong.getMp3());
     preparedStatement.execute();
     ResultSet resultSetWithKeys = preparedStatement.getGeneratedKeys();
-    if (resultSetWithKeys.next()){
+    while (resultSetWithKeys.next()){
       newSong.setId(resultSetWithKeys.getInt("songId"));
     }
+    return songId;
   }
 
   private void songArtistRelation(Song newSong, Connection connection) throws SQLException {
@@ -222,7 +248,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
               resultSet.getInt("songreleaseyear"),
               new Album(resultSet.getInt("albumId"),
                   resultSet.getString("albumtitle"),
-                  resultSet.getInt("albumduration")));
+                  resultSet.getInt("albumduration")),resultSet.getString("mp3"));
           listOfSongs.add(song);
           songId = song.getId();
         }

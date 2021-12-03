@@ -1,8 +1,11 @@
 package server.networking;
 
 import com.google.gson.Gson;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.DAO.IMP3DAO;
 import server.DAO.ISongDAO;
+import server.DAO.MP3DAO;
 import server.DAO.SongDAO;
 import shared.Song;
 import java.util.ArrayList;
@@ -12,7 +15,8 @@ public class SongController
 {
   ISongDAO songDAO = new SongDAO();
 
-  @GetMapping("/songs")
+
+  @GetMapping("/song")
   public String getAllSongs() {
     ArrayList<Song> songs = songDAO.getAllSongs();
 
@@ -30,23 +34,21 @@ public class SongController
   }
 
   @PostMapping("/song")
-  public synchronized void postSong(@RequestBody Song newSong)
+  public synchronized ResponseEntity postSong(@RequestBody Song newSong)
   {
     System.out.println("Getting post request on " + newSong.getTitle());
     ISongDAO songDAO = new SongDAO();
-
-    songDAO.addNewSong(newSong);
+    try
+    {
+      Song song = songDAO.addNewSong(newSong);
+      String songAsJson = new Gson().toJson(song);
+      return ResponseEntity.ok(songAsJson);
+    }catch (Exception e){
+      return ResponseEntity.internalServerError().build();
+    }
   }
 
-  @GetMapping("/songs/{songId}")
-  public byte[] getSongWithMP3(@PathVariable int songId)
-  {
-    Song song = songDAO.getSongWithMP3(songId);
-    System.out.println("Length of byte array: " + song.getMp3().length);
-    String songJson = new Gson().toJson(song.getMp3());
-    System.out.println("Length of Json mp3: " + songJson.length());
-    return song.getMp3();
-  }
+
 
   @DeleteMapping("/song/{songId}")
   public synchronized void deleteSongFromId(@PathVariable int songId){

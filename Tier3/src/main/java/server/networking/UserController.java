@@ -25,7 +25,6 @@ public class UserController {
         }catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().build();
         }
-
         URI uriToFindUser = new URI("http://localhost:8080/user/" + user.getUsername() +"&" + user.getPassword());
         return ResponseEntity.created(uriToFindUser).build();
     }
