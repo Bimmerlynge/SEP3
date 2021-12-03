@@ -150,16 +150,25 @@ INSERT INTO _User(username, password, role)
 VALUES ('Admin', 'Admin', 'Admin');
 
 
-INSERT INTO playlist(playlistTitle, username)
-VALUES ('TestPlaylist', 'Admin'),('SoloList','Admin');
-
-
-INSERT INTO playlistsongrelation(playlistId, songId)
-VALUES (1, 1),
-       (1, 2),
-       (1, 3),
-       (1, 4),
-       (2,1),(2,3);
+CREATE OR REPLACE VIEW PlaylistWithSongsAndUser AS
+SELECT P.playlistId,
+       P.playlistTitle,
+       P.username,
+       U.password,
+       U.role,
+       S.songId,
+       songTitle,
+       songDuration,
+       songReleaseYear,
+       A.albumId,
+       A.albumTitle,
+       A.albumDuration
+FROM Playlist P
+         JOIN PlaylistSongRelation PSR ON P.playlistId = PSR.playlistId
+         JOIN Song S ON PSR.songId = S.songId
+         JOIN _User U ON U.username = P.username
+         JOIN AlbumSongRelation ASR ON S.songId = ASR.songId
+         JOIN Album A ON A.albumId = ASR.albumId;
 
 SELECT *
 FROM AllSongs;

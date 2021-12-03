@@ -68,16 +68,6 @@ public class Song implements Serializable
         return Objects.hash(id);
     }
 
-//    public Album[] getAlbums()
-//    {
-//        return albums;
-//    }
-//
-//    public void setAlbums(Album[] albums)
-//    {
-//        this.albums = albums;
-//    }
-
     public Album getAlbumProperty()
     {
         return album;

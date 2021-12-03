@@ -1,7 +1,9 @@
 package server.networking;
 
 import com.google.gson.Gson;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.function.EntityResponse;
 import server.DAO.IPlaylistDAO;
 import server.DAO.IUserDAO;
 import server.DAO.PlaylistDAO;
@@ -21,6 +23,7 @@ public class PlaylistController {
     @PostMapping("/playlist/")
     public synchronized void createNewPlaylistAsync(@RequestBody Playlist playlist) {
         System.out.println("Getting post request on " + playlist.getTitle());
+        System.out.println("Post from: " + playlist.getUser().getUsername());
 
         playlistDAO.createNewPlaylist(playlist);
     }
@@ -34,14 +37,14 @@ public class PlaylistController {
     }
 
     @GetMapping("/playlistSongs/{playlistId}")
-    public String getSongsFromPlaylist(@PathVariable int playlistId) {
-        ArrayList<Song> songs = playlistDAO.getSongsInPlaylist(playlistId);
+    public ResponseEntity<Playlist> getPlaylistFromId (@PathVariable int playlistId) {
 
-        return new Gson().toJson(songs);
+        Playlist playlist = playlistDAO.getPlaylistFromId(playlistId);
+        return ResponseEntity.ok(playlist);
     }
 
     @DeleteMapping("/playlist/{playlistId}")
-    public synchronized void removePlaylistFromId(@PathVariable int playlistId){
+    public void removePlaylistFromId(@PathVariable int playlistId){
         playlistDAO.removePlaylistFromId(playlistId);
     }
 

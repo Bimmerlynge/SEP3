@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 
 import com.google.gson.reflect.TypeToken;
 import org.springframework.web.client.RestTemplate;
-import shared.Artist;
 import shared.Song;
 
 import java.lang.reflect.Type;

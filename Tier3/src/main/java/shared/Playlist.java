@@ -14,6 +14,7 @@ public class Playlist
         this.id = id;
         this.title = title;
         this.user = user;
+        songs = new ArrayList<>();
     }
 
     public int getId()
@@ -49,5 +50,9 @@ public class Playlist
     public void setSongs(ArrayList<Song> songs)
     {
         this.songs = songs;
+    }
+
+    public void addSong(Song song){
+        songs.add(song);
     }
 }
