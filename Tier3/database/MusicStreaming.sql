@@ -8,10 +8,10 @@ CREATE DOMAIN _date AS DATE
 CREATE TABLE IF NOT EXISTS Song
 (
     songId          SERIAL PRIMARY KEY,
-    songTitle       VARCHAR  NOT NULL UNIQUE,
+    songTitle       VARCHAR  NOT NULL,
     songDuration    SMALLINT NOT NULL,
     songReleaseYear SMALLINT,
-    mp3             bytea
+    mp3             VARCHAR
 );
 
 
@@ -146,27 +146,28 @@ CREATE TRIGGER updateSongDuration
     FOR EACH ROW
 EXECUTE PROCEDURE songDurationTotal();
 
+CREATE OR REPLACE FUNCTION updateSongMp3()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS
+$$
+    BEGIN
+        UPDATE Song
+        SET mp3 = concat(songId::varchar, '_', songTitle, '.mp3')
+        WHERE songId = NEW.songId;
+        RETURN NEW;
+        END;
+$$;
+
+CREATE TRIGGER updateSongMp3
+    AFTER INSERT
+    ON Song
+    FOR EACH ROW
+EXECUTE PROCEDURE updateSongMp3();
+
+
+
 INSERT INTO _User(username, password, role)
 VALUES ('Admin', 'Admin', 'Admin');
 
-
-INSERT INTO playlist(playlistTitle, username)
-VALUES ('TestPlaylist', 'Admin'),('SoloList','Admin');
-
-
-INSERT INTO playlistsongrelation(playlistId, songId)
-VALUES (1, 1),
-       (1, 2),
-       (1, 3),
-       (1, 4),
-       (2,1),(2,3);
-
-SELECT *
-FROM AllSongs;
-
-SELECT *
-FROM _User;
-
-SELECT *
-From Playlist;
 

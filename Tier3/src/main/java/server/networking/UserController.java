@@ -7,6 +7,9 @@ import server.DAO.IUserDAO;
 import server.DAO.UserDAO;
 import shared.User;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 @RestController
 
 public class UserController {
@@ -14,27 +17,29 @@ public class UserController {
     private IUserDAO userDAO = new UserDAO();
 
 
-    @PostMapping("/users")
-    public synchronized Object postUser(@RequestBody User user)
+    @PostMapping("/user")
+    public synchronized ResponseEntity postUser(@RequestBody User user)
     {
+        System.out.println(user.getUsername());
+        URI uriToFindUser;
         try
         {
             userDAO.registerUser(user);
-        }catch (IllegalArgumentException e){
-            return ResponseEntity.badRequest();
+            uriToFindUser = new URI("http://localhost:8080/user/" + user.getUsername() +"&" + user.getPassword());
+        }catch (IllegalArgumentException | URISyntaxException e){
+            return ResponseEntity.badRequest().build();
         }
-
-        return ResponseEntity.ok();
+        return ResponseEntity.created(uriToFindUser).build();
     }
 
-    @GetMapping("/users/{username}&{password}")
-    public synchronized Object validateUser(@PathVariable String username, @PathVariable String password){
+    @GetMapping("/user/{username}&{password}")
+    public synchronized ResponseEntity validateUser(@PathVariable String username, @PathVariable String password){
         User user = null;
         try
         {
             user = userDAO.validateUser(new User(username, password, null));
         } catch (NullPointerException e){
-            return ResponseEntity.notFound();
+            return ResponseEntity.notFound().build();
         }
         String userAsJson = new Gson().toJson(user);
         return ResponseEntity.ok(userAsJson);

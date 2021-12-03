@@ -48,12 +48,15 @@ public class UserDAO extends BaseDAO implements IUserDAO
             resultSet.getString("role"));
 
       }
+      if (toReturn == null){
+        throw new NullPointerException("No user found");
+      }
       return toReturn;
     }
     catch (SQLException throwables)
     {
       throwables.printStackTrace();
-      throw new NullPointerException(throwables.getMessage());
+      return null;
     }
 
   }

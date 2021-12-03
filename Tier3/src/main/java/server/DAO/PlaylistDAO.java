@@ -57,7 +57,7 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO
               resultSet.getInt("songreleaseyear"),
               new Album(resultSet.getInt("albumId"),
                   resultSet.getString("albumtitle"),
-                  resultSet.getInt("albumduration")));
+                  resultSet.getInt("albumduration")), resultSet.getString("mp3"));
           songs.add(song);
           songId = song.getId();
         }

@@ -16,7 +16,7 @@ public class Song implements Serializable
     private int releaseYear;
     private ArrayList<Artist> artists;
     private Album album;
-    private byte[] mp3;
+    private String mp3;
 
     public ArrayList<Artist> getArtists()
     {
@@ -32,21 +32,22 @@ public class Song implements Serializable
         artists.add(artist);
     }
 
-    public Song(int id, String title, int duration, int releaseYear, Album album) {
+    public Song(int id, String title, int duration, int releaseYear, Album album, String mp3) {
         this.id = id;
         this.title = title;
         this.duration = duration;
         this.releaseYear = releaseYear;
         this.album = album;
+        this.mp3 = mp3;
         artists = new ArrayList<>();
     }
 
-    public byte[] getMp3()
+    public String getMp3()
     {
         return mp3;
     }
 
-    public void setMp3(byte[] mp3)
+    public void setMp3(String mp3)
     {
         this.mp3 = mp3;
     }

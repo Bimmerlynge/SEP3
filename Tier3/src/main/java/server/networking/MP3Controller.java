@@ -1,10 +1,13 @@
 package server.networking;
 
+import com.google.gson.Gson;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.DAO.IMP3DAO;
 import server.DAO.ISongDAO;
 import server.DAO.MP3DAO;
 import server.DAO.SongDAO;
+import shared.Mp3;
 import shared.Song;
 
 import java.util.ArrayList;
@@ -12,23 +15,14 @@ import java.util.ArrayList;
 @RestController
 public class MP3Controller
 {
-  ArrayList<byte[]> MP3s = new ArrayList<>();
 
-  @GetMapping("/mp3/{songNo}")
-  public synchronized byte[] getAllMP3(@PathVariable int songNo) {
-    IMP3DAO MP3DAO = new MP3DAO();
-    if (MP3s.isEmpty()) {
-      MP3s = MP3DAO.getAllMP3();
-    }
+  private IMP3DAO mp3DAO = new MP3DAO();
 
-    //(SKAL FIXES) Kaster en IndexOutOfBoundsException - det er ikke optimailt, men virker som det skal
-    byte[] byteToReturn = MP3s.get(songNo);
-    return byteToReturn;
-    //return new Gson().toJson(MP3s);
-  }
+
+
 
   @PostMapping("/songs")
-  public synchronized void postAllSongs(@RequestBody ArrayList<Song> songs)
+  public void postAllSongs(@RequestBody ArrayList<Song> songs)
   {
     ISongDAO songDAO = new SongDAO();
     System.out.println(songs.get(0).getAlbumProperty());
@@ -37,4 +31,34 @@ public class MP3Controller
     //ArrayList<Song> songList = gson.fromJson(jsonSongs, new TypeToken<ArrayList<Song>>(){}.getType());
 
   }
+
+  @GetMapping("/mp3/{songPath}")
+  public byte[] getSongData(@PathVariable String songPath)
+  {
+    byte[] mp3 = mp3DAO.getMp3(songPath);
+    
+
+    return mp3;
+  }
+
+  @PostMapping("/mp3")
+  public ResponseEntity uploadMp3(@RequestBody Mp3 song){
+    System.out.println("Trying to upload: " + song.getPath());
+    try
+    {
+      mp3DAO.uploadMp3(song);
+      return ResponseEntity.ok().build();
+    } catch (Exception e){
+      return ResponseEntity.badRequest().build();
+    }
+
+
+
+
+  }
+
+
+
+
+
 }
