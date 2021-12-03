@@ -1,5 +1,6 @@
 package server.DAO;
 
+import org.postgresql.util.PSQLException;
 import shared.User;
 
 import java.sql.Connection;
@@ -26,7 +27,7 @@ public class UserDAO extends BaseDAO implements IUserDAO
     }
     catch (SQLException throwables)
     {
-      throwables.printStackTrace();
+      throw new IllegalArgumentException(throwables.getMessage());
     }
 
   }
@@ -52,7 +53,7 @@ public class UserDAO extends BaseDAO implements IUserDAO
     catch (SQLException throwables)
     {
       throwables.printStackTrace();
-      return null;
+      throw new NullPointerException(throwables.getMessage());
     }
 
   }

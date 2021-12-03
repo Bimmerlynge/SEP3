@@ -1,15 +1,11 @@
 package server.networking;
 
 import com.google.gson.Gson;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.DAO.ISongDAO;
 import server.DAO.IUserDAO;
-import server.DAO.SongDAO;
 import server.DAO.UserDAO;
-import shared.Song;
 import shared.User;
-
-import java.util.ArrayList;
 
 @RestController
 
@@ -19,17 +15,29 @@ public class UserController {
 
 
     @PostMapping("/users")
-    public synchronized void postUser(@RequestBody User user)
+    public synchronized Object postUser(@RequestBody User user)
     {
-        userDAO.registerUser(user);
+        try
+        {
+            userDAO.registerUser(user);
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest();
+        }
+
+        return ResponseEntity.ok();
     }
 
     @GetMapping("/users/{username}&{password}")
-    public synchronized String validateUser(@PathVariable String username, @PathVariable String password){
-
-        User user = userDAO.validateUser(new User(username, password, null));
-
-        return new Gson().toJson(user);
+    public synchronized Object validateUser(@PathVariable String username, @PathVariable String password){
+        User user = null;
+        try
+        {
+            user = userDAO.validateUser(new User(username, password, null));
+        } catch (NullPointerException e){
+            return ResponseEntity.notFound();
+        }
+        String userAsJson = new Gson().toJson(user);
+        return ResponseEntity.ok(userAsJson);
     }
 
 
