@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS Album
     albumId       SERIAL PRIMARY KEY,
     albumTitle    VARCHAR(100) NOT NULL,
     albumDuration SMALLINT
-);
+    );
 
 CREATE TABLE IF NOT EXISTS _User
 (
@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS Artist
 (
     artistId   SERIAL PRIMARY KEY,
     artistName VARCHAR(100)
-);
+    );
 
 CREATE TABLE IF NOT EXISTS ArtistSongRelation
 (
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS ArtistSongRelation
     PRIMARY KEY (artistId, songId),
     FOREIGN KEY (artistId) REFERENCES Artist (artistId) ON DELETE CASCADE,
     FOREIGN KEY (songId) REFERENCES Song (songId) ON DELETE CASCADE
-);
+    );
 
 CREATE TABLE IF NOT EXISTS AlbumSongRelation
 (
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS AlbumSongRelation
     PRIMARY KEY (albumId, songId),
     FOREIGN KEY (albumId) REFERENCES Album (albumId) ON DELETE CASCADE,
     FOREIGN KEY (songId) REFERENCES Song (songId) ON DELETE CASCADE
-);
+    );
 CREATE TABLE IF NOT EXISTS AlbumArtistRelation
 (
     albumId  SMALLINT,
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS AlbumArtistRelation
     PRIMARY KEY (albumId, artistId),
     FOREIGN KEY (albumId) REFERENCES Album (albumId) ON DELETE CASCADE,
     FOREIGN KEY (artistId) REFERENCES Artist (artistId) ON DELETE CASCADE
-);
+    );
 
 CREATE TABLE IF NOT EXISTS AlbumRelease
 (
@@ -70,7 +70,7 @@ CREATE TABLE IF NOT EXISTS AlbumRelease
     PRIMARY KEY (albumId, artistId),
     FOREIGN KEY (albumId) REFERENCES Album (albumId),
     FOREIGN KEY (artistId) REFERENCES Artist (artistId)
-);
+    );
 
 CREATE TABLE IF NOT EXISTS Playlist
 (
@@ -78,16 +78,16 @@ CREATE TABLE IF NOT EXISTS Playlist
     playlistTitle VARCHAR(50) NOT NULL,
     username      VARCHAR     NOT NULL,
     FOREIGN KEY (username) REFERENCES _User (username)
-);
+    );
 
 CREATE TABLE IF NOT EXISTS PlaylistSongRelation
 (
     playlistId SMALLINT,
     songId     SMALLINT,
     PRIMARY KEY (playlistId, songId),
-    FOREIGN KEY (playlistId) REFERENCES Playlist (playlistId) ON DELETE  CASCADE ,
+    FOREIGN KEY (playlistId) REFERENCES Playlist (playlistId) ON DELETE CASCADE,
     FOREIGN KEY (songId) REFERENCES Song (songId) ON DELETE CASCADE
-);
+    );
 
 CREATE VIEW SongWithArtist AS
 SELECT S.*, A.*
@@ -104,6 +104,7 @@ FROM Artist Ar
          JOIN Album Al ON Al.albumId = AAR.albumId
 ORDER BY albumId ASC;
 
+
 CREATE VIEW AllSongs AS
 SELECT A2.*, Ar.*, S.*
 FROM Song AS S
@@ -114,12 +115,6 @@ FROM Song AS S
 ORDER BY songId ASC
 ;
 
-CREATE VIEW PlaylistWithSongs AS
-SELECT PSR.*
-FROM Song AS S
-         JOIN PlaylistSongRelation PSR ON S.songId = PSR.songId
-         JOIN Playlist P ON P.playlistId = PSR.playlistId
-ORDER BY PSR.playlistId ASC;
 
 CREATE OR REPLACE FUNCTION songDurationTotal()
     RETURNS TRIGGER
@@ -127,43 +122,43 @@ CREATE OR REPLACE FUNCTION songDurationTotal()
 AS
 $$
 BEGIN
-    WITH durationTotal AS (
-        SELECT SUM(S.songDuration) AS durTot
-        FROM AlbumSongRelation
-                 JOIN Song S ON S.songId = AlbumSongRelation.songId
-        WHERE AlbumSongRelation.albumId = NEW.albumId)
-    UPDATE Album
-    SET albumDuration = durationTotal.durTot
+WITH durationTotal AS (
+    SELECT SUM(S.songDuration) AS durTot
+    FROM AlbumSongRelation
+             JOIN Song S ON S.songId = AlbumSongRelation.songId
+    WHERE AlbumSongRelation.albumId = NEW.albumId)
+UPDATE Album
+SET albumDuration = durationTotal.durTot
     FROM durationTotal
-    WHERE NEW.albumId = albumId;
-    RETURN new;
+WHERE NEW.albumId = albumId;
+RETURN new;
 END;
 $$;
 
 CREATE TRIGGER updateSongDuration
     AFTER INSERT OR UPDATE OR DELETE
-    ON AlbumSongRelation
-    FOR EACH ROW
-EXECUTE PROCEDURE songDurationTotal();
+                    ON AlbumSongRelation
+                        FOR EACH ROW
+                        EXECUTE PROCEDURE songDurationTotal();
 
 CREATE OR REPLACE FUNCTION updateSongMp3()
     RETURNS TRIGGER
     LANGUAGE plpgsql
 AS
 $$
-    BEGIN
-        UPDATE Song
-        SET mp3 = concat(songId::varchar, '_', songTitle, '.mp3')
-        WHERE songId = NEW.songId;
-        RETURN NEW;
-        END;
+BEGIN
+UPDATE Song
+SET mp3 = CONCAT(songId::VARCHAR, '_', songTitle, '.mp3')
+WHERE songId = NEW.songId;
+RETURN NEW;
+END;
 $$;
 
 CREATE TRIGGER updateSongMp3
     AFTER INSERT
     ON Song
     FOR EACH ROW
-EXECUTE PROCEDURE updateSongMp3();
+    EXECUTE PROCEDURE updateSongMp3();
 
 
 
@@ -175,21 +170,23 @@ CREATE OR REPLACE VIEW PlaylistWithSongsAndUser AS
 SELECT P.playlistId,
        P.playlistTitle,
        P.username,
-       U.password,
-       U.role,
        S.songId,
        songTitle,
        songDuration,
        songReleaseYear,
+       mp3,
+       ART.artistId,
+       ART.artistName,
        A.albumId,
        A.albumTitle,
        A.albumDuration
 FROM Playlist P
-         JOIN PlaylistSongRelation PSR ON P.playlistId = PSR.playlistId
-         JOIN Song S ON PSR.songId = S.songId
-         JOIN _User U ON U.username = P.username
-         JOIN AlbumSongRelation ASR ON S.songId = ASR.songId
-         JOIN Album A ON A.albumId = ASR.albumId;
+         LEFT JOIN PlaylistSongRelation PSR ON P.playlistId = PSR.playlistId
+         LEFT JOIN Song S ON PSR.songId = S.songId
+         LEFT JOIN ArtistSongRelation ATSR ON S.songId = ATSR.songId
+         LEFT JOIN Artist ART ON ATSR.artistId = ART.artistId
+         LEFT JOIN AlbumSongRelation ALSR ON S.songId = ALSR.songId
+         LEFT JOIN Album A ON A.albumId = ALSR.albumId;
 
 SELECT *
 FROM AllSongs;
@@ -198,5 +195,22 @@ SELECT *
 FROM _User;
 
 SELECT *
-From Playlist;
+FROM Playlist;
+
+SELECT *
+FROM PlaylistWithSongsAndUser;
+
+
+SELECT *
+FROM Playlist
+WHERE username = 'Mikkel';
+
+SELECT S.songId, songTitle, songDuration, songReleaseYear, mp3, ASR.albumId, albumTitle, albumDuration
+FROM PlaylistSongRelation
+         JOIN Song S ON S.songId = PlaylistSongRelation.songId
+         JOIN AlbumSongRelation ASR ON S.songId = ASR.songId
+         JOIN Album A ON A.albumId = ASR.albumId
+WHERE playlistId = 1;
+
+SELECT Artist.artistId, artistName FROM Artist JOIN ArtistSongRelation ASR ON Artist.artistId = ASR.artistId WHERE songId = 2;
 

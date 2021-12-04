@@ -3,13 +3,11 @@ package server.networking;
 import com.google.gson.Gson;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.function.EntityResponse;
 import server.DAO.IPlaylistDAO;
 import server.DAO.IUserDAO;
 import server.DAO.PlaylistDAO;
 import server.DAO.UserDAO;
 import shared.Playlist;
-import shared.Song;
 import shared.User;
 
 import java.util.ArrayList;
