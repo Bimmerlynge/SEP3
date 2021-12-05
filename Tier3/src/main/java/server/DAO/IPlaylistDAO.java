@@ -9,8 +9,8 @@ import java.util.ArrayList;
 public interface IPlaylistDAO
 {
   ArrayList<Playlist> getAllPlaylistForUser(User user);
-  void createNewPlaylist(Playlist playlist);
-  void removePlaylistFromId(int playlistId);
+  int createNewPlaylist(Playlist playlist) throws Exception;
+  void removePlaylistFromId(int playlistId) throws NoSuchFieldException;
   Playlist getPlaylistFromId(int playlistId);
 
 

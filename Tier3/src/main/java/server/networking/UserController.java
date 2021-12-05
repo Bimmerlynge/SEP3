@@ -18,19 +18,21 @@ public class UserController {
 
 
     @PostMapping("/user")
-    public synchronized ResponseEntity postUser(@RequestBody User user) throws URISyntaxException {
+    public ResponseEntity postUser(@RequestBody User user) throws URISyntaxException {
         try
         {
             userDAO.registerUser(user);
+            URI uriToFindUser = new URI("http://localhost:8080/user/" + user.getUsername() +"&" + user.getPassword());
+            return ResponseEntity.created(uriToFindUser).build();
+
         }catch (IllegalArgumentException e){
             return ResponseEntity.badRequest().build();
         }
-        URI uriToFindUser = new URI("http://localhost:8080/user/" + user.getUsername() +"&" + user.getPassword());
-        return ResponseEntity.created(uriToFindUser).build();
+
     }
 
-    @GetMapping("/user/{username}&{password}")
-    public synchronized ResponseEntity validateUser(@PathVariable String username, @PathVariable String password){
+    @GetMapping("/user")
+    public ResponseEntity validateUser(@RequestParam String username, @RequestParam String password){
         User user = null;
         try
         {

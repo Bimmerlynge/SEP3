@@ -17,29 +17,20 @@ public class SongController
 
 
   @GetMapping("/song")
-  public String getAllSongs() {
+  public ResponseEntity getAllSongs() {
     ArrayList<Song> songs = songDAO.getAllSongs();
 
-    return new Gson().toJson(songs);
-  }
-
-  @PostMapping("/songss")
-  public synchronized void postAllSongs(@RequestBody ArrayList<Song> songs)
-  {
-    System.out.println("Getting post request");
-    ISongDAO songDAO = new SongDAO();
-
-    songDAO.postAllSongs(songs);
-
+    String songsAsJson = new Gson().toJson(songs);
+    return ResponseEntity.ok(songsAsJson);
   }
 
   @PostMapping("/song")
-  public synchronized ResponseEntity postSong(@RequestBody Song newSong)
+  public ResponseEntity postSong(@RequestBody Song newSong)
   {
-    System.out.println("Getting post request on " + newSong.getTitle());
-    ISongDAO songDAO = new SongDAO();
     try
     {
+      ISongDAO songDAO = new SongDAO();
+
       Song song = songDAO.addNewSong(newSong);
       String songAsJson = new Gson().toJson(song);
       return ResponseEntity.ok(songAsJson);
@@ -48,11 +39,10 @@ public class SongController
     }
   }
 
-
-
   @DeleteMapping("/song/{songId}")
-  public synchronized void deleteSongFromId(@PathVariable int songId){
+  public ResponseEntity deleteSongFromId(@PathVariable int songId){
     songDAO.removeSongFromId(songId);
+    return ResponseEntity.ok().build();
   }
 
 }

@@ -1,8 +1,10 @@
 package server.networking;
 
 import com.google.gson.Gson;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import server.DAO.ISongSearchDAO;
 import server.DAO.SongSearchDAO;
@@ -17,29 +19,42 @@ public class SongSearchController {
     ISongSearchDAO songSearchDAO = new SongSearchDAO();
 
 
-    @GetMapping("/songSearch/songTitle={songTitle}")
-    public synchronized String getSongsBySongTitle(@PathVariable String songTitle) {
-        System.out.println("songTitle: " + songTitle);
-        ArrayList<Song> songs = songSearchDAO.getSongsByTitle(songTitle);
-        System.out.println("Sender list, size: " + songs.size());
-        return new Gson().toJson(songs);
+    @GetMapping("/songSearch")
+    public ResponseEntity getSongsByFilter(@RequestParam(required = false) String songTitle,
+                                           @RequestParam(required = false) String artistName,
+                                           @RequestParam(required = false) String albumTitle) {
+        if (checkNotMoreThanOnceArgument(songTitle,artistName, albumTitle)){
+            ResponseEntity.badRequest().build();
+        }
+
+        ArrayList<Song> songs = null;
+        if (songTitle != null){
+            songs = songSearchDAO.getSongsByTitle(songTitle);
+        } else if (artistName != null){
+            songs = songSearchDAO.getSongsByArtist(artistName);
+        } else if (albumTitle != null){
+            songs = songSearchDAO.getSongsByAlbum(albumTitle);
+        }
+        String songsAsJson = new Gson().toJson(songs);
+        return ResponseEntity.ok(songsAsJson);
     }
 
-    @GetMapping("/songSearch/artistName={artistName}")
-    public synchronized String getSongsByArtistName(@PathVariable String artistName) {
-        System.out.println("artistName : " + artistName );
-        ArrayList<Song> songs = songSearchDAO.getSongsByArtist(artistName);
-        System.out.println("Sender list, size: " + songs.size());
-        return new Gson().toJson(songs);
+    private boolean checkNotMoreThanOnceArgument(String songTitle, String artistName, String albumTitle){
+        boolean checker = false;
+        boolean songTitleNull = songTitle != null;
+        boolean artistNameNull = artistName != null;
+        boolean albumTitleNull = albumTitle  != null;
+
+        if (songTitleNull && artistNameNull){
+            checker = true;
+        } else if (songTitleNull && albumTitleNull){
+            checker = true;
+        }else if (artistNameNull && albumTitleNull){
+            checker = true;
+        }
+        return checker;
     }
 
-    @GetMapping("/songSearch/albumTitle={albumTitle}")
-    public synchronized String getSongsByAlbumTitle(@PathVariable String albumTitle) {
-        System.out.println("albumTitle: " + albumTitle);
-        ArrayList<Song> songs = songSearchDAO.getSongsByAlbum(albumTitle);
-        System.out.println("Sender list, size: " + songs.size());
-        return new Gson().toJson(songs);
-    }
 
 
 }

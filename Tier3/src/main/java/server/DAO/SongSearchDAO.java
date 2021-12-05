@@ -21,9 +21,9 @@ public class SongSearchDAO extends BaseDAO implements ISongSearchDAO {
         }
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM AllSongs WHERE songTitle = ?");
+                    .prepareStatement("SELECT * FROM AllSongs WHERE songTitle ILIKE ?");
 
-            preparedStatement.setString(1, songTitle);
+            preparedStatement.setString(1, "%" + songTitle + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
 
             return getSongsFromResultSet(resultSet);
@@ -45,9 +45,9 @@ public class SongSearchDAO extends BaseDAO implements ISongSearchDAO {
         }
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM AllSongs WHERE artistName = ?");
+                    .prepareStatement("SELECT * FROM AllSongs WHERE artistName ILIKE ?");
 
-            preparedStatement.setString(1, artistName);
+            preparedStatement.setString(1, "%" + artistName + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
 
             return getSongsFromResultSet(resultSet);
@@ -67,9 +67,9 @@ public class SongSearchDAO extends BaseDAO implements ISongSearchDAO {
         }
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection
-                    .prepareStatement("SELECT * FROM AllSongs WHERE albumTitle = ?");
+                    .prepareStatement("SELECT * FROM AllSongs WHERE albumTitle ILIKE ?");
 
-            preparedStatement.setString(1, albumTitle);
+            preparedStatement.setString(1, "%" + albumTitle + "%");
             ResultSet resultSet = preparedStatement.executeQuery();
 
             return getSongsFromResultSet(resultSet);
@@ -86,7 +86,6 @@ public class SongSearchDAO extends BaseDAO implements ISongSearchDAO {
         int songId = 0;
 
         while (resultSet.next()) {
-            System.out.println("Inde i loop");
             if (songId != resultSet.getInt("songid")) {
                 Song song = new Song(resultSet.getInt("songid"),
                         resultSet.getString("songtitle"),

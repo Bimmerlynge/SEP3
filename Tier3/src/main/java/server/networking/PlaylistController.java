@@ -10,6 +10,7 @@ import server.DAO.UserDAO;
 import shared.Playlist;
 import shared.User;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 @RestController
@@ -18,32 +19,57 @@ public class PlaylistController {
     IUserDAO userDao = new UserDAO();
 
 
-    @PostMapping("/playlist/")
-    public synchronized void createNewPlaylistAsync(@RequestBody Playlist playlist) {
-        System.out.println("Getting post request on " + playlist.getTitle());
-        System.out.println("Post from: " + playlist.getUser().getUsername());
+    @PostMapping("/playlist")
+    public ResponseEntity createNewPlaylistAsync(@RequestBody Playlist playlist) {
 
-        playlistDAO.createNewPlaylist(playlist);
+        try {
+            int playlistId = playlistDAO.createNewPlaylist(playlist);
+            URI uriToPlaylist = new URI("http://localhost:8080/playlist/" + playlistId);
+            return ResponseEntity.created(uriToPlaylist).build();
+        }
+        catch (Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
+
     }
 
-    @GetMapping("/playlist/{username}")
-    public String getPlaylistsForUser(@PathVariable String username) {
-        User user = userDao.getUser(username);
-        ArrayList<Playlist> playlists = playlistDAO.getAllPlaylistForUser(user);
+    /*
+    Denne metode returnere en liste af playlister hvis man søger på username, men kun 1 playlist hvis man søger på Id
+     */
+    @GetMapping("/playlist")
+    public ResponseEntity getPlaylistsFormUserOrId(@RequestParam(required = false) String username, @RequestParam(required = false) Integer playlistId) {
 
-        return new Gson().toJson(playlists);
+        if (username != null && playlistId != null) return ResponseEntity.badRequest().build();
+
+        if (username != null){
+            User user = userDao.getUser(username);
+            ArrayList<Playlist> playlists = playlistDAO.getAllPlaylistForUser(user);
+            String playlistsAsJons = new Gson().toJson(playlists);
+            return ResponseEntity.ok(playlistsAsJons);
+
+        } else if (playlistId != null){
+            Playlist playlist = playlistDAO.getPlaylistFromId(playlistId);
+            String playlistAsJson = new Gson().toJson(playlist);
+            return ResponseEntity.ok(playlistAsJson);
+        }
+
+        return ResponseEntity.badRequest().build();
+
     }
 
-    @GetMapping("/playlistSongs/{playlistId}")
-    public ResponseEntity<Playlist> getPlaylistFromId (@PathVariable int playlistId) {
-
-        Playlist playlist = playlistDAO.getPlaylistFromId(playlistId);
-        return ResponseEntity.ok(playlist);
-    }
 
     @DeleteMapping("/playlist/{playlistId}")
-    public void removePlaylistFromId(@PathVariable int playlistId){
-        playlistDAO.removePlaylistFromId(playlistId);
+    public ResponseEntity removePlaylistFromId(@PathVariable int playlistId){
+        try {
+            playlistDAO.removePlaylistFromId(playlistId);
+            return ResponseEntity.ok().build();
+
+        } catch (NoSuchFieldException e) {
+            return ResponseEntity.badRequest().build();
+
+        } catch (Exception e){
+            return ResponseEntity.internalServerError().build();
+        }
     }
 
 

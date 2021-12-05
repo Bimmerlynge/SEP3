@@ -1,8 +1,10 @@
 package server.networking;
 
 import com.google.gson.Gson;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import server.DAO.AlbumDAO;
 import server.DAO.IAlbumDAO;
@@ -16,18 +18,17 @@ public class AlbumController {
 
     private IAlbumDAO albumDAO = new AlbumDAO();
 
-    @GetMapping("/album/{title}")
-    public String searchForArtists(@PathVariable String title) {
-        ArrayList<Album> albumArrayList = albumDAO.searchForAlbums(title);
-
-        return new Gson().toJson(albumArrayList);
-    }
-
     @GetMapping("/album")
-    public String getAllAlbums() {
-        ArrayList<Album> albumArrayList = albumDAO.getAllAlbums();
-
-        return new Gson().toJson(albumArrayList);
+    public ResponseEntity searchForAlbums(@RequestParam(required = false) String title) {
+        ArrayList<Album> albumArrayList = null;
+        if (title != null){
+            albumArrayList = albumDAO.searchForAlbums(title);
+        } else {
+            albumArrayList = albumDAO.getAllAlbums();
+        }
+        String albumListAsJson = new Gson().toJson(albumArrayList);
+        return ResponseEntity.ok(albumListAsJson);
     }
+
 
 }

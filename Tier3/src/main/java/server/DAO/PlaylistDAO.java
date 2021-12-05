@@ -34,31 +34,42 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
 
 
     @Override
-    public void createNewPlaylist(Playlist playlist) {
+    public int createNewPlaylist(Playlist playlist) throws Exception {
         try (Connection connection = getConnection()) {
 
             PreparedStatement preparedStatement = connection.prepareStatement(
-                    "INSERT INTO playlist(playlistTitle, username) VALUES  (?, ?)");
+                    "INSERT INTO playlist(playlistTitle, username) VALUES  (?, ?)", PreparedStatement.RETURN_GENERATED_KEYS);
             preparedStatement.setString(1, playlist.getTitle());
             preparedStatement.setString(2, playlist.getUser().getUsername());
             preparedStatement.execute();
+            ResultSet generatedKeys = preparedStatement.getGeneratedKeys();
 
-
+            if (generatedKeys.next()) {
+                return generatedKeys.getInt("playlistId");
+            }
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw new Exception("Exeption in INSER TO PLAYLIST");
         }
+        throw new Exception("No keys generated from playlist");
+
     }
 
     @Override
-    public void removePlaylistFromId(int playlistId) {
+    public void removePlaylistFromId(int playlistId) throws NoSuchFieldException {
 
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM playlist where playlistId = ?;");
             preparedStatement.setInt(1, playlistId);
-            preparedStatement.executeUpdate();
+            int rowsEffected = preparedStatement.executeUpdate();
+
+            if (rowsEffected == 0){
+                throw new NoSuchFieldException("No such playlist found");
+            }
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
+            throw new IllegalArgumentException();
         }
     }
 

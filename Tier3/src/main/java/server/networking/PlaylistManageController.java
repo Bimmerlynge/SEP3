@@ -10,7 +10,7 @@ import shared.Song;
 public class PlaylistManageController {
     private IPlaylistManageDAO playlistManageDAO = new PlaylistManageDAO();
 
-    @PostMapping("/playlist/{playlistId}/")
+    @PostMapping("/playlistManage/{playlistId}/")
     public ResponseEntity addSongToPlaylist(@PathVariable int playlistId, @RequestBody Song song) {
         try {
             playlistManageDAO.addSongToPlayList(playlistId, song);
@@ -21,7 +21,7 @@ public class PlaylistManageController {
 
     }
 
-    @DeleteMapping("/playlist/{playlistId}/{songId}")
+    @DeleteMapping("/playlistManage/{playlistId}/{songId}")
     public ResponseEntity removeSongFromPlaylist(@PathVariable int playlistId, @PathVariable int songId) {
         try {
             playlistManageDAO.removeSongFromPlaylist(playlistId, songId);
