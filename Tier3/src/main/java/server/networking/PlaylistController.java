@@ -26,8 +26,7 @@ public class PlaylistController {
             int playlistId = playlistDAO.createNewPlaylist(playlist);
             URI uriToPlaylist = new URI("http://localhost:8080/playlist/" + playlistId);
             return ResponseEntity.created(uriToPlaylist).build();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
 
@@ -41,33 +40,33 @@ public class PlaylistController {
 
         if (username != null && playlistId != null) return ResponseEntity.badRequest().build();
 
-        if (username != null){
-            User user = userDao.getUser(username);
-            ArrayList<Playlist> playlists = playlistDAO.getAllPlaylistForUser(user);
-            String playlistsAsJons = new Gson().toJson(playlists);
-            return ResponseEntity.ok(playlistsAsJons);
-
-        } else if (playlistId != null){
-            Playlist playlist = playlistDAO.getPlaylistFromId(playlistId);
-            String playlistAsJson = new Gson().toJson(playlist);
-            return ResponseEntity.ok(playlistAsJson);
+        try {
+            if (username != null) {
+                User user = userDao.getUser(username);
+                ArrayList<Playlist> playlists = playlistDAO.getAllPlaylistForUser(user);
+                String playlistsAsJons = new Gson().toJson(playlists);
+                return ResponseEntity.ok(playlistsAsJons);
+            } else if (playlistId != null) {
+                Playlist playlist = playlistDAO.getPlaylistFromId(playlistId);
+                String playlistAsJson = new Gson().toJson(playlist);
+                return ResponseEntity.ok(playlistAsJson);
+            }
+            return ResponseEntity.badRequest().build();
+        } catch (Exception | InternalError e) {
+            return ResponseEntity.internalServerError().build();
         }
-
-        return ResponseEntity.badRequest().build();
-
     }
 
 
     @DeleteMapping("/playlist/{playlistId}")
-    public ResponseEntity removePlaylistFromId(@PathVariable int playlistId){
+    public ResponseEntity removePlaylistFromId(@PathVariable int playlistId) {
         try {
             playlistDAO.removePlaylistFromId(playlistId);
             return ResponseEntity.ok().build();
 
         } catch (NoSuchFieldException e) {
             return ResponseEntity.badRequest().build();
-
-        } catch (Exception e){
+        } catch (Exception | InternalError e) {
             return ResponseEntity.internalServerError().build();
         }
     }

@@ -20,14 +20,18 @@ public class AlbumController {
 
     @GetMapping("/album")
     public ResponseEntity searchForAlbums(@RequestParam(required = false) String title) {
-        ArrayList<Album> albumArrayList = null;
-        if (title != null){
-            albumArrayList = albumDAO.searchForAlbums(title);
-        } else {
-            albumArrayList = albumDAO.getAllAlbums();
+        try {
+            ArrayList<Album> albumArrayList = null;
+            if (title != null) {
+                albumArrayList = albumDAO.searchForAlbums(title);
+            } else {
+                albumArrayList = albumDAO.getAllAlbums();
+            }
+            String albumListAsJson = new Gson().toJson(albumArrayList);
+            return ResponseEntity.ok(albumListAsJson);
+        } catch (Exception | InternalError e){
+            return ResponseEntity.internalServerError().build();
         }
-        String albumListAsJson = new Gson().toJson(albumArrayList);
-        return ResponseEntity.ok(albumListAsJson);
     }
 
 

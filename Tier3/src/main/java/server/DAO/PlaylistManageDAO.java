@@ -23,6 +23,7 @@ public class PlaylistManageDAO extends BaseDAO implements IPlaylistManageDAO
     catch (SQLException throwables)
     {
       throwables.printStackTrace();
+      throw new InternalError(throwables.getMessage());
     }
   }
 
@@ -40,6 +41,7 @@ public class PlaylistManageDAO extends BaseDAO implements IPlaylistManageDAO
     catch (SQLException throwables)
     {
       throwables.printStackTrace();
+      throw new InternalError(throwables.getMessage());
     }
   }
 }

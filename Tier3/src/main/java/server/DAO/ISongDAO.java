@@ -11,6 +11,6 @@ public interface ISongDAO {
 
     Song addNewSong(Song newSong);
 
-    void removeSongFromId(int songId);
+    void removeSongFromId(int songId) throws NoSuchFieldException;
     Song getSongById(int id);
 }

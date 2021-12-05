@@ -39,7 +39,7 @@ public class AlbumDAO extends BaseDAO implements IAlbumDAO
     catch (SQLException throwables)
     {
       throwables.printStackTrace();
-      return null;
+      throw new InternalError(throwables.getMessage());
     }
 
 
@@ -60,7 +60,7 @@ public class AlbumDAO extends BaseDAO implements IAlbumDAO
     catch (SQLException throwables)
     {
       throwables.printStackTrace();
-      return null;
+      throw new InternalError(throwables.getMessage());
     }
 
   }
@@ -78,7 +78,7 @@ public class AlbumDAO extends BaseDAO implements IAlbumDAO
     catch (SQLException throwables)
     {
       throwables.printStackTrace();
-      return null;
+      throw new InternalError(throwables.getMessage());
     }
   }
 

@@ -25,7 +25,7 @@ public class ArtistDAO extends BaseDAO implements IArtistDAO {
         catch (SQLException throwables)
         {
             throwables.printStackTrace();
-            return null;
+            throw new InternalError(throwables.getMessage());
         }
     }
 
@@ -40,7 +40,7 @@ public class ArtistDAO extends BaseDAO implements IArtistDAO {
         catch (SQLException throwables)
         {
             throwables.printStackTrace();
-            return null;
+            throw new InternalError(throwables.getMessage());
         }
     }
 

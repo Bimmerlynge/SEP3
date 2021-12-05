@@ -11,6 +11,7 @@ import java.sql.SQLException;
 public class UserDAO extends BaseDAO implements IUserDAO
 {
 
+
   @Override public void registerUser(User user)
   {
 
@@ -22,12 +23,17 @@ public class UserDAO extends BaseDAO implements IUserDAO
       preparedStatement.setString(1, user.getUsername());
       preparedStatement.setString(2, user.getPassword());
       preparedStatement.setString(3, user.getRole());
-      preparedStatement.executeUpdate();
+      int rowsEffected = preparedStatement.executeUpdate();
+
+      if (rowsEffected == 0){
+        throw new IllegalArgumentException("No ");
+      }
 
     }
     catch (SQLException throwables)
     {
-      throw new IllegalArgumentException(throwables.getMessage());
+      throwables.printStackTrace();
+      throw new InternalError(throwables.getMessage());
     }
 
   }
@@ -42,12 +48,13 @@ public class UserDAO extends BaseDAO implements IUserDAO
       preparedStatement.setString(2, user.getPassword());
       ResultSet resultSet = preparedStatement.executeQuery();
       User toReturn = null;
+
       if (resultSet.next())
       {
         toReturn = new User(resultSet.getString("username"), null,
             resultSet.getString("role"));
-
       }
+
       if (toReturn == null){
         throw new NullPointerException("No user found");
       }
@@ -56,7 +63,7 @@ public class UserDAO extends BaseDAO implements IUserDAO
     catch (SQLException throwables)
     {
       throwables.printStackTrace();
-      return null;
+      throw new InternalError(throwables.getMessage());
     }
 
   }
@@ -80,7 +87,7 @@ public class UserDAO extends BaseDAO implements IUserDAO
     catch (SQLException throwables)
     {
       throwables.printStackTrace();
-      return null;
+      throw new InternalError(throwables.getMessage());
     }
   }
 }

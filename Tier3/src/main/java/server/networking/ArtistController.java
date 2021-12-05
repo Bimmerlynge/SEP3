@@ -20,16 +20,20 @@ public class ArtistController {
 
     @GetMapping("/artist")
     public ResponseEntity searchForArtists(@RequestParam(required = false) String name) {
-        ArrayList<Artist> artistArrayList = null;
-        if (name != null){
-            artistArrayList = artistDAO.searchForArtists(name);
 
-        } else {
-            artistArrayList = artistDAO.getAllArtist();
+        try {
+            ArrayList<Artist> artistArrayList = null;
+            if (name != null) {
+                artistArrayList = artistDAO.searchForArtists(name);
+
+            } else {
+                artistArrayList = artistDAO.getAllArtist();
+            }
+            String artistAsJons = new Gson().toJson(artistArrayList);
+            return ResponseEntity.ok(artistAsJons);
+        } catch (Exception | InternalError e){
+            return ResponseEntity.internalServerError().build();
         }
-        String artistAsJons = new Gson().toJson(artistArrayList);
-        return ResponseEntity.ok(artistAsJons);
     }
-
 
 }

@@ -15,8 +15,8 @@ public class PlaylistManageController {
         try {
             playlistManageDAO.addSongToPlayList(playlistId, song);
             return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+        } catch (Exception | InternalError e){
+            return ResponseEntity.internalServerError().build();
         }
 
     }
@@ -27,8 +27,8 @@ public class PlaylistManageController {
             playlistManageDAO.removeSongFromPlaylist(playlistId, songId);
             return ResponseEntity.ok().build();
 
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+        } catch (Exception | InternalError e){
+            return ResponseEntity.internalServerError().build();
         }
     }
 }

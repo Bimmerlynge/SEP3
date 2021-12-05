@@ -70,6 +70,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
       catch (SQLException throwables)
       {
         throwables.printStackTrace();
+        throw new InternalError(throwables.getMessage());
       }
 
     }
@@ -128,7 +129,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
     catch (SQLException throwables)
     {
       throwables.printStackTrace();
-      return null;
+      throw new InternalError(throwables.getMessage());
     }
   }
 
@@ -148,19 +149,23 @@ public class SongDAO extends BaseDAO implements ISongDAO
     catch (SQLException throwables)
     {
       throwables.printStackTrace();
-      return null;
+      throw new InternalError(throwables.getMessage());
     }
   }
 
   @Override
-  public void removeSongFromId(int songId) {
+  public void removeSongFromId(int songId) throws NoSuchFieldException {
     try(Connection connection = getConnection()) {
       PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM Song WHERE songId = ?;");
       preparedStatement.setInt(1, songId);
-      preparedStatement.executeUpdate();
-
-    } catch (SQLException throwables) {
+      int rowsEffected = preparedStatement.executeUpdate();
+      if (rowsEffected == 0){
+        throw new NoSuchFieldException();
+      }
+    }  catch (SQLException throwables)
+    {
       throwables.printStackTrace();
+      throw new InternalError(throwables.getMessage());
     }
   }
 
@@ -268,7 +273,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
     catch (SQLException throwables)
     {
       throwables.printStackTrace();
-      return null;
+      throw new InternalError();
     }
 
   }

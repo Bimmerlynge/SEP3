@@ -28,9 +28,10 @@ public class SongSearchDAO extends BaseDAO implements ISongSearchDAO {
 
             return getSongsFromResultSet(resultSet);
 
-        } catch (SQLException throwables) {
+        }  catch (SQLException throwables)
+        {
             throwables.printStackTrace();
-            return null;
+            throw new InternalError(throwables.getMessage());
         }
     }
 
@@ -52,9 +53,10 @@ public class SongSearchDAO extends BaseDAO implements ISongSearchDAO {
 
             return getSongsFromResultSet(resultSet);
 
-        } catch (SQLException throwables) {
+        }  catch (SQLException throwables)
+        {
             throwables.printStackTrace();
-            return null;
+            throw new InternalError(throwables.getMessage());
         }
     }
 
@@ -74,9 +76,10 @@ public class SongSearchDAO extends BaseDAO implements ISongSearchDAO {
 
             return getSongsFromResultSet(resultSet);
 
-        } catch (SQLException throwables) {
+        } catch (SQLException throwables)
+        {
             throwables.printStackTrace();
-            return null;
+            throw new InternalError(throwables.getMessage());
         }
     }
 

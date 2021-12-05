@@ -25,9 +25,10 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
 
             return allUsersPlaylists;
 
-        } catch (SQLException throwables) {
+        } catch (SQLException throwables)
+        {
             throwables.printStackTrace();
-            return null;
+            throw new InternalError(throwables.getMessage());
         }
 
     }
@@ -47,9 +48,10 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
             if (generatedKeys.next()) {
                 return generatedKeys.getInt("playlistId");
             }
-        } catch (SQLException throwables) {
+        }  catch (SQLException throwables)
+        {
             throwables.printStackTrace();
-            throw new Exception("Exeption in INSER TO PLAYLIST");
+            throw new InternalError(throwables.getMessage());
         }
         throw new Exception("No keys generated from playlist");
 
@@ -67,9 +69,10 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
                 throw new NoSuchFieldException("No such playlist found");
             }
 
-        } catch (SQLException throwables) {
+        }  catch (SQLException throwables)
+        {
             throwables.printStackTrace();
-            throw new IllegalArgumentException();
+            throw new InternalError(throwables.getMessage());
         }
     }
 
@@ -98,9 +101,10 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
 
                 return newPlaylist;
 
-            } catch (SQLException throwables) {
+            }  catch (SQLException throwables)
+            {
                 throwables.printStackTrace();
-                return null;
+                throw new InternalError(throwables.getMessage());
             }
     }
 
