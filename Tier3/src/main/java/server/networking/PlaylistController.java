@@ -24,7 +24,7 @@ public class PlaylistController {
 
         try {
             int playlistId = playlistDAO.createNewPlaylist(playlist);
-            URI uriToPlaylist = new URI("http://localhost:8080/playlist/" + playlistId);
+            URI uriToPlaylist = new URI("http://localhost:8080/playlist?playlistId=" + playlistId);
             return ResponseEntity.created(uriToPlaylist).build();
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
