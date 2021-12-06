@@ -32,12 +32,12 @@ public class Song implements Serializable
         artists.add(artist);
     }
 
-    public Song(int id, String title, int duration, int releaseYear, Album album, String mp3) {
+    public Song(int id, String title, int duration, int releaseYear, String mp3) {
         this.id = id;
         this.title = title;
         this.duration = duration;
         this.releaseYear = releaseYear;
-        this.album = album;
+        this.album = null;
         this.mp3 = mp3;
         artists = new ArrayList<>();
     }

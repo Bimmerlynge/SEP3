@@ -121,8 +121,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
       ResultSet resultSet = preparedStatement.executeQuery();
       if (resultSet.next()){
         song = new Song(resultSet.getInt("songId"), resultSet.getString("songTitle"),
-            resultSet.getInt("songDuration"), resultSet.getInt("songReleaseYear"),
-            null, resultSet.getString("mp3"));
+            resultSet.getInt("songDuration"), resultSet.getInt("songReleaseYear"), resultSet.getString("mp3"));
       }
       return song;
     }
@@ -250,10 +249,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
           Song song = new Song(resultSet.getInt("songid"),
               resultSet.getString("songtitle"),
               resultSet.getInt("songduration"),
-              resultSet.getInt("songreleaseyear"),
-              new Album(resultSet.getInt("albumId"),
-                  resultSet.getString("albumtitle"),
-                  resultSet.getInt("albumduration")),resultSet.getString("mp3"));
+              resultSet.getInt("songreleaseyear"),resultSet.getString("mp3"));
           listOfSongs.add(song);
           songId = song.getId();
         }

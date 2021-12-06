@@ -154,15 +154,16 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
     }
 
     private Song getNewSong(ResultSet songListResultSet) throws SQLException {
-        return new Song(songListResultSet.getInt("songId"),
-                                songListResultSet.getString("songTitle"),
-                                songListResultSet.getInt("songDuration"),
-                                songListResultSet.getInt("songReleaseYear"),
-                                new Album(songListResultSet.getInt("albumId"),
-                                        songListResultSet.getString("albumTitle"),
-                                        songListResultSet.getInt("albumDuration")
-                                ),
-                                songListResultSet.getString("mp3"));
+        Song song = new Song(songListResultSet.getInt("songId"),
+            songListResultSet.getString("songTitle"),
+            songListResultSet.getInt("songDuration"),
+            songListResultSet.getInt("songReleaseYear"),
+            songListResultSet.getString("mp3"));
+        Album album = new Album(songListResultSet.getInt("albumId"),
+            songListResultSet.getString("albumtitle"),
+            songListResultSet.getInt("albumduration"));
+        song.setAlbums(album);
+        return song;
     }
 
     private ResultSet getResultSetWithAllSongsFromPlaylist(Connection connection, Playlist newPlaylist) throws SQLException {

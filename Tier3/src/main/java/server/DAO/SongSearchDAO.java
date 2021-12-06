@@ -92,7 +92,7 @@ public class SongSearchDAO extends BaseDAO implements ISongSearchDAO {
             if (songId != resultSet.getInt("songid")) {
                 Song song = new Song(resultSet.getInt("songid"),
                         resultSet.getString("songtitle"),
-                        resultSet.getInt("songduration"), resultSet.getInt("songreleaseyear"), null,resultSet.getString("mp3"));
+                        resultSet.getInt("songduration"), resultSet.getInt("songreleaseyear"), resultSet.getString("mp3"));
                 listOfSongs.add(song);
                 songId = song.getId();
 
