@@ -9,14 +9,12 @@ public class Album implements Serializable
 {
   private int id;
   private String title;
-  private int duration;
 
 
-  public Album(int id, String title, int duration)
+  public Album(int id, String title)
   {
     this.id = id;
     this.title = title;
-    this.duration = duration;
   }
 
   public String toString(){
@@ -46,17 +44,6 @@ public class Album implements Serializable
     this.title = title;
 
   }
-
-  public void setDuration(int duration)
-  {
-    this.duration = duration;
-  }
-
-  public int getDuration()
-  {
-    return duration;
-  }
-
 
 
 }

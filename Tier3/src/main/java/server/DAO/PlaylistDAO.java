@@ -154,25 +154,22 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
     }
 
     private Song getNewSong(ResultSet songListResultSet) throws SQLException {
-        Song song = new Song(songListResultSet.getInt("songId"),
-            songListResultSet.getString("songTitle"),
-            songListResultSet.getInt("songDuration"),
-            songListResultSet.getInt("songReleaseYear"),
-            songListResultSet.getString("mp3"));
-        Album album = new Album(songListResultSet.getInt("albumId"),
-            songListResultSet.getString("albumtitle"),
-            songListResultSet.getInt("albumduration"));
-        song.setAlbums(album);
-        return song;
+        return new Song(songListResultSet.getInt("songId"),
+                                songListResultSet.getString("songTitle"),
+                                songListResultSet.getInt("songDuration"),
+                                songListResultSet.getInt("songReleaseYear"),
+                                new Album(songListResultSet.getInt("albumId"),
+                                        songListResultSet.getString("albumTitle")
+                                ),
+                                songListResultSet.getString("mp3"));
     }
 
     private ResultSet getResultSetWithAllSongsFromPlaylist(Connection connection, Playlist newPlaylist) throws SQLException {
-        PreparedStatement songStatement = connection.prepareStatement("SELECT S.songId, songTitle, songDuration, songReleaseYear, mp3, ASR.albumId, albumTitle, albumDuration\n" +
-                "FROM PlaylistSongRelation\n" +
-                "         JOIN Song S ON S.songId = PlaylistSongRelation.songId\n" +
-                "         JOIN AlbumSongRelation ASR ON S.songId = ASR.songId\n" +
-                "         JOIN Album A ON A.albumId = ASR.albumId\n" +
-                "WHERE playlistId = ?");
+        PreparedStatement songStatement = connection.prepareStatement("SELECT S.songId, songTitle, songDuration, songReleaseYear, mp3, S.albumId , albumTitle\n" +
+                "                FROM PlaylistSongRelation\n" +
+                "                         JOIN Song S ON S.songId = PlaylistSongRelation.songId\n" +
+                "                         JOIN Album A ON A.albumId = S.albumId\n" +
+                "                WHERE playlistId = ?;");
         songStatement.setInt(1, newPlaylist.getId());
         return songStatement.executeQuery();
     }
