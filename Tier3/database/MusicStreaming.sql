@@ -5,22 +5,27 @@ SET SCHEMA 'musicstreaming';
 CREATE DOMAIN _date AS DATE
     CHECK ( VALUE > TO_DATE('01-Jan-1920', 'dd-Mon-yyyy'));
 
-CREATE TABLE IF NOT EXISTS Song
-(
-    songId          SERIAL PRIMARY KEY,
-    songTitle       VARCHAR  NOT NULL,
-    songDuration    SMALLINT NOT NULL,
-    songReleaseYear SMALLINT,
-    mp3             VARCHAR
-);
-
 
 CREATE TABLE IF NOT EXISTS Album
 (
     albumId       SERIAL PRIMARY KEY,
-    albumTitle    VARCHAR(100) NOT NULL,
-    albumDuration SMALLINT
+    albumTitle    VARCHAR(100) NOT NULL
     );
+
+
+CREATE TABLE IF NOT EXISTS Song
+(
+    songId          SERIAL PRIMARY KEY,
+    albumId         INT,
+    songTitle       VARCHAR  NOT NULL,
+    songDuration    SMALLINT NOT NULL,
+    songReleaseYear SMALLINT,
+    mp3             VARCHAR,
+    FOREIGN KEY (albumId) REFERENCES Album(albumId)
+    );
+
+
+
 
 CREATE TABLE IF NOT EXISTS _User
 (
@@ -46,31 +51,6 @@ CREATE TABLE IF NOT EXISTS ArtistSongRelation
     FOREIGN KEY (songId) REFERENCES Song (songId) ON DELETE CASCADE
     );
 
-CREATE TABLE IF NOT EXISTS AlbumSongRelation
-(
-    albumId SMALLINT,
-    songId  SMALLINT,
-    PRIMARY KEY (albumId, songId),
-    FOREIGN KEY (albumId) REFERENCES Album (albumId) ON DELETE CASCADE,
-    FOREIGN KEY (songId) REFERENCES Song (songId) ON DELETE CASCADE
-    );
-CREATE TABLE IF NOT EXISTS AlbumArtistRelation
-(
-    albumId  SMALLINT,
-    artistId SMALLINT,
-    PRIMARY KEY (albumId, artistId),
-    FOREIGN KEY (albumId) REFERENCES Album (albumId) ON DELETE CASCADE,
-    FOREIGN KEY (artistId) REFERENCES Artist (artistId) ON DELETE CASCADE
-    );
-
-CREATE TABLE IF NOT EXISTS AlbumRelease
-(
-    artistId SMALLINT,
-    albumId  SMALLINT,
-    PRIMARY KEY (albumId, artistId),
-    FOREIGN KEY (albumId) REFERENCES Album (albumId),
-    FOREIGN KEY (artistId) REFERENCES Artist (artistId)
-    );
 
 CREATE TABLE IF NOT EXISTS Playlist
 (
@@ -97,49 +77,16 @@ FROM Song AS S
 ORDER BY songId ASC;
 
 
-CREATE VIEW AlbumsWithArtist AS
-SELECT Al.*, Ar.*
-FROM Artist Ar
-         JOIN AlbumArtistRelation AAR ON Ar.artistId = AAR.artistId
-         JOIN Album Al ON Al.albumId = AAR.albumId
-ORDER BY albumId ASC;
-
-
 CREATE VIEW AllSongs AS
-SELECT A2.*, Ar.*, S.*
+SELECT Ar.*, S.*, A2.albumTitle
 FROM Song AS S
          JOIN ArtistSongRelation ASR ON S.songId = ASR.songId
          JOIN Artist Ar ON ASR.artistId = Ar.artistId
-         JOIN AlbumSongRelation A ON S.songId = A.songId
-         JOIN Album A2 ON A.albumId = A2.albumId
+         JOIN Album A2 ON S.albumId = A2.albumId
 ORDER BY songId ASC
 ;
 
 
-CREATE OR REPLACE FUNCTION songDurationTotal()
-    RETURNS TRIGGER
-    LANGUAGE plpgsql
-AS
-$$
-BEGIN
-WITH durationTotal AS (
-    SELECT SUM(S.songDuration) AS durTot
-    FROM AlbumSongRelation
-             JOIN Song S ON S.songId = AlbumSongRelation.songId
-    WHERE AlbumSongRelation.albumId = NEW.albumId)
-UPDATE Album
-SET albumDuration = durationTotal.durTot
-    FROM durationTotal
-WHERE NEW.albumId = albumId;
-RETURN new;
-END;
-$$;
-
-CREATE TRIGGER updateSongDuration
-    AFTER INSERT OR UPDATE OR DELETE
-                    ON AlbumSongRelation
-                        FOR EACH ROW
-                        EXECUTE PROCEDURE songDurationTotal();
 
 CREATE OR REPLACE FUNCTION updateSongMp3()
     RETURNS TRIGGER
@@ -166,28 +113,6 @@ INSERT INTO _User(username, password, role)
 VALUES ('Admin', 'Admin', 'Admin');
 
 
-CREATE OR REPLACE VIEW PlaylistWithSongsAndUser AS
-SELECT P.playlistId,
-       P.playlistTitle,
-       P.username,
-       S.songId,
-       songTitle,
-       songDuration,
-       songReleaseYear,
-       mp3,
-       ART.artistId,
-       ART.artistName,
-       A.albumId,
-       A.albumTitle,
-       A.albumDuration
-FROM Playlist P
-         LEFT JOIN PlaylistSongRelation PSR ON P.playlistId = PSR.playlistId
-         LEFT JOIN Song S ON PSR.songId = S.songId
-         LEFT JOIN ArtistSongRelation ATSR ON S.songId = ATSR.songId
-         LEFT JOIN Artist ART ON ATSR.artistId = ART.artistId
-         LEFT JOIN AlbumSongRelation ALSR ON S.songId = ALSR.songId
-         LEFT JOIN Album A ON A.albumId = ALSR.albumId;
-
 SELECT *
 FROM AllSongs;
 
@@ -201,16 +126,4 @@ SELECT *
 FROM PlaylistWithSongsAndUser;
 
 
-SELECT *
-FROM Playlist
-WHERE username = 'Mikkel';
-
-SELECT S.songId, songTitle, songDuration, songReleaseYear, mp3, ASR.albumId, albumTitle, albumDuration
-FROM PlaylistSongRelation
-         JOIN Song S ON S.songId = PlaylistSongRelation.songId
-         JOIN AlbumSongRelation ASR ON S.songId = ASR.songId
-         JOIN Album A ON A.albumId = ASR.albumId
-WHERE playlistId = 1;
-
-SELECT Artist.artistId, artistName FROM Artist JOIN ArtistSongRelation ASR ON Artist.artistId = ASR.artistId WHERE songId = 2;
-
+SELECT * FROM Album;

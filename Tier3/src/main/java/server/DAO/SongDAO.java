@@ -138,7 +138,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
 
     try (Connection connection = getConnection())
     {
-      addNewSongToDatabase(newSong, connection);
+      int newSongId = addNewSongToDatabase(newSong, connection);
 
       newSongAlbum(newSong, connection);
 
@@ -214,8 +214,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
 
   private void newSongAlbum(Song newSong, Connection connection) throws SQLException {
     if (newSong.getAlbumProperty().getId() == 0) {
-      PreparedStatement preparedStatementAlbum = connection.prepareStatement("INSERT INTO Album(albumTitle) VALUES " +
-              "(?);", PreparedStatement.RETURN_GENERATED_KEYS);
+      PreparedStatement preparedStatementAlbum = connection.prepareStatement("INSERT INTO Album(albumTitle) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS);
       preparedStatementAlbum.setString(1, newSong.getAlbumProperty().getTitle());
       preparedStatementAlbum.execute();
 
@@ -225,8 +224,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
       }
     }
 
-    PreparedStatement preparedStatementAlbumSongConnection = connection.prepareStatement("INSERT INTO AlbumSongRelation(albumId, songId) VALUES " +
-            "(?, ?);");
+    PreparedStatement preparedStatementAlbumSongConnection = connection.prepareStatement("UPDATE Song SET albumId = (?) WHERE songId = (?);");
     preparedStatementAlbumSongConnection.setInt(1, newSong.getAlbumProperty().getId());
     preparedStatementAlbumSongConnection.setInt(2, newSong.getId());
     preparedStatementAlbumSongConnection.execute();
@@ -252,8 +250,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
               resultSet.getInt("songduration"),
               resultSet.getInt("songreleaseyear"),
               new Album(resultSet.getInt("albumId"),
-                  resultSet.getString("albumtitle"),
-                  resultSet.getInt("albumduration")),resultSet.getString("mp3"));
+                  resultSet.getString("albumtitle")),resultSet.getString("mp3"));
           listOfSongs.add(song);
           songId = song.getId();
         }
@@ -263,8 +260,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
         listOfSongs.get(listOfSongs.size() - 1).addArtist(artist);
 
         Album album = new Album(resultSet.getInt("albumId"),
-            resultSet.getString("albumtitle"),
-            resultSet.getInt("albumduration"));
+            resultSet.getString("albumtitle"));
         listOfSongs.get(listOfSongs.size() - 1).setAlbums(album);
       }
       return listOfSongs;

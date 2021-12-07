@@ -21,28 +21,18 @@ public class MP3Controller
 
 
 
-  @PostMapping("/songs")
-  public void postAllSongs(@RequestBody ArrayList<Song> songs)
-  {
-    ISongDAO songDAO = new SongDAO();
-    System.out.println(songs.get(0).getAlbumProperty());
-    songDAO.postAllSongs(songs);
 
-    //ArrayList<Song> songList = gson.fromJson(jsonSongs, new TypeToken<ArrayList<Song>>(){}.getType());
-
-  }
-
-  @GetMapping("/mp3/{songPath}")
-  public byte[] getSongData(@PathVariable String songPath)
+  @GetMapping("/mp3")
+  public ResponseEntity<byte[]> getSongData(@RequestParam String songPath)
   {
     byte[] mp3 = mp3DAO.getMp3(songPath);
-    
 
-    return mp3;
+
+    return ResponseEntity.ok(mp3);
   }
 
   @PostMapping("/mp3")
-  public ResponseEntity uploadMp3(@RequestBody Mp3 song){
+  public ResponseEntity<String> uploadMp3(@RequestBody Mp3 song){
     System.out.println("Trying to upload: " + song.getPath());
     try
     {
