@@ -1,33 +1,15 @@
 package server.DAO;
 
 import shared.Mp3;
-import shared.Song;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 public class MP3DAO implements IMP3DAO
 {
   String pathDirectory = "Tier3/audio/";
 
-  @Override public ArrayList<Song> getAllMP3()
-  {
-    ArrayList<Song> songsToReturn = new ArrayList<>();
-    File folder = new File(pathDirectory);
-    File[] listOfFiles = folder.listFiles();
-
-    for (File file : listOfFiles) {
-      String path = file.getPath();
-
-      System.out.println(path);
-
-
-    }
-    return songsToReturn;
-  }
 
   @Override public void uploadMp3(Mp3 mp3)
   {

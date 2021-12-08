@@ -21,7 +21,7 @@ public class UserController {
     public ResponseEntity postUser(@RequestBody User user) {
         try {
             userDAO.registerUser(user);
-            URI uriToFindUser = new URI("http://localhost:8080/user/" + user.getUsername() + "&" + user.getPassword());
+            URI uriToFindUser = new URI("http://localhost:8080/user?username=" + user.getUsername() + "&password=" + user.getPassword());
             return ResponseEntity.created(uriToFindUser).build();
 
         } catch (IllegalArgumentException e) {

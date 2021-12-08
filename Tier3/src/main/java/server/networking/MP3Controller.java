@@ -10,6 +10,7 @@ import server.DAO.SongDAO;
 import shared.Mp3;
 import shared.Song;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 @RestController
@@ -32,12 +33,13 @@ public class MP3Controller
   }
 
   @PostMapping("/mp3")
-  public ResponseEntity<String> uploadMp3(@RequestBody Mp3 song){
+  public ResponseEntity<URI> uploadMp3(@RequestBody Mp3 song){
     System.out.println("Trying to upload: " + song.getPath());
     try
     {
       mp3DAO.uploadMp3(song);
-      return ResponseEntity.ok().build();
+      URI uriToThisMp3 = new URI("http://localhost:8080/mp3?songPath=" + song.getPath());
+      return ResponseEntity.created(uriToThisMp3).build();
     } catch (Exception e){
       return ResponseEntity.badRequest().build();
     }

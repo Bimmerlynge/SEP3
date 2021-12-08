@@ -17,13 +17,9 @@ import java.util.ArrayList;
     SpringApplication.run(StartServer.class, args);
     DriverManager.registerDriver(new org.postgresql.Driver());
     ISongDAO songDAO = new SongDAO();
-    IAlbumDAO albumDAO = new AlbumDAO();
 
     ArrayList<Song> songs = songDAO.getAllSongs();
 
-    IMP3DAO dao = new MP3DAO();
-    dao.getAllMP3();
-    System.out.println("Ud fra database");
     for (Song song : songs)
     {
       System.out.println(song.toString());

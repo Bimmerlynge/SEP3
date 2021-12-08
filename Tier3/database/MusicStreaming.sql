@@ -122,8 +122,6 @@ FROM _User;
 SELECT *
 FROM Playlist;
 
-SELECT *
-FROM PlaylistWithSongsAndUser;
 
 
 SELECT * FROM Album;
