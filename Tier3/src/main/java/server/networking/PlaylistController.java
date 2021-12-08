@@ -32,8 +32,11 @@ public class PlaylistController {
 
     }
 
-    /*
-    Denne metode returnere en liste af playlister hvis man søger på username, men kun 1 playlist hvis man søger på Id
+    /**
+     * Kun 1 parameter udfyldt pr request.
+     * @param username Søge på alle alle playlisteer for en bestemt user
+     * @param playlistId Søge på playlist med Id der matcher
+     * @return Arraylist<Playlist> hvis man søger på username eller ebkel playlist hvis man søger på Id
      */
     @GetMapping("/playlist")
     public ResponseEntity getPlaylistsFormUserOrId(@RequestParam(required = false) String username, @RequestParam(required = false) Integer playlistId) {
@@ -46,13 +49,18 @@ public class PlaylistController {
                 ArrayList<Playlist> playlists = playlistDAO.getAllPlaylistForUser(user);
                 String playlistsAsJons = new Gson().toJson(playlists);
                 return ResponseEntity.ok(playlistsAsJons);
-            } else if (playlistId != null) {
+                }
+            else if (playlistId != null) {
                 Playlist playlist = playlistDAO.getPlaylistFromId(playlistId);
                 String playlistAsJson = new Gson().toJson(playlist);
                 return ResponseEntity.ok(playlistAsJson);
             }
             return ResponseEntity.badRequest().build();
-        } catch (Exception | InternalError e) {
+        }
+        catch (NoSuchFieldException e){
+            return ResponseEntity.notFound().build();
+        }
+        catch (Exception | InternalError e) {
             return ResponseEntity.internalServerError().build();
         }
     }

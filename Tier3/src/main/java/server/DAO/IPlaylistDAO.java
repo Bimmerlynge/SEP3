@@ -11,7 +11,7 @@ public interface IPlaylistDAO
   ArrayList<Playlist> getAllPlaylistForUser(User user);
   int createNewPlaylist(Playlist playlist) throws Exception;
   void removePlaylistFromId(int playlistId) throws NoSuchFieldException;
-  Playlist getPlaylistFromId(int playlistId);
+  Playlist getPlaylistFromId(int playlistId) throws NoSuchFieldException;
 
 
 }
