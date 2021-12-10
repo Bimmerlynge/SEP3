@@ -20,7 +20,6 @@ import java.util.ArrayList;
     IAlbumDAO albumDAO = new AlbumDAO();
 
     ArrayList<Song> songs = songDAO.getAllSongs();
-
     IMP3DAO dao = new MP3DAO();
     dao.getAllMP3();
     System.out.println("Ud fra database");
