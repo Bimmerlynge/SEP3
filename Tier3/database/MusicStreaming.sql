@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS Song
     songTitle       VARCHAR  NOT NULL,
     songDuration    SMALLINT NOT NULL,
     songReleaseYear SMALLINT,
-    mp3             VARCHAR,
+    songPath            VARCHAR,
     FOREIGN KEY (albumId) REFERENCES Album(albumId)
     );
 
