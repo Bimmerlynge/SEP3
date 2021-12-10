@@ -163,7 +163,7 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
                                 new Album(songListResultSet.getInt("albumId"),
                                         songListResultSet.getString("albumTitle")
                                 ),
-                                songListResultSet.getString("mp3"));
+                                songListResultSet.getString("songPath"));
     }
 
     private ResultSet getResultSetWithAllSongsFromPlaylist(Connection connection, Playlist newPlaylist) throws SQLException {

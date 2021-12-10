@@ -1,14 +1,11 @@
 package server.networking;
-
 import com.google.gson.Gson;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.DAO.IUserDAO;
 import server.DAO.UserDAO;
 import shared.User;
-
 import java.net.URI;
-import java.net.URISyntaxException;
 
 @RestController
 

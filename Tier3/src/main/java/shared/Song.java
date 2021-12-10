@@ -42,7 +42,7 @@ public class Song implements Serializable
         artists = new ArrayList<>();
     }
 
-    public String getMp3()
+    public String getSongPath()
     {
         return mp3;
     }

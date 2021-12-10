@@ -31,6 +31,7 @@ public class SongController {
             return ResponseEntity.ok(songsAsJson);
 
         } catch (Exception | InternalError e){
+            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
 
@@ -44,6 +45,7 @@ public class SongController {
 
             return ResponseEntity.created(uriToFindNewSong).build();
         } catch (Exception | InternalError e){
+            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }

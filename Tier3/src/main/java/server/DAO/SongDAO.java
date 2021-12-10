@@ -21,7 +21,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
       if (resultSet.next()){
         song = new Song(resultSet.getInt("songId"), resultSet.getString("songTitle"),
             resultSet.getInt("songDuration"), resultSet.getInt("songReleaseYear"),
-            null, resultSet.getString("mp3"));
+            null, resultSet.getString("songPath"));
       }
       return song;
     }
@@ -70,12 +70,12 @@ public class SongDAO extends BaseDAO implements ISongDAO
 
   private int addNewSongToDatabase(Song newSong, Connection connection) throws SQLException {
     PreparedStatement preparedStatement = connection
-            .prepareStatement("INSERT INTO Song(songTitle, songDuration, songReleaseYear, mp3) VALUES" +
+            .prepareStatement("INSERT INTO Song(songTitle, songDuration, songReleaseYear, songPath) VALUES" +
                     "    (?,?,?,?);", PreparedStatement.RETURN_GENERATED_KEYS);
     preparedStatement.setString(1, newSong.getTitle());
     preparedStatement.setInt(2, newSong.getDuration());
     preparedStatement.setInt(3, newSong.getReleaseYear());
-    preparedStatement.setString(4, newSong.getMp3());
+    preparedStatement.setString(4, newSong.getSongPath());
     preparedStatement.execute();
     ResultSet resultSetWithKeys = preparedStatement.getGeneratedKeys();
     if (resultSetWithKeys.next()){
@@ -128,7 +128,8 @@ public class SongDAO extends BaseDAO implements ISongDAO
     preparedStatementAlbumSongConnection.execute();
   }
 
-  @Override public ArrayList<Song> getAllSongs()
+  @Override
+  public ArrayList<Song> getAllSongs()
   {
     try (Connection connection = getConnection())
     {
@@ -148,7 +149,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
               resultSet.getInt("songduration"),
               resultSet.getInt("songreleaseyear"),
               new Album(resultSet.getInt("albumId"),
-                  resultSet.getString("albumtitle")),resultSet.getString("mp3"));
+                  resultSet.getString("albumtitle")),resultSet.getString("songPath"));
           listOfSongs.add(song);
           songId = song.getId();
         }
