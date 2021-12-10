@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS Song
     songTitle       VARCHAR  NOT NULL,
     songDuration    SMALLINT NOT NULL,
     songReleaseYear SMALLINT,
-    songPath            VARCHAR,
+    songPath        VARCHAR,
     FOREIGN KEY (albumId) REFERENCES Album(albumId)
     );
 
@@ -69,13 +69,25 @@ CREATE TABLE IF NOT EXISTS PlaylistSongRelation
     FOREIGN KEY (songId) REFERENCES Song (songId) ON DELETE CASCADE
     );
 
-CREATE VIEW SongWithArtist AS
-SELECT S.*, A.*
-FROM Song AS S
-         JOIN ArtistSongRelation ASR ON S.songId = ASR.songId
-         JOIN Artist A ON A.artistId = ASR.artistId
-ORDER BY songId ASC;
 
+CREATE OR REPLACE FUNCTION updateSongPath()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+AS
+$$
+BEGIN
+UPDATE Song
+SET songPath = CONCAT(songId::VARCHAR, '_', songTitle, '.mp3')
+WHERE songId = NEW.songId;
+RETURN NEW;
+END;
+$$;
+
+CREATE TRIGGER updateSongPath
+    AFTER INSERT
+    ON Song
+    FOR EACH ROW
+    EXECUTE PROCEDURE updateSongPath();
 
 CREATE VIEW AllSongs AS
 SELECT Ar.*, S.*, A2.albumTitle
@@ -86,32 +98,25 @@ FROM Song AS S
 ORDER BY songId ASC
 ;
 
-
-
-CREATE OR REPLACE FUNCTION updateSongMp3()
-    RETURNS TRIGGER
-    LANGUAGE plpgsql
-AS
-$$
-BEGIN
-UPDATE Song
-SET mp3 = CONCAT(songId::VARCHAR, '_', songTitle, '.mp3')
-WHERE songId = NEW.songId;
-RETURN NEW;
-END;
-$$;
-
-CREATE TRIGGER updateSongMp3
-    AFTER INSERT
-    ON Song
-    FOR EACH ROW
-    EXECUTE PROCEDURE updateSongMp3();
-
+CREATE VIEW SongWithArtist AS
+SELECT S.*, A.*
+FROM Song AS S
+         JOIN ArtistSongRelation ASR ON S.songId = ASR.songId
+         JOIN Artist A ON A.artistId = ASR.artistId
+ORDER BY songId ASC;
 
 
 INSERT INTO _User(username, password, role)
 VALUES ('Admin', 'Admin', 'Admin');
 
+
+SELECT * FROM Artist JOIN Song S ON Artist.artistId = S.albumId WHERE songId = ?;
+
+SELECT S.songId, songTitle, songDuration, songReleaseYear, songPath, S.albumId , albumTitle
+FROM PlaylistSongRelation
+         JOIN Song S ON S.songId = PlaylistSongRelation.songId
+         JOIN Album A ON A.albumId = S.albumId
+WHERE playlistId = ?;
 
 SELECT *
 FROM AllSongs;
@@ -123,5 +128,6 @@ SELECT *
 FROM Playlist;
 
 
+SELECT * FROM AllSongs
 
 SELECT * FROM Album;
