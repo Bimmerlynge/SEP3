@@ -18,22 +18,22 @@ public class UserController {
 
 
     @PostMapping("/user")
-    public ResponseEntity postUser(@RequestBody User user) {
+    public ResponseEntity<?> postUser(@RequestBody User user) {
         try {
             userDAO.registerUser(user);
             URI uriToFindUser = new URI("http://localhost:8080/user?username=" + user.getUsername() + "&password=" + user.getPassword());
             return ResponseEntity.created(uriToFindUser).build();
-
-        } catch (IllegalArgumentException e) {
+        }
+        catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
-        } catch (Exception | InternalError e){
+        }
+        catch (Exception | InternalError e){
             return ResponseEntity.internalServerError().build();
         }
-
     }
 
     @GetMapping("/user")
-    public ResponseEntity validateUser(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<?> validateUser(@RequestParam String username, @RequestParam String password) {
         try {
             User user = userDAO.validateUser(new User(username, password, null));
             String userAsJson = new Gson().toJson(user);

@@ -1,6 +1,4 @@
 package server.networking;
-
-import com.google.gson.Gson;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.DAO.IMP3DAO;
@@ -9,38 +7,47 @@ import server.DAO.MP3DAO;
 import server.DAO.SongDAO;
 import shared.Mp3;
 import shared.Song;
-
 import java.net.URI;
-import java.util.ArrayList;
 
 @RestController
 public class MP3Controller
 {
 
   private IMP3DAO mp3DAO = new MP3DAO();
+  private ISongDAO songDAO = new SongDAO();
 
 
 
 
 
   @GetMapping("/mp3")
-  public ResponseEntity<byte[]> getSongData(@RequestParam String songPath)
+  public ResponseEntity<?> getSongData(@RequestParam(required = false) Integer songId,
+                                            @RequestParam(required = false) String pathToMp3)
   {
-    byte[] mp3 = mp3DAO.getMp3(songPath);
+    try
+    {
+      if (songId != null){
+        Song song = songDAO.getSongById(songId);
+        pathToMp3 = song.getMp3();
+      }
+      byte[] mp3 = mp3DAO.getMp3(pathToMp3);
+      return ResponseEntity.ok(mp3);
+    }
+    catch (Exception e) {
+      return ResponseEntity.internalServerError().build();
+    }
 
-
-    return ResponseEntity.ok(mp3);
   }
 
   @PostMapping("/mp3")
-  public ResponseEntity<URI> uploadMp3(@RequestBody Mp3 song){
-    System.out.println("Trying to upload: " + song.getPath());
+  public ResponseEntity<?> uploadMp3(@RequestBody Mp3 song){
     try
     {
       mp3DAO.uploadMp3(song);
-      URI uriToThisMp3 = new URI("http://localhost:8080/mp3?songPath=" + song.getPath());
+      URI uriToThisMp3 = new URI("http://localhost:8080/mp3?pathToMp3=" + song.getPath());
       return ResponseEntity.created(uriToThisMp3).build();
-    } catch (Exception e){
+    }
+    catch (Exception e){
       return ResponseEntity.badRequest().build();
     }
 

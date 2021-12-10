@@ -20,7 +20,7 @@ public class PlaylistController {
 
 
     @PostMapping("/playlist")
-    public ResponseEntity createNewPlaylistAsync(@RequestBody Playlist playlist) {
+    public ResponseEntity<?> createNewPlaylistAsync(@RequestBody Playlist playlist) {
 
         try {
             int playlistId = playlistDAO.createNewPlaylist(playlist);
@@ -39,7 +39,7 @@ public class PlaylistController {
      * @return Arraylist<Playlist> hvis man søger på username eller ebkel playlist hvis man søger på Id
      */
     @GetMapping("/playlist")
-    public ResponseEntity getPlaylistsFormUserOrId(@RequestParam(required = false) String username, @RequestParam(required = false) Integer playlistId) {
+    public ResponseEntity<?> getPlaylistsFormUserOrId(@RequestParam(required = false) String username, @RequestParam(required = false) Integer playlistId) {
 
         if (username != null && playlistId != null) return ResponseEntity.badRequest().build();
 
@@ -67,7 +67,7 @@ public class PlaylistController {
 
 
     @DeleteMapping("/playlist/{playlistId}")
-    public ResponseEntity removePlaylistFromId(@PathVariable int playlistId) {
+    public ResponseEntity<?> removePlaylistFromId(@PathVariable int playlistId) {
         try {
             playlistDAO.removePlaylistFromId(playlistId);
             return ResponseEntity.ok().build();

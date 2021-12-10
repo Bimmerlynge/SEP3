@@ -64,10 +64,6 @@ public class Song implements Serializable
         return id == song.id;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 
     public Album getAlbumProperty()
     {

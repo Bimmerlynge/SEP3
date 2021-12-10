@@ -11,7 +11,7 @@ public class PlaylistManageController {
     private IPlaylistManageDAO playlistManageDAO = new PlaylistManageDAO();
 
     @PostMapping("/playlistManage/{playlistId}/")
-    public ResponseEntity addSongToPlaylist(@PathVariable int playlistId, @RequestBody Song song) {
+    public ResponseEntity<?> addSongToPlaylist(@PathVariable int playlistId, @RequestBody Song song) {
         try {
             playlistManageDAO.addSongToPlayList(playlistId, song);
             return ResponseEntity.ok().build();
@@ -22,7 +22,7 @@ public class PlaylistManageController {
     }
 
     @DeleteMapping("/playlistManage/{playlistId}/{songId}")
-    public ResponseEntity removeSongFromPlaylist(@PathVariable int playlistId, @PathVariable int songId) {
+    public ResponseEntity<?> removeSongFromPlaylist(@PathVariable int playlistId, @PathVariable int songId) {
         try {
             playlistManageDAO.removeSongFromPlaylist(playlistId, songId);
             return ResponseEntity.ok().build();

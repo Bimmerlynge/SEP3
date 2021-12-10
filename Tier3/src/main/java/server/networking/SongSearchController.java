@@ -19,7 +19,7 @@ public class SongSearchController {
 
 
     @GetMapping("/songSearch")
-    public ResponseEntity getSongsByFilter(@RequestParam(required = false) String songTitle,
+    public ResponseEntity<?> getSongsByFilter(@RequestParam(required = false) String songTitle,
                                            @RequestParam(required = false) String artistName,
                                            @RequestParam(required = false) String albumTitle) {
         if (checkIfMoreThanOneArgument(songTitle, artistName, albumTitle)) {

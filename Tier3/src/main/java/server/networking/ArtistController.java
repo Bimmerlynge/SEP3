@@ -19,7 +19,7 @@ public class ArtistController {
     private IArtistDAO artistDAO = new ArtistDAO();
 
     @GetMapping("/artist")
-    public ResponseEntity searchForArtists(@RequestParam(required = false) String name) {
+    public ResponseEntity<?> searchForArtists(@RequestParam(required = false) String name) {
 
         try {
             ArrayList<Artist> artistArrayList = null;

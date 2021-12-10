@@ -18,7 +18,7 @@ public class SongController {
 
 
     @GetMapping("/song")
-    public ResponseEntity getAllSongs(@RequestParam(required = false) Integer songId) {
+    public ResponseEntity<?> getAllSongs(@RequestParam(required = false) Integer songId) {
         try {
 
             if (songId != null){
@@ -37,7 +37,7 @@ public class SongController {
     }
 
     @PostMapping("/song")
-    public ResponseEntity postSong(@RequestBody Song newSong) {
+    public ResponseEntity<?> postSong(@RequestBody Song newSong) {
         try {
             int newSongId = songDAO.addNewSong(newSong);
             URI uriToFindNewSong = new URI("http://localhost:8080/song?songId=" + newSongId);
@@ -49,7 +49,7 @@ public class SongController {
     }
 
     @DeleteMapping("/song/{songId}")
-    public ResponseEntity deleteSongFromId(@PathVariable int songId) {
+    public ResponseEntity<?> deleteSongFromId(@PathVariable int songId) {
         try{
             songDAO.removeSongFromId(songId);
             return ResponseEntity.ok().build();
