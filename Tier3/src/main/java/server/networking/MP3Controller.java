@@ -39,12 +39,14 @@ public class MP3Controller
 
   }
 
-  @PostMapping("/mp3")
-  public ResponseEntity<?> uploadMp3(@RequestBody Mp3 song){
+  @PostMapping("/mp3/{songId}")
+  public ResponseEntity<?> uploadMp3(@PathVariable int songId, @RequestBody Mp3 song){
     try
     {
+      Song songWithPath = songDAO.getSongById(songId);
+      song.setPath(songWithPath.getMp3());
       mp3DAO.uploadMp3(song);
-      URI uriToThisMp3 = new URI("http://localhost:8080/mp3?pathToMp3=" + song.getPath());
+      URI uriToThisMp3 = new URI("http://localhost:8080/mp3?pathToMp3=" + songWithPath.getMp3());
       return ResponseEntity.created(uriToThisMp3).build();
     }
     catch (Exception e){
