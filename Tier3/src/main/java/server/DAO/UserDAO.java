@@ -26,7 +26,7 @@ public class UserDAO extends BaseDAO implements IUserDAO
       int rowsEffected = preparedStatement.executeUpdate();
 
       if (rowsEffected == 0){
-        throw new IllegalArgumentException("No ");
+        throw new IllegalArgumentException("No rows effected by call");
       }
 
     }

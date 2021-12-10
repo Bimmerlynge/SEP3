@@ -78,7 +78,7 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
 
         @Override
 
-    public Playlist getPlaylistFromId(int playlistId) {
+    public Playlist getPlaylistFromId(int playlistId) throws NoSuchFieldException {
 
             try (Connection connection = getConnection()) {
 
@@ -97,6 +97,8 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
                     ResultSet songListResultSet = getResultSetWithAllSongsFromPlaylist(connection, newPlaylist);
 
                     addingSongsToPlaylist(connection, newPlaylist, songListResultSet);
+                } else {
+                    throw new NoSuchFieldException();
                 }
 
                 return newPlaylist;
@@ -161,7 +163,7 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
                                 new Album(songListResultSet.getInt("albumId"),
                                         songListResultSet.getString("albumTitle")
                                 ),
-                                songListResultSet.getString("mp3"));
+                                songListResultSet.getString("songPath"));
     }
 
     private ResultSet getResultSetWithAllSongsFromPlaylist(Connection connection, Playlist newPlaylist) throws SQLException {

@@ -42,7 +42,7 @@ public class Song implements Serializable
         artists = new ArrayList<>();
     }
 
-    public String getMp3()
+    public String getSongPath()
     {
         return mp3;
     }
@@ -64,10 +64,6 @@ public class Song implements Serializable
         return id == song.id;
     }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 
     public Album getAlbumProperty()
     {

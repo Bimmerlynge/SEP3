@@ -19,7 +19,7 @@ public class AlbumController {
     private IAlbumDAO albumDAO = new AlbumDAO();
 
     @GetMapping("/album")
-    public ResponseEntity searchForAlbums(@RequestParam(required = false) String title) {
+    public ResponseEntity<?> searchForAlbums(@RequestParam(required = false) String title) {
         try {
             ArrayList<Album> albumArrayList = null;
             if (title != null) {

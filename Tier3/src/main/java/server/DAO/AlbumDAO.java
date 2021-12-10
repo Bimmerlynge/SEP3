@@ -21,14 +21,12 @@ public class AlbumDAO extends BaseDAO implements IAlbumDAO
       statement.setString(1, "%"+title+"%");
 
       return getAlbumsAndReturnFromResultSet(statement);
-
     }
     catch (SQLException throwables)
     {
       throwables.printStackTrace();
       throw new InternalError(throwables.getMessage());
     }
-
   }
 
   @Override
@@ -54,10 +52,8 @@ public class AlbumDAO extends BaseDAO implements IAlbumDAO
     ArrayList<Album> albums = new ArrayList<>();
     while (resultSet.next()) {
       Album newAlbum = new Album(resultSet.getInt("albumId"), resultSet.getString("albumTitle"));
-
       albums.add(newAlbum);
     }
-
     return albums;
   }
 }

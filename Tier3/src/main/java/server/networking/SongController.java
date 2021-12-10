@@ -9,6 +9,7 @@ import server.DAO.MP3DAO;
 import server.DAO.SongDAO;
 import shared.Song;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 @RestController
@@ -17,30 +18,40 @@ public class SongController {
 
 
     @GetMapping("/song")
-    public ResponseEntity getAllSongs() {
+    public ResponseEntity<?> getAllSongs(@RequestParam(required = false) Integer songId) {
         try {
+
+            if (songId != null){
+                Song songById = songDAO.getSongById(songId);
+                String songAsJson = new Gson().toJson(songById);
+                return ResponseEntity.ok(songAsJson);
+            }
             ArrayList<Song> songs = songDAO.getAllSongs();
             String songsAsJson = new Gson().toJson(songs);
             return ResponseEntity.ok(songsAsJson);
+
         } catch (Exception | InternalError e){
+            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
 
     }
 
     @PostMapping("/song")
-    public ResponseEntity postSong(@RequestBody Song newSong) {
+    public ResponseEntity<?> postSong(@RequestBody Song newSong) {
         try {
-            Song song = songDAO.addNewSong(newSong);
-            String songAsJson = new Gson().toJson(song);
-            return ResponseEntity.ok(songAsJson);
+            int newSongId = songDAO.addNewSong(newSong);
+            URI uriToFindNewSong = new URI("http://localhost:8080/song?songId=" + newSongId);
+
+            return ResponseEntity.created(uriToFindNewSong).build();
         } catch (Exception | InternalError e){
+            e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
     }
 
     @DeleteMapping("/song/{songId}")
-    public ResponseEntity deleteSongFromId(@PathVariable int songId) {
+    public ResponseEntity<?> deleteSongFromId(@PathVariable int songId) {
         try{
             songDAO.removeSongFromId(songId);
             return ResponseEntity.ok().build();
