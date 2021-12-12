@@ -21,16 +21,13 @@ public class MP3Controller
 
 
   @GetMapping("/mp3")
-  public ResponseEntity<?> getSongData(@RequestParam(required = false) Integer songId,
-                                       @RequestParam(required = false) String pathToMp3)
+  public ResponseEntity<?> getSongData(@RequestParam Integer songId)
   {
     try
     {
-      if (songId != null){
+
         Song song = songDAO.getSongById(songId);
-        pathToMp3 = song.getSongPath();
-      }
-      byte[] mp3 = mp3DAO.getMp3(pathToMp3);
+      byte[] mp3 = mp3DAO.getMp3(song.getSongPath());
       return ResponseEntity.ok(mp3);
     }
     catch (Exception e) {
@@ -46,10 +43,11 @@ public class MP3Controller
       Song songWithPath = songDAO.getSongById(songId);
       song.setPath(songWithPath.getSongPath());
       mp3DAO.uploadMp3(song);
-      URI uriToThisMp3 = new URI("http://localhost:8080/mp3?pathToMp3=" + songWithPath.getSongPath());
+      URI uriToThisMp3 = new URI("http://localhost:8080/mp3?songId=" + songWithPath.getId());
       return ResponseEntity.created(uriToThisMp3).build();
     }
     catch (Exception e){
+      e.printStackTrace();
       return ResponseEntity.badRequest().build();
     }
 
