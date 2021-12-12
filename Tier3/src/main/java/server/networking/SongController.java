@@ -1,21 +1,16 @@
 package server.networking;
-
 import com.google.gson.Gson;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.DAO.IMP3DAO;
 import server.DAO.ISongDAO;
-import server.DAO.MP3DAO;
 import server.DAO.SongDAO;
 import shared.Song;
-
 import java.net.URI;
 import java.util.ArrayList;
 
 @RestController
 public class SongController {
     ISongDAO songDAO = new SongDAO();
-
 
     @GetMapping("/song")
     public ResponseEntity<?> getAllSongs(@RequestParam(required = false) Integer songId) {
@@ -38,7 +33,7 @@ public class SongController {
     }
 
     @PostMapping("/song")
-    public ResponseEntity<?> postSong(@RequestBody Song newSong) {
+    public ResponseEntity<URI> postSong(@RequestBody Song newSong) {
         try {
             int newSongId = songDAO.addNewSong(newSong);
             URI uriToFindNewSong = new URI("http://localhost:8080/song?songId=" + newSongId);
