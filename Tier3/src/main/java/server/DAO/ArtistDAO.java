@@ -1,6 +1,4 @@
 package server.DAO;
-
-import shared.Album;
 import shared.Artist;
 
 import java.sql.Connection;
