@@ -9,15 +9,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SongSearchDAOTest {
 
-    ISongSearchDAO songSearchDAO = new SongSearchDAO();
-    ISongDAO songDAO = new SongDAO();
+    private ISongSearchDAO songSearchDAO = new SongSearchDAO();
+    private ISongDAO songDAO = new SongDAO();
+    private String notFoundInput = "NotASongTitleOrArtistNameOrAlbumTitleasdfasaj21nf";
 
 
     @Test
     void TestIfCorrectSongIsFoundByTitle() {
 
         ArrayList<Song> listWithEverySongInDatabase = songDAO.getAllSongs();
-
         String songTest1 = listWithEverySongInDatabase.get(1).getTitle();
 
         ArrayList<Song> songWithTitle = songSearchDAO.getSongsByTitle(songTest1);
@@ -59,9 +59,7 @@ class SongSearchDAOTest {
 
     @Test
     void SongTitleIsEmpty() {
-
         assertThrows(IllegalArgumentException.class,()-> songSearchDAO.getSongsByTitle(""));
-
     }
 
     @Test
@@ -74,7 +72,7 @@ class SongSearchDAOTest {
     @Test
     void SongTitleNotFound() {
 
-        assertEquals(0,songSearchDAO.getSongsByTitle("asdfasaj21nfNotASongTitle").size());
+        assertEquals(0,songSearchDAO.getSongsByTitle(notFoundInput).size());
 
 
     }
@@ -97,7 +95,7 @@ class SongSearchDAOTest {
     @Test
     void ArtistNameNotFound() {
 
-        assertEquals(0,songSearchDAO.getSongsByArtist("asdfasaj21nfNotAnArtistName").size());
+        assertEquals(0,songSearchDAO.getSongsByArtist(notFoundInput).size());
 
 
     }
@@ -121,9 +119,7 @@ class SongSearchDAOTest {
     @Test
     void AlbumTitleNotFound() {
 
-        assertEquals(0,songSearchDAO.getSongsByAlbum("asdfasaj21nfNotAnAlbumName").size());
-
-
+        assertEquals(0,songSearchDAO.getSongsByAlbum(notFoundInput).size());
     }
 
 

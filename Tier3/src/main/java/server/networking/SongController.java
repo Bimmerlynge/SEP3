@@ -12,8 +12,12 @@ import java.util.ArrayList;
 public class SongController {
     ISongDAO songDAO = new SongDAO();
 
+    /**
+     * @param songId Søge på songs med Id der matcher
+     * @return Arraylist<Song> hvis man søger uden para eller enkel song hvis man søger på Id
+     */
     @GetMapping("/song")
-    public ResponseEntity<?> getAllSongs(@RequestParam(required = false) Integer songId) {
+    public ResponseEntity<?> getSongs(@RequestParam(required = false) Integer songId) {
         try {
 
             if (songId != null){
@@ -29,7 +33,6 @@ public class SongController {
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
         }
-
     }
 
     @PostMapping("/song")
@@ -37,7 +40,6 @@ public class SongController {
         try {
             int newSongId = songDAO.addNewSong(newSong);
             URI uriToFindNewSong = new URI("http://localhost:8080/song?songId=" + newSongId);
-
             return ResponseEntity.created(uriToFindNewSong).build();
         } catch (Exception | InternalError e){
             e.printStackTrace();

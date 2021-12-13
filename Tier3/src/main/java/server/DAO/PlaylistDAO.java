@@ -77,12 +77,11 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
     }
 
         @Override
-
     public Playlist getPlaylistFromId(int playlistId) throws NoSuchFieldException {
 
             try (Connection connection = getConnection()) {
 
-                PreparedStatement infoStatement = connection.prepareStatement("SELECT * FROM PlaylistWithSongsAndUser WHERE playListId = ?;");
+                PreparedStatement infoStatement = connection.prepareStatement("SELECT * FROM playlist WHERE playListId = ?;");
                 infoStatement.setInt(1, playlistId);
                 ResultSet playlistResultSet = infoStatement.executeQuery();
                 Playlist newPlaylist = null;
@@ -167,7 +166,7 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
     }
 
     private ResultSet getResultSetWithAllSongsFromPlaylist(Connection connection, Playlist newPlaylist) throws SQLException {
-        PreparedStatement songStatement = connection.prepareStatement("SELECT S.songId, songTitle, songDuration, songReleaseYear, mp3, S.albumId , albumTitle\n" +
+        PreparedStatement songStatement = connection.prepareStatement("SELECT S.songId, songTitle, songDuration, songReleaseYear, songPath, S.albumId , albumTitle\n" +
                 "                FROM PlaylistSongRelation\n" +
                 "                         JOIN Song S ON S.songId = PlaylistSongRelation.songId\n" +
                 "                         JOIN Album A ON A.albumId = S.albumId\n" +
