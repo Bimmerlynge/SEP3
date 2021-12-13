@@ -19,7 +19,7 @@ public class AlbumController {
     private IAlbumDAO albumDAO = new AlbumDAO();
 
     @GetMapping("/album")
-    public ResponseEntity<?> searchForAlbums(@RequestParam(required = false) String title) {
+    public ResponseEntity<ArrayList<Album>> searchForAlbums(@RequestParam(required = false) String title) {
         try {
             ArrayList<Album> albumArrayList = null;
             if (title != null) {
@@ -27,8 +27,7 @@ public class AlbumController {
             } else {
                 albumArrayList = albumDAO.getAllAlbums();
             }
-            String albumListAsJson = new Gson().toJson(albumArrayList);
-            return ResponseEntity.ok(albumListAsJson);
+            return ResponseEntity.ok(albumArrayList);
         } catch (Exception | InternalError e){
             return ResponseEntity.internalServerError().build();
         }

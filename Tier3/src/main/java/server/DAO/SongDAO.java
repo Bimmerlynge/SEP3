@@ -111,19 +111,19 @@ public class SongDAO extends BaseDAO implements ISongDAO
   }
 
   private void newSongAlbum(Song newSong, Connection connection) throws SQLException {
-    if (newSong.getAlbumProperty().getId() == 0) {
+    if (newSong.getAlbum().getId() == 0) {
       PreparedStatement preparedStatementAlbum = connection.prepareStatement("INSERT INTO Album(albumTitle) VALUES (?)", PreparedStatement.RETURN_GENERATED_KEYS);
-      preparedStatementAlbum.setString(1, newSong.getAlbumProperty().getTitle());
+      preparedStatementAlbum.setString(1, newSong.getAlbum().getTitle());
       preparedStatementAlbum.execute();
 
       ResultSet resultSetWithKeys = preparedStatementAlbum.getGeneratedKeys();
       if (resultSetWithKeys.next()){
-        newSong.getAlbumProperty().setId(resultSetWithKeys.getInt("albumId"));
+        newSong.getAlbum().setId(resultSetWithKeys.getInt("albumId"));
       }
     }
 
     PreparedStatement preparedStatementAlbumSongConnection = connection.prepareStatement("UPDATE Song SET albumId = (?) WHERE songId = (?);");
-    preparedStatementAlbumSongConnection.setInt(1, newSong.getAlbumProperty().getId());
+    preparedStatementAlbumSongConnection.setInt(1, newSong.getAlbum().getId());
     preparedStatementAlbumSongConnection.setInt(2, newSong.getId());
     preparedStatementAlbumSongConnection.execute();
   }
@@ -160,7 +160,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
 
         Album album = new Album(resultSet.getInt("albumId"),
             resultSet.getString("albumtitle"));
-        listOfSongs.get(listOfSongs.size() - 1).setAlbums(album);
+        listOfSongs.get(listOfSongs.size() - 1).setAlbum(album);
       }
       return listOfSongs;
 

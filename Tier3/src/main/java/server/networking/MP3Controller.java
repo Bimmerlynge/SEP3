@@ -21,12 +21,11 @@ public class MP3Controller
 
 
   @GetMapping("/mp3")
-  public ResponseEntity<?> getSongData(@RequestParam Integer songId)
+  public ResponseEntity<byte[]> getSongData(@RequestParam Integer songId)
   {
     try
     {
-
-        Song song = songDAO.getSongById(songId);
+      Song song = songDAO.getSongById(songId);
       byte[] mp3 = mp3DAO.getMp3(song.getSongPath());
       return ResponseEntity.ok(mp3);
     }
@@ -37,7 +36,7 @@ public class MP3Controller
   }
 
   @PostMapping("/mp3/{songId}")
-  public ResponseEntity<?> uploadMp3(@PathVariable int songId, @RequestBody Mp3 song){
+  public ResponseEntity<URI> uploadMp3(@PathVariable int songId, @RequestBody Mp3 song){
     try
     {
       Song songWithPath = songDAO.getSongById(songId);

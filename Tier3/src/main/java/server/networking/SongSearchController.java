@@ -19,7 +19,7 @@ public class SongSearchController {
 
 
     @GetMapping("/songSearch")
-    public ResponseEntity<?> getSongsByFilter(@RequestParam(required = false) String songTitle,
+    public ResponseEntity<ArrayList<Song>> getSongsByFilter(@RequestParam(required = false) String songTitle,
                                            @RequestParam(required = false) String artistName,
                                            @RequestParam(required = false) String albumTitle) {
         if (checkIfMoreThanOneArgument(songTitle, artistName, albumTitle)) {
@@ -37,8 +37,7 @@ public class SongSearchController {
                 return ResponseEntity.badRequest().build();
             }
 
-            String songsAsJson = new Gson().toJson(songs);
-            return ResponseEntity.ok(songsAsJson);
+            return ResponseEntity.ok(songs);
         } catch (Exception | InternalError e){
             return ResponseEntity.internalServerError().build();
         }

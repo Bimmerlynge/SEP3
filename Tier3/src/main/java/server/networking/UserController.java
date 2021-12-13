@@ -15,7 +15,7 @@ public class UserController {
 
 
     @PostMapping("/user")
-    public ResponseEntity<?> postUser(@RequestBody User user) {
+    public ResponseEntity<URI> postUser(@RequestBody User user) {
         try {
             userDAO.registerUser(user);
             URI uriToFindUser = new URI("http://localhost:8080/user?username=" + user.getUsername() + "&password=" + user.getPassword());
@@ -30,11 +30,10 @@ public class UserController {
     }
 
     @GetMapping("/user")
-    public ResponseEntity<?> validateUser(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<User> validateUser(@RequestParam String username, @RequestParam String password) {
         try {
             User user = userDAO.validateUser(new User(username, password, null));
-            String userAsJson = new Gson().toJson(user);
-            return ResponseEntity.ok(userAsJson);
+            return ResponseEntity.ok(user);
         } catch (NullPointerException e) {
             return ResponseEntity.notFound().build();
         } catch (Exception | InternalError e){

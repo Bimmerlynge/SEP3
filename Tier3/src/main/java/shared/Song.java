@@ -16,7 +16,7 @@ public class Song implements Serializable
     private int releaseYear;
     private ArrayList<Artist> artists;
     private Album album;
-    private String mp3;
+    private String songPath;
 
     public ArrayList<Artist> getArtists()
     {
@@ -32,24 +32,24 @@ public class Song implements Serializable
         artists.add(artist);
     }
 
-    public Song(int id, String title, int duration, int releaseYear, Album album, String mp3) {
+    public Song(int id, String title, int duration, int releaseYear, Album album, String songPath) {
         this.id = id;
         this.title = title;
         this.duration = duration;
         this.releaseYear = releaseYear;
         this.album = album;
-        this.mp3 = mp3;
+        this.songPath = songPath;
         artists = new ArrayList<>();
     }
 
     public String getSongPath()
     {
-        return mp3;
+        return songPath;
     }
 
-    public void setMp3(String mp3)
+    public void setSongPath(String songPath)
     {
-        this.mp3 = mp3;
+        this.songPath = songPath;
     }
 
 
@@ -65,12 +65,12 @@ public class Song implements Serializable
     }
 
 
-    public Album getAlbumProperty()
+    public Album getAlbum()
     {
         return album;
     }
 
-    public void setAlbums(Album album)
+    public void setAlbum(Album album)
     {
         this.album = album;
     }

@@ -98,7 +98,7 @@ public class SongSearchDAO extends BaseDAO implements ISongSearchDAO {
 
 
               Album album = new Album(resultSet.getInt("albumId"), resultSet.getString("albumtitle"));
-              song.setAlbums(album);
+              song.setAlbum(album);
             }
 
           Artist artist = new Artist(resultSet.getInt("artistid"),

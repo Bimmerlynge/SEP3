@@ -47,13 +47,11 @@ public class PlaylistController {
             if (username != null) {
                 User user = userDao.getUser(username);
                 ArrayList<Playlist> playlists = playlistDAO.getAllPlaylistForUser(user);
-                String playlistsAsJons = new Gson().toJson(playlists);
-                return ResponseEntity.ok(playlistsAsJons);
+                return ResponseEntity.ok(playlists);
                 }
             else if (playlistId != null) {
                 Playlist playlist = playlistDAO.getPlaylistFromId(playlistId);
-                String playlistAsJson = new Gson().toJson(playlist);
-                return ResponseEntity.ok(playlistAsJson);
+                return ResponseEntity.ok(playlist);
             }
             return ResponseEntity.badRequest().build();
         }

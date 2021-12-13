@@ -19,16 +19,12 @@ public class SongController {
     @GetMapping("/song")
     public ResponseEntity<?> getSongs(@RequestParam(required = false) Integer songId) {
         try {
-
             if (songId != null){
                 Song songById = songDAO.getSongById(songId);
-                String songAsJson = new Gson().toJson(songById);
-                return ResponseEntity.ok(songAsJson);
+                return ResponseEntity.ok(songById);
             }
             ArrayList<Song> songs = songDAO.getAllSongs();
-            String songsAsJson = new Gson().toJson(songs);
-            return ResponseEntity.ok(songsAsJson);
-
+            return ResponseEntity.ok(songs);
         } catch (Exception | InternalError e){
             e.printStackTrace();
             return ResponseEntity.internalServerError().build();
