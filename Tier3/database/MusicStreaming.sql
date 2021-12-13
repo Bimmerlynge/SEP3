@@ -128,6 +128,6 @@ SELECT *
 FROM Playlist;
 
 
-SELECT * FROM AllSongs
+SELECT * FROM AllSongs;
 
 SELECT * FROM Album;
