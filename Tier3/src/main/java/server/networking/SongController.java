@@ -1,5 +1,4 @@
 package server.networking;
-import com.google.gson.Gson;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.DAO.ISongDAO;
@@ -8,6 +7,9 @@ import shared.Song;
 import java.net.URI;
 import java.util.ArrayList;
 
+/**
+ * Controller end point håndtere requests angående Sange. Her er filer ikke indkluderet
+ */
 @RestController
 public class SongController {
     ISongDAO songDAO = new SongDAO();

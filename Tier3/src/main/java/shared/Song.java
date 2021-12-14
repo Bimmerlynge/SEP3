@@ -5,8 +5,11 @@ import com.google.gson.GsonBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Objects;
 
+/**
+ * Denne klasse fungere song "songInfo" og indeholder information omkring sangen,
+ * men ikke selve lydfilen, kun en path til hvor denne fil kan findes.
+ */
 public class Song implements Serializable
 {
 

@@ -1,14 +1,17 @@
 package server.DAO;
 
-import shared.Album;
 import shared.Artist;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Denne klasse står for interaktionen med databasen hvad angår Artister.
+ * Der kan søges på artist på navn.
+ * Der kan søges efter alle artister
+ */
 public class ArtistDAO extends BaseDAO implements IArtistDAO {
 
     @Override
@@ -44,6 +47,11 @@ public class ArtistDAO extends BaseDAO implements IArtistDAO {
         }
     }
 
+    /**
+     * @param statement SQL statement, hvor parameterne er sat
+     * @return Liste af alle artister, som opfylder det givne statement.
+     * @throws SQLException
+     */
     private ArrayList<Artist> getArtistAndReturnFromResultSet(PreparedStatement statement) throws SQLException {
         ResultSet resultSet = statement.executeQuery();
 

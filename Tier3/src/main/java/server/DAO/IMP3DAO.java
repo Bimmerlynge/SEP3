@@ -1,9 +1,7 @@
 package server.DAO;
 
 import shared.Mp3;
-import shared.Song;
 
-import java.util.ArrayList;
 
 public interface IMP3DAO
 {

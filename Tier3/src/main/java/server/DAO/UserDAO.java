@@ -1,13 +1,17 @@
 package server.DAO;
 
-import org.postgresql.util.PSQLException;
 import shared.User;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Interaktion med databasen hvad angår Users.
+ *
+ * Her indgår det at registerer en bruger og validere om en bruger findes i systemet.
+ * Man kan også GetUser på username
+ */
 public class UserDAO extends BaseDAO implements IUserDAO
 {
 
@@ -28,7 +32,6 @@ public class UserDAO extends BaseDAO implements IUserDAO
       if (rowsEffected == 0){
         throw new IllegalArgumentException("No rows effected by call");
       }
-
     }
     catch (SQLException throwables)
     {

@@ -3,12 +3,18 @@ package server.DAO;
 import shared.Album;
 import shared.Artist;
 import shared.Song;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+/**
+ * Interaktion med databasen hvad angår at søge efet sangen.
+ * Sange der søges på indeholder informantion omkring sangen, her er lydfil til sang ikke inkluderet.
+ *
+ * Der kan søges på sange, her returneres en liste af alle sangen, som opfyldte søge kritererne
+ */
 
 public class SongSearchDAO extends BaseDAO implements ISongSearchDAO {
     @Override
@@ -84,6 +90,12 @@ public class SongSearchDAO extends BaseDAO implements ISongSearchDAO {
     }
 
 
+    /**
+     * Lave liste af sange og fylder den med alle sange der indgår i det givne resultSet
+     * @param resultSet Resultset som indeholder sange der opfylder kriteriet
+     * @return Arrayliste<Song> der opfylder søge kriteriet
+     * @throws SQLException
+     */
     private ArrayList<Song> getSongsFromResultSet(ResultSet resultSet) throws SQLException {
         ArrayList<Song> listOfSongs = new ArrayList<>();
         int songId = 0;
