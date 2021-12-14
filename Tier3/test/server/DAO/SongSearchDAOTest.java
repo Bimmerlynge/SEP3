@@ -26,7 +26,6 @@ class SongSearchDAOTest {
 
     }
 
-
     @Test
     void TestIfCorrectSongIsFoundByArtistName() {
 
@@ -74,9 +73,7 @@ class SongSearchDAOTest {
 
         assertEquals(0,songSearchDAO.getSongsByTitle(notFoundInput).size());
 
-
     }
-
 
     @Test
     void ArtistNameIsEmpty() {
