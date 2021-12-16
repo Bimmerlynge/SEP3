@@ -14,8 +14,12 @@ import java.util.ArrayList;
  */
 public class ArtistDAO extends BaseDAO implements IArtistDAO {
 
+
     @Override
     public ArrayList<Artist> searchForArtists(String name) {
+
+        if (name == null || name.length() == 0) throw new IllegalArgumentException();
+
 
         try (Connection connection = getConnection()){
             PreparedStatement statement = connection.prepareStatement(

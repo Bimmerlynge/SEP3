@@ -19,6 +19,8 @@ public class AlbumDAO extends BaseDAO implements IAlbumDAO
   @Override
   public ArrayList<Album> searchForAlbums(String title) {
 
+    if (title == null || title.length() == 0) throw new IllegalArgumentException();
+
     try (Connection connection = getConnection()){
       PreparedStatement statement = connection.prepareStatement(
               "SELECT * FROM Album WHERE albumTitle ILIKE ?"
