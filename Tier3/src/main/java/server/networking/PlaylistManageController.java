@@ -5,7 +5,9 @@ import org.springframework.web.bind.annotation.*;
 import server.DAO.IPlaylistManageDAO;
 import server.DAO.PlaylistManageDAO;
 import shared.Song;
-
+/**
+ * Controller end point håndtere requests hvad ændringer til playlister.
+ */
 @RestController
 public class PlaylistManageController {
     private IPlaylistManageDAO playlistManageDAO = new PlaylistManageDAO();

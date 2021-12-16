@@ -3,10 +3,17 @@ package server.DAO;
 import shared.Album;
 import shared.Artist;
 import shared.Song;
-
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * Interaktion med databasen hvad angår informantion omkring en sang, her er lydfil til sang ikke inkluderet.
+ *
+ * Der kan tilføjes og fjernes sange
+ *
+ * Der kan søges på en bestemt sang på dens Id
+ * Der kan søges på at få alle sange i databasen
+ */
 public class SongDAO extends BaseDAO implements ISongDAO
 {
 
@@ -99,6 +106,12 @@ public class SongDAO extends BaseDAO implements ISongDAO
     return newSong.getId();
   }
 
+  /**
+   * Tilføjer relation mellem sange og deres artister
+   * @param newSong Den sang relationerne skal laves på.
+   * @param connection Forbindelse til databasen
+   * @throws SQLException
+   */
   private void songArtistRelation(Song newSong, Connection connection) throws SQLException {
     for (Artist artist: newSong.getArtists()) {
 
@@ -112,6 +125,13 @@ public class SongDAO extends BaseDAO implements ISongDAO
     }
   }
 
+  /**
+   * Hvis en artist ikke er i databasen skal de oprettes i systemet.
+   * Dette sker under oprettelse af sangen
+   * @param connection forbindelse til databasen
+   * @param artist Den artist som skal oprettes i databasen
+   * @throws SQLException
+   */
   private void putNewArtistInDatabase(Connection connection, Artist artist) throws SQLException {
     if (artist.getId() == 0){
       PreparedStatement preparedStatementArtist =  connection.prepareStatement("INSERT INTO Artist(artistName) VALUES (?);", PreparedStatement.RETURN_GENERATED_KEYS);
@@ -124,6 +144,14 @@ public class SongDAO extends BaseDAO implements ISongDAO
       }
     }
   }
+
+  /**
+   * Hvis et album ikke er i databasne skal det oprettes i systemet.
+   * Dette sker under oprettelse af sangen.
+   * @param newSong Sangen albummet er en del af
+   * @param connection forbindelsen til databsen
+   * @throws SQLException
+   */
 
   private void newSongAlbum(Song newSong, Connection connection) throws SQLException {
     if (newSong.getAlbum().getId() == 0) {

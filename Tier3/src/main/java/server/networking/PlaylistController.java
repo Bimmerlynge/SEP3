@@ -13,6 +13,9 @@ import shared.User;
 import java.net.URI;
 import java.util.ArrayList;
 
+/**
+ * Controller end point håndtere requests hvad angående playlister
+ */
 @RestController
 public class PlaylistController {
     IPlaylistDAO playlistDAO = new PlaylistDAO();

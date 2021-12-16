@@ -9,16 +9,15 @@ import shared.Mp3;
 import shared.Song;
 import java.net.URI;
 
+/**
+ * Controller end point, som håndtere requests hvad angår Mp3 filer.
+ * Det er her de store datamængder bliver sendt
+ */
 @RestController
 public class MP3Controller
 {
-
   private IMP3DAO mp3DAO = new MP3DAO();
   private ISongDAO songDAO = new SongDAO();
-
-
-
-
 
   @GetMapping("/mp3")
   public ResponseEntity<byte[]> getSongData(@RequestParam Integer songId)
@@ -48,6 +47,7 @@ public class MP3Controller
     catch (Exception e){
       e.printStackTrace();
       return ResponseEntity.badRequest().build();
+
     }
 
   }

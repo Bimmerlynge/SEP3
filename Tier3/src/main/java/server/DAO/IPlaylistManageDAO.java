@@ -1,6 +1,5 @@
 package server.DAO;
 
-import shared.Playlist;
 import shared.Song;
 
 public interface IPlaylistManageDAO

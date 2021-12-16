@@ -1,18 +1,25 @@
 package server.DAO;
 
 import shared.Album;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Denne klasse står for interaktionen med databasen hvad angår albummer.
+ * Der kan søges på albummer på deres title.
+ * Der kan søges efter alle albummer
+ */
+
 public class AlbumDAO extends BaseDAO implements IAlbumDAO
 {
 
   @Override
   public ArrayList<Album> searchForAlbums(String title) {
+
+    if (title == null || title.length() == 0) throw new IllegalArgumentException();
 
     try (Connection connection = getConnection()){
       PreparedStatement statement = connection.prepareStatement(
@@ -46,6 +53,11 @@ public class AlbumDAO extends BaseDAO implements IAlbumDAO
     }
   }
 
+  /**
+   * @param statement SQL statement, hvor parameterne er sat
+   * @return Liste af alle albummber, som opfylder det givne statement.
+   * @throws SQLException
+   */
   private ArrayList<Album> getAlbumsAndReturnFromResultSet(PreparedStatement statement) throws SQLException {
     ResultSet resultSet = statement.executeQuery();
 

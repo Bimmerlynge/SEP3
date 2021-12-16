@@ -6,6 +6,14 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Kasse er ikke en "ægte DAO klasse", da den ikke implementere baseDAO.
+ *
+ *
+ * Står for at holde styr på Mp3 filer, skrive til Tier3/audio mappen, og hente filerne igen.
+ *
+ */
+
 public class MP3DAO implements IMP3DAO
 {
   String pathDirectory = "Tier3/audio/";

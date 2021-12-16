@@ -1,5 +1,4 @@
 package server.networking;
-import com.google.gson.Gson;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.DAO.IUserDAO;
@@ -7,8 +6,12 @@ import server.DAO.UserDAO;
 import shared.User;
 import java.net.URI;
 
+/**
+ * Controller end point håndtere requests angående Users
+ *
+ * ValidateUser fungere også som Log ind
+ */
 @RestController
-
 public class UserController {
 
     private IUserDAO userDAO = new UserDAO();
@@ -29,6 +32,13 @@ public class UserController {
         }
     }
 
+    /**
+     * Fungere også som login
+     *
+     * @param username username på user man prøver at validere
+     * @param password password for user man prøver at validere
+     * @return Hvis fundet returneres den givne user, eller relevant fejlkode.
+     */
     @GetMapping("/user")
     public ResponseEntity<User> validateUser(@RequestParam String username, @RequestParam String password) {
         try {

@@ -6,6 +6,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Base DAO parent klasse til samtlige DAO klasser
+ * Opretter forbindelse til databasen.
+ */
 public class BaseDAO {
 
     private static Connection connection;

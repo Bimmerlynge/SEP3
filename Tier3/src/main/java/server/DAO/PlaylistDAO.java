@@ -8,6 +8,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Interaktion med databasen hvad angår playlister.
+ * Når en playliste skal ud af databasen skal den være inklusiv sangene den består af.
+ */
+
 public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
 
 
@@ -110,7 +115,15 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
     }
 
 
-
+    /**
+     * Opretter playlite og ligger den i allUsersPlaylists listen
+     *
+     * @param user user som playlisten er koblet til.
+     * @param connection forbindelsen til databasen
+     * @param playlistResultSet resultSet givet efter SQL query angående playlister.
+     * @param allUsersPlaylists Liste hvor alle playliste for en given user skal ingå.
+     * @throws SQLException
+     */
     private void addingPlaylistToAllPlaylist(User user, Connection connection, ResultSet playlistResultSet, ArrayList<Playlist> allUsersPlaylists) throws SQLException {
         while (playlistResultSet.next()) {
             Playlist newPlaylist = new Playlist(
@@ -125,6 +138,14 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
         }
     }
 
+    /**
+     * Laver sange for en given playliste og tilføjer dem til den givne playlist.
+     *
+     * @param connection forbindelse til databasen
+     * @param newPlaylist den playlist de nye sange skal være en del af
+     * @param songListResultSet ResultSet med sange som skal tilføjes playlisten
+     * @throws SQLException
+     */
     private void addingSongsToPlaylist(Connection connection, Playlist newPlaylist, ResultSet songListResultSet) throws SQLException {
         while (songListResultSet.next()) {
 
@@ -138,6 +159,12 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
         }
     }
 
+    /**
+     * tager en sang og tilføjer de nødvendige artister til sangen
+     * @param newSong Den sang artisterne skal tilføjes til
+     * @param artistResultSet ResultSet som indeholder alle artister, der skal tilføjes til sangen
+     * @throws SQLException
+     */
     private void addingArtistsToSong(Song newSong, ResultSet artistResultSet) throws SQLException {
         while (artistResultSet.next()) {
 
@@ -147,6 +174,14 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
         }
     }
 
+    /**
+     * Generere resultset som indeholder alle artister, der har en relation til den givne sang
+     *
+     * @param connection forbindelse til databasen
+     * @param newSong sangen artisterne skal have en relation til
+     * @return ResultSet som indeholder alle artister der har en relation til den givne sang
+     * @throws SQLException
+     */
     private ResultSet getArtistResultSet(Connection connection, Song newSong) throws SQLException {
         PreparedStatement artistsStatement = connection.prepareStatement("SELECT * FROM Artist JOIN " +
                 "ArtistSongRelation ASR ON Artist.artistId = ASR.artistId WHERE songId = ?");
@@ -154,6 +189,14 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
         return artistsStatement.executeQuery();
     }
 
+    /**
+     * Tager et resultset og laver en ny sang udfra det.
+     *
+     * Result set skal være på rigtig plads, denne metode sørger ikke for der er noget i result settet.
+     * @param songListResultSet Resultset som indeholder sang
+     * @return Song object udpakker fra resultSet
+     * @throws SQLException
+     */
     private Song getNewSong(ResultSet songListResultSet) throws SQLException {
         return new Song(songListResultSet.getInt("songId"),
                                 songListResultSet.getString("songTitle"),
@@ -165,6 +208,14 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
                                 songListResultSet.getString("songPath"));
     }
 
+    /**
+     * Generrer et resultset, som indeholder alle sange for en bestemt playliste
+     *
+     * @param connection forbindelse til databasem
+     * @param newPlaylist Den playliste man vil finde sange for
+     * @return Resultset som indeholder alle sang for den bestemte playliste
+     * @throws SQLException
+     */
     private ResultSet getResultSetWithAllSongsFromPlaylist(Connection connection, Playlist newPlaylist) throws SQLException {
         PreparedStatement songStatement = connection.prepareStatement("SELECT S.songId, songTitle, songDuration, songReleaseYear, songPath, S.albumId , albumTitle\n" +
                 "                FROM PlaylistSongRelation\n" +

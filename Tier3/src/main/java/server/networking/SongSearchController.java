@@ -1,6 +1,5 @@
 package server.networking;
 
-import com.google.gson.Gson;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -8,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 import server.DAO.ISongSearchDAO;
 import server.DAO.SongSearchDAO;
 import shared.Song;
-
 import java.util.ArrayList;
 
 
@@ -17,7 +15,13 @@ import java.util.ArrayList;
 public class SongSearchController {
     ISongSearchDAO songSearchDAO = new SongSearchDAO();
 
-
+    /**
+     * Kun 1 parameter udfyldt pr request.
+     * @param songTitle Søge efter sange hvor titlen er songTitle
+     * @param artistName Søge efter Sange lavet af artist med navn artistName
+     * @param albumTitle Søge efter Sange på et album med Title albumTitle
+     * @return Arraylist<Song> hvis request går som forventet, eller returneres relevante fejl koder
+     */
     @GetMapping("/songSearch")
     public ResponseEntity<ArrayList<Song>> getSongsByFilter(@RequestParam(required = false) String songTitle,
                                            @RequestParam(required = false) String artistName,
@@ -43,6 +47,7 @@ public class SongSearchController {
         }
 
     }
+
 
     private boolean checkIfMoreThanOneArgument(String songTitle, String artistName, String albumTitle) {
         boolean checker = false;

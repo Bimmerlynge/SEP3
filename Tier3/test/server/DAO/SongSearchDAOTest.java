@@ -26,34 +26,17 @@ class SongSearchDAOTest {
 
     }
 
-
     @Test
     void TestIfCorrectSongIsFoundByArtistName() {
 
         ArrayList<Song> listWithEverySongInDatabase = songDAO.getAllSongs();
 
-        //String artistNameOfSong = listWithEverySongInDatabase.get(1).getArtists().get(0).getArtistName();
+        String artistNameOfSong = listWithEverySongInDatabase.get(1).getArtists().get(0).getName();
 
-        //ArrayList<Song> songWithTitle = songSearchDAO.getSongsByArtist(artistNameOfSong);
+        ArrayList<Song> songWithTitle = songSearchDAO.getSongsByArtist(artistNameOfSong);
 
-        //assertTrue(songWithTitle.contains(listWithEverySongInDatabase.get(1)));
+        assertTrue(songWithTitle.contains(listWithEverySongInDatabase.get(1)));
 
-    }
-
-    @Test
-    void TestIfCorrectSongIsFoundByAlbum() {
-
-//        ArrayList<Song> listWithEverySongInDatabase = songDAO.getAllSongs();
-//
-//        for (Song song : listWithEverySongInDatabase) {
-//
-//            if (song.getAlbums(). <= 1) {
-//                String albumTitleOfSong = song.getAlbums()[0].getTitle();
-//                ArrayList<Song> songWithTitle = songSearchDAO.getSongsByAlbum(albumTitleOfSong);
-//                assertTrue(songWithTitle.contains(song));
-//                return;
-//            }
-//        }
     }
 
 
@@ -74,9 +57,7 @@ class SongSearchDAOTest {
 
         assertEquals(0,songSearchDAO.getSongsByTitle(notFoundInput).size());
 
-
     }
-
 
     @Test
     void ArtistNameIsEmpty() {

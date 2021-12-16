@@ -118,16 +118,3 @@ FROM PlaylistSongRelation
          JOIN Album A ON A.albumId = S.albumId
 WHERE playlistId = ?;
 
-SELECT *
-FROM AllSongs;
-
-SELECT *
-FROM _User;
-
-SELECT *
-FROM Playlist;
-
-
-SELECT * FROM AllSongs;
-
-SELECT * FROM Album;

@@ -1,12 +1,13 @@
 package server.DAO;
 
-import shared.Playlist;
 import shared.Song;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+/**
+ * Interaktion med databasen hvad angår sanges relation til playlister.
+ */
 public class PlaylistManageDAO extends BaseDAO implements IPlaylistManageDAO
 {
   @Override public void addSongToPlayList(int playlistId, Song song)
