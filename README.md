@@ -1,6 +1,9 @@
 # SEP3 Java
 
+Dataserver connected to postgres database, found under Tier 3, database.
+
 AppServer and Client on: https://github.com/Nissen99/SEP3Csharp
+
 
 To run, create an Enum called "MINKODE", in the Util package in the server package, with your postgres password
 
