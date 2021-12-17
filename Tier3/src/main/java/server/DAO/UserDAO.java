@@ -54,7 +54,7 @@ public class UserDAO extends BaseDAO implements IUserDAO
 
       if (resultSet.next())
       {
-        toReturn = new User(resultSet.getString("username"), null,
+        toReturn = new User(resultSet.getString("username"), resultSet.getString("password"),
             resultSet.getString("role"));
       }
 
