@@ -41,6 +41,8 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
 
     @Override
     public int createNewPlaylist(Playlist playlist) throws Exception {
+        if (isValidPlaylist(playlist)) throw new IllegalArgumentException();
+
         try (Connection connection = getConnection()) {
 
             PreparedStatement preparedStatement = connection.prepareStatement(
@@ -60,6 +62,10 @@ public class PlaylistDAO extends BaseDAO implements IPlaylistDAO {
         }
         throw new Exception("No keys generated from playlist");
 
+    }
+
+    private boolean isValidPlaylist(Playlist playlist) {
+        return playlist == null || playlist.getTitle() == null || playlist.getTitle().equals("") || playlist.getUser() == null;
     }
 
     @Override
