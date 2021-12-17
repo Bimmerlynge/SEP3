@@ -1,6 +1,6 @@
 # SEP3 Java
 
-Dataserver connected to postgres database, found under Tier 3, database.
+Dataserver connected to postgresql database, found under Tier 3, database.
 
 AppServer and Client on: https://github.com/Nissen99/SEP3Csharp
 
