@@ -22,15 +22,30 @@ public class SongDAO extends BaseDAO implements ISongDAO
     Song song = null;
     try(Connection connection = getConnection())
     {
-      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM Song WHERE songId = ?");
+      PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM AllSongs WHERE songId = ?");
       preparedStatement.setInt(1,id);
       ResultSet resultSet = preparedStatement.executeQuery();
-      if (resultSet.next()){
-        song = new Song(resultSet.getInt("songId"), resultSet.getString("songTitle"),
-            resultSet.getInt("songDuration"), resultSet.getInt("songReleaseYear"),
-            null, resultSet.getString("songPath"));
+      int songId = 0;
+      Song songToReturn = null;
+      while (resultSet.next())
+      {
+        if (songId != resultSet.getInt("songid"))
+        {
+          songToReturn = new Song(resultSet.getInt("songid"),
+              resultSet.getString("songtitle"),
+              resultSet.getInt("songduration"), resultSet.getInt("songreleaseyear"), null,
+              resultSet.getString("songPath"));
+          songId = songToReturn.getId();
+
+          Album album = new Album(resultSet.getInt("albumId"), resultSet.getString("albumtitle"));
+          songToReturn.setAlbum(album);
+        }
+
+        Artist artist = new Artist(resultSet.getInt("artistid"),
+            resultSet.getString("artistname"));
+        songToReturn.addArtist(artist);
       }
-      return song;
+      return songToReturn;
     }
     catch (SQLException throwables)
     {
@@ -164,33 +179,7 @@ public class SongDAO extends BaseDAO implements ISongDAO
       PreparedStatement preparedStatement = connection
           .prepareStatement("SELECT * FROM AllSongs");
       ResultSet resultSet = preparedStatement.executeQuery();
-
-      ArrayList<Song> listOfSongs = new ArrayList<>();
-      int songId = 0;
-
-      while (resultSet.next())
-      {
-        if (songId != resultSet.getInt("songid"))
-        {
-          Song song = new Song(resultSet.getInt("songid"),
-              resultSet.getString("songtitle"),
-              resultSet.getInt("songduration"),
-              resultSet.getInt("songreleaseyear"),
-              new Album(resultSet.getInt("albumId"),
-                  resultSet.getString("albumtitle")),resultSet.getString("songPath"));
-          listOfSongs.add(song);
-          songId = song.getId();
-        }
-
-        Artist artist = new Artist(resultSet.getInt("artistid"),
-            resultSet.getString("artistname"));
-        listOfSongs.get(listOfSongs.size() - 1).addArtist(artist);
-
-        Album album = new Album(resultSet.getInt("albumId"),
-            resultSet.getString("albumtitle"));
-        listOfSongs.get(listOfSongs.size() - 1).setAlbum(album);
-      }
-      return listOfSongs;
+      return getSongsFromResultSet(resultSet);
 
     }
     catch (SQLException throwables)
@@ -200,5 +189,31 @@ public class SongDAO extends BaseDAO implements ISongDAO
     }
 
   }
+
+  private ArrayList<Song> getSongsFromResultSet(ResultSet resultSet) throws SQLException {
+    ArrayList<Song> listOfSongs = new ArrayList<>();
+    int songId = 0;
+
+    while (resultSet.next()) {
+      if (songId != resultSet.getInt("songid")) {
+        Song song = new Song(resultSet.getInt("songid"),
+            resultSet.getString("songtitle"),
+            resultSet.getInt("songduration"), resultSet.getInt("songreleaseyear"), null,resultSet.getString("songPath"));
+        listOfSongs.add(song);
+        songId = song.getId();
+
+
+        Album album = new Album(resultSet.getInt("albumId"), resultSet.getString("albumtitle"));
+        song.setAlbum(album);
+      }
+
+      Artist artist = new Artist(resultSet.getInt("artistid"),
+          resultSet.getString("artistname"));
+      listOfSongs.get(listOfSongs.size() - 1).addArtist(artist);
+
+    }
+    return listOfSongs;
+  }
+
 
 }

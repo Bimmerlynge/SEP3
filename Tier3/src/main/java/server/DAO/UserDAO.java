@@ -18,7 +18,8 @@ public class UserDAO extends BaseDAO implements IUserDAO
 
   @Override public void registerUser(User user)
   {
-
+    if (user.getUsername().isEmpty() || user.getUsername().isBlank() || user.getPassword().isBlank() || user.getPassword().isBlank())
+      throw new IllegalArgumentException();
     try (Connection connection = getConnection())
     {
 
@@ -43,6 +44,8 @@ public class UserDAO extends BaseDAO implements IUserDAO
 
   @Override public User validateUser(User user)
   {
+    if (user.getUsername().isEmpty() || user.getUsername().isBlank() || user.getPassword().isBlank() || user.getPassword().isBlank())
+      throw new IllegalArgumentException();
     try (Connection connection = getConnection())
     {
       PreparedStatement preparedStatement = connection.prepareStatement(
@@ -54,7 +57,7 @@ public class UserDAO extends BaseDAO implements IUserDAO
 
       if (resultSet.next())
       {
-        toReturn = new User(resultSet.getString("username"), null,
+        toReturn = new User(resultSet.getString("username"), resultSet.getString("password"),
             resultSet.getString("role"));
       }
 

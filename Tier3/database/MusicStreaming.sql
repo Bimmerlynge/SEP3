@@ -118,3 +118,4 @@ FROM PlaylistSongRelation
          JOIN Album A ON A.albumId = S.albumId
 WHERE playlistId = ?;
 
+SELECT * From _User;
