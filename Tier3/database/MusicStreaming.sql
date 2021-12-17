@@ -108,14 +108,3 @@ ORDER BY songId ASC;
 
 INSERT INTO _User(username, password, role)
 VALUES ('Admin', 'Admin', 'Admin');
-
-
-SELECT * FROM Artist JOIN Song S ON Artist.artistId = S.albumId WHERE songId = ?;
-
-SELECT S.songId, songTitle, songDuration, songReleaseYear, songPath, S.albumId , albumTitle
-FROM PlaylistSongRelation
-         JOIN Song S ON S.songId = PlaylistSongRelation.songId
-         JOIN Album A ON A.albumId = S.albumId
-WHERE playlistId = ?;
-
-SELECT * From _User;
