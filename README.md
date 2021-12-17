@@ -20,4 +20,4 @@ public enum MINKODE {
 ```
 And adujst the connection information in "BaseDAO"
 
-A folder empty folder called "audio" must be created under Tier 3 
+An empty folder called "audio" must be created under Tier 3 
