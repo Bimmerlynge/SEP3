@@ -19,9 +19,8 @@ public class PlaylistManageDAO extends BaseDAO implements IPlaylistManageDAO
       preparedStatement.setInt(1, playlistId);
       preparedStatement.setInt(2, song.getId());
       preparedStatement.executeUpdate();
-
     }
-    catch (SQLException throwables)
+    catch (NullPointerException | SQLException throwables)
     {
       throwables.printStackTrace();
       throw new InternalError(throwables.getMessage());
@@ -36,8 +35,11 @@ public class PlaylistManageDAO extends BaseDAO implements IPlaylistManageDAO
           "DELETE FROM PlaylistSongRelation WHERE playlistId = (?) AND songId = (?)");
       preparedStatement.setInt(1, playlistId);
       preparedStatement.setInt(2, songId);
-      preparedStatement.executeUpdate();
+      int rowsEffected = preparedStatement.executeUpdate();
 
+      if (rowsEffected == 0){
+        throw new InternalError();
+      }
     }
     catch (SQLException throwables)
     {
